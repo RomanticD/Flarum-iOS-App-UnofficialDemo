@@ -19,7 +19,7 @@ _*Please note do not use com.flarum or any similar wording that could imply the 
 
 1. Login using username and password, with an option to remember login credentials
 <div align="left">
-  <img src="https://github.com/RomanticD/Test/assets/96178954/e6d03521-570b-4ec5-b732-97b1b06771d5" alt="LoginPage" width="250">
+  <img src="https://github.com/RomanticD/Flarum-iOS-App-UnofficialDemo/assets/96178954/d18b86f8-3c4a-4b49-b926-fc489613172f" alt="LoginPage" width="250">
 </div>
 
 2. Browse all discussions on Flarum, with pagination support and display of pinned discussions
