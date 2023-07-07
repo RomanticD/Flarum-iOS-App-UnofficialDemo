@@ -19,43 +19,43 @@ _*Please note do not use com.flarum or any similar wording that could imply the 
 
 1. Login using username and password, with an option to remember login credentials
 <div align="left">
-  <img src="https://github.com/RomanticD/FlarumiOSAppSwiftUI/assets/96178954/e68cd517-6edf-4f95-801e-85be565415b3" alt="LoginPage" width="250">
+  <img src="https://github.com/RomanticD/Test/assets/96178954/e6d03521-570b-4ec5-b732-97b1b06771d5" alt="LoginPage" width="250">
 </div>
 
 2. Browse all discussions on Flarum, with pagination support and display of pinned discussions
 <div align="left">
-  <img src="https://github.com/RomanticD/FlarumiOSAppSwiftUI/assets/96178954/7ed30688-7ac9-4339-bce5-23feb5be7559" alt="HomePage" width="250">
+  <img src="https://github.com/RomanticD/Flarum-iOS-App-UnofficialDemo/assets/96178954/4a9b9348-8155-4ee7-b6f7-2ca21240f07c" alt="HomePage" width="250">
 </div>
 
 3. View replies to discussions, with the ability to load more replies for discussions with more than 20 replies
 <div align="left">
-  <img src="https://github.com/RomanticD/FlarumiOSAppSwiftUI/assets/96178954/4836a227-a5af-4df4-8c5d-94352c691b6f" alt="DiscussionPage" width="250">
+  <img src="https://github.com/RomanticD/Flarum-iOS-App-UnofficialDemo/assets/96178954/adc4b99d-2e4b-411a-ad5c-7d74f10ed166" alt="DiscussionPage" width="250">
 </div>
 
 4. Support for tags, allowing users to browse discussions by tags (compatible with Flarum installations with the Tags extension disabled)
 <div align="left">
-  <img src="https://github.com/RomanticD/FlarumiOSAppSwiftUI/assets/96178954/23d8893c-72dc-4c59-85ea-2911ca458748" alt="TagsPage" width="250">
+  <img src="https://github.com/RomanticD/Flarum-iOS-App-UnofficialDemo/assets/96178954/a3e4ddd1-7a1f-4e60-80ca-279e1860e2ec" alt="TagsPage" width="250">
 </div>
 
 5. Create new discussions and reply to existing discussions
 <div align="left">
-  <img src="https://github.com/RomanticD/FlarumiOSAppSwiftUI/assets/96178954/68d0fd95-a899-4980-83b2-7d5634d6341b" alt="NewDiscussion" width="250">
+  <img src="https://github.com/RomanticD/Flarum-iOS-App-UnofficialDemo/assets/96178954/f189906d-0df4-4184-bea3-5ff8c41613f5" alt="NewDiscussion" width="250">
 </div>
 <div align="left">
-  <img src="https://github.com/RomanticD/FlarumiOSAppSwiftUI/assets/96178954/3e29e712-27e0-4bee-8891-e945b639dcab" alt="NewReply" width="250">
+  <img src="https://github.com/RomanticD/Flarum-iOS-App-UnofficialDemo/assets/96178954/d2f82b58-e45b-4c5b-ab1d-1dcf019de766" alt="NewReply" width="250">
 </div>
 
 6. User profile page with the ability to view the profile of users who replied to a discussion
 <div align="left">
-  <img src="https://github.com/RomanticD/FlarumiOSAppSwiftUI/assets/96178954/d7e9fb05-c995-49e7-a1ee-69ca5de148d6" alt="ProfilePage" width="250">
+  <img src="https://github.com/RomanticD/Flarum-iOS-App-UnofficialDemo/assets/96178954/81fee594-be9c-481a-a267-e9288cbdf1f5" alt="ProfilePage" width="250">
 </div>
 
 7. Dark mode support for iOS
 <div align="left">
-  <img src="https://github.com/RomanticD/FlarumiOSAppSwiftUI/assets/96178954/bb37340f-84ee-4ecc-8df2-b9363bf62c5e" alt="DarkMode2" width="250">
+  <img src="https://github.com/RomanticD/Flarum-iOS-App-UnofficialDemo/assets/96178954/6d516eef-5b3e-4419-a156-c38aef5aa0ad" alt="DarkMode2" width="250">
 </div>
 <div align="left">
-  <img src="https://github.com/RomanticD/FlarumiOSAppSwiftUI/assets/96178954/0a2018ff-c112-4fd1-b49e-9d6ed12633bf" alt="DarkMode" width="250">
+  <img src="https://github.com/RomanticD/Flarum-iOS-App-UnofficialDemo/assets/96178954/1133950b-6c0d-4a13-a823-9e30d3868547" alt="DarkMode" width="250">
 </div>
 
 
