@@ -1,0 +1,86 @@
+//
+//  AppSettings.swift
+//  LiangJianForum
+//
+//  Created by Romantic D on 2023/6/28.
+//
+
+import Foundation
+import SwiftUI
+
+class AppSettings: ObservableObject {
+    @Published var refreshPostView = false
+    @Published var refreshReplyView = false
+    @Published var refreshProfileView = false
+    @Published var isLoggedIn = true
+    @Published var FlarumUrl = "https://discuss.flarum.org"
+    @Published var FlarumName = "Flarum"
+    @Published var token = ""
+    @Published var userId = 0
+    
+    func refreshPost() {
+        refreshPostView.toggle()
+    }
+    
+    func refreshComment() {
+        refreshReplyView.toggle()
+    }
+    func refreshProfile() {
+        refreshProfileView.toggle()
+    }
+}
+
+extension String{
+var htmlConvertedString : String{
+    let string = self.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
+    return string
+}}
+
+extension String {
+    var htmlConvertedWithoutUrl: String {
+        let htmlRemovedString = self.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
+        let bracketsAndImageRemovedString = htmlRemovedString.replacingOccurrences(of: "\\[.*?\\]", with: "", options: .regularExpression, range: nil)
+        return bracketsAndImageRemovedString
+    }
+}
+
+
+func extractImageURLs(from string: String) -> [String]? {
+    let pattern = #"\[upl-image-preview url=([^]]+)\]"#
+    let regex = try! NSRegularExpression(pattern: pattern, options: [])
+    let range = NSRange(location: 0, length: string.utf16.count)
+    let matches = regex.matches(in: string, options: [], range: range)
+    
+    guard matches.count > 0 else {
+        return nil
+    }
+    
+    var imageURLs = [String]()
+    
+    for match in matches {
+        let urlRange = match.range(at: 1)
+        if let urlRange = Range(urlRange, in: string) {
+            let url = String(string[urlRange])
+            imageURLs.append(url)
+        }
+    }
+    
+    return imageURLs
+}
+
+extension Color {
+    init(hex: String) {
+        let scanner = Scanner(string: hex)
+        var rgbValue: UInt64 = 0
+        scanner.scanHexInt64(&rgbValue)
+
+        let r = Double((rgbValue & 0xFF0000) >> 16) / 255.0
+        let g = Double((rgbValue & 0x00FF00) >> 8) / 255.0
+        let b = Double(rgbValue & 0x0000FF) / 255.0
+
+        self.init(red: r, green: g, blue: b, opacity: 1.0)
+    }
+}
+
+
+

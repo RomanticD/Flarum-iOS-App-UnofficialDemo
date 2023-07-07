@@ -1,0 +1,701 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "26F49426-AD7A-4E5A-8AF0-D33709492A03"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D13C0961-198F-42DE-8424-8EA40B15F209"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LiangJianForum/View/Post/AlternativePostView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "133"
+            endingLineNumber = "133"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1BB02CD0-07C4-49B6-95FB-2B865632C499"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LiangJianForum/View/Post/AlternativePostView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "134"
+            endingLineNumber = "134"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2301D669-41DD-419F-A8CA-266F02964306"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LiangJianForum/View/Post/AlternativePostView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "138"
+            endingLineNumber = "138"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B9707C53-19DE-4145-B02D-C186DC912730"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LiangJianForum/View/Post/AlternativePostView(Test).swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "B9707C53-19DE-4145-B02D-C186DC912730 - c5825618c078d46a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI._ConditionalContent&lt;SwiftUI.ProgressView&lt;SwiftUI.EmptyView, SwiftUI.EmptyView&gt;, &lt;&lt;opaque return type of SwiftUI.View.opacity(Swift.Double) -&gt; some&gt;&gt;.0&gt;, SwiftUI.List&lt;Swift.Never, SwiftUI.ForEach&lt;Swift.Array&lt;LiangJianForum.Included4&gt;, Swift.String, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(Swift.Optional&lt;SwiftUI.Text&gt;, Swift.Optional&lt;SwiftUI.Text&gt;)&gt;&gt;&gt;&gt;, SwiftUI.Spacer)&gt; in LiangJianForum.AlternativePostView.body.getter : some"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView(Test).swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "22"
+                  endingLineNumber = "22"
+                  offsetFromSymbolStart = "960">
+               </Location>
+               <Location
+                  uuid = "B9707C53-19DE-4145-B02D-C186DC912730 - 7c9dce25909bdc2f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI._ConditionalContent&lt;SwiftUI.ProgressView&lt;SwiftUI.EmptyView, SwiftUI.EmptyView&gt;, &lt;&lt;opaque return type of SwiftUI.View.opacity(Swift.Double) -&gt; some&gt;&gt;.0&gt;, SwiftUI.List&lt;Swift.Never, SwiftUI.ForEach&lt;Swift.Array&lt;LiangJianForum.Included4&gt;, Swift.String, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(Swift.Optional&lt;SwiftUI.Text&gt;, Swift.Optional&lt;SwiftUI.Text&gt;)&gt;&gt;&gt;&gt;, SwiftUI.List&lt;Swift.Never, SwiftUI.ForEach&lt;Swift.Array&lt;LiangJianForum.Included5&gt;, Swift.String, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(Swift.Optional&lt;SwiftUI.Text&gt;, Swift.Optional&lt;SwiftUI.Text&gt;)&gt;&gt;&gt;&gt;, SwiftUI.Spacer)&gt; in LiangJianForum.AlternativePostView.body.getter : some"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView(Test).swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "26"
+                  endingLineNumber = "26"
+                  offsetFromSymbolStart = "920">
+               </Location>
+               <Location
+                  uuid = "B9707C53-19DE-4145-B02D-C186DC912730 - c5825618c078d5ee"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI._ConditionalContent&lt;SwiftUI.ProgressView&lt;SwiftUI.EmptyView, SwiftUI.EmptyView&gt;, &lt;&lt;opaque return type of SwiftUI.View.opacity(Swift.Double) -&gt; some&gt;&gt;.0&gt;, SwiftUI.List&lt;Swift.Never, SwiftUI.ForEach&lt;Swift.Array&lt;LiangJianForum.Included5&gt;, Swift.String, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(Swift.Optional&lt;SwiftUI.Text&gt;, Swift.Optional&lt;SwiftUI.Text&gt;)&gt;&gt;&gt;&gt;, SwiftUI.Spacer)&gt; in LiangJianForum.AlternativePostView.body.getter : some"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView(Test).swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "26"
+                  endingLineNumber = "26"
+                  offsetFromSymbolStart = "828">
+               </Location>
+               <Location
+                  uuid = "B9707C53-19DE-4145-B02D-C186DC912730 - d7749a3f292a9e04"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI._ConditionalContent&lt;SwiftUI.ProgressView&lt;SwiftUI.EmptyView, SwiftUI.EmptyView&gt;, &lt;&lt;opaque return type of SwiftUI.View.opacity(Swift.Double) -&gt; some&gt;&gt;.0&gt;, SwiftUI._ConditionalContent&lt;SwiftUI.List&lt;Swift.Never, SwiftUI.ForEach&lt;Swift.Array&lt;LiangJianForum.Included4&gt;, Swift.String, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(Swift.Optional&lt;SwiftUI.Text&gt;, Swift.Optional&lt;SwiftUI.Text&gt;, Swift.Optional&lt;Swift.Optional&lt;SwiftUI.Group&lt;SwiftUI.Text&gt;&gt;&gt;)&gt;&gt;&gt;&gt;, SwiftUI.List&lt;Swift.Never, SwiftUI.ForEach&lt;Swift.Array&lt;LiangJianForum.Included5&gt;, Swift.String, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(Swift.Optional&lt;SwiftUI.Text&gt;, Swift.Optional&lt;SwiftUI.Text&gt;)&gt;&gt;&gt;&gt;&gt;, SwiftUI.Spacer)&gt; in LiangJianForum.AlternativePostView.body.getter : some"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView(Test).swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "26"
+                  endingLineNumber = "26"
+                  offsetFromSymbolStart = "1064">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9E6161F5-B037-46F7-9445-94779A5AF552"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LiangJianForum/View/Post/AlternativePostView(Test).swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "230"
+            endingLineNumber = "230"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "9E6161F5-B037-46F7-9445-94779A5AF552 - 7b669ee31dcdcb95"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #4 @Sendable () async -&gt; () in LiangJianForum.AlternativePostView.body.getter : some"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView(Test).swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "65"
+                  endingLineNumber = "65"
+                  offsetFromSymbolStart = "88">
+               </Location>
+               <Location
+                  uuid = "9E6161F5-B037-46F7-9445-94779A5AF552 - 300e5c3d22263eb7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) await resume partial function for closure #4 @Sendable () async -&gt; () in LiangJianForum.AlternativePostView.body.getter : some"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView(Test).swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "65"
+                  endingLineNumber = "65"
+                  offsetFromSymbolStart = "40">
+               </Location>
+               <Location
+                  uuid = "9E6161F5-B037-46F7-9445-94779A5AF552 - d40fd1fff5fe8298"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(2) suspend resume partial function for closure #4 @Sendable () async -&gt; () in LiangJianForum.AlternativePostView.body.getter : some"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView(Test).swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "65"
+                  endingLineNumber = "65"
+                  offsetFromSymbolStart = "28">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "609EBA8D-F0E1-495B-9CB8-63498E68387E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LiangJianForum/View/Post/AlternativePostView(Test).swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "242"
+            endingLineNumber = "242"
+            landmarkName = "fetchDetail(postID:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "609EBA8D-F0E1-495B-9CB8-63498E68387E - 95ab320b6e7ff7d6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for LiangJianForum.AlternativePostView.fetchDetail(postID: Swift.String) async -&gt; ()"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView(Test).swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77"
+                  offsetFromSymbolStart = "452">
+               </Location>
+               <Location
+                  uuid = "609EBA8D-F0E1-495B-9CB8-63498E68387E - 406800d02b7ac3ff"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(2) await resume partial function for LiangJianForum.AlternativePostView.fetchDetail(postID: Swift.String) async -&gt; ()"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView(Test).swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77"
+                  offsetFromSymbolStart = "56">
+               </Location>
+               <Location
+                  uuid = "609EBA8D-F0E1-495B-9CB8-63498E68387E - 61c46f2b8a58b3d4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for LiangJianForum.AlternativePostView.fetchDetail(postID: Swift.String) async -&gt; ()"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView(Test).swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77"
+                  offsetFromSymbolStart = "108">
+               </Location>
+               <Location
+                  uuid = "609EBA8D-F0E1-495B-9CB8-63498E68387E - a16fdd859b51dd5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(4) suspend resume partial function for LiangJianForum.AlternativePostView.fetchDetail(postID: Swift.String) async -&gt; ()"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView(Test).swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77"
+                  offsetFromSymbolStart = "72">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E94680B5-FC9F-4440-8F01-B8A04EA5D9B2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LiangJianForum/View/Post/AlternativePostView(Test).swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "279"
+            endingLineNumber = "279"
+            landmarkName = "processIncludedTagsArray(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AC89D38B-B753-4E8E-9C43-845B22044DED"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LiangJianForum/View/Post/AlternativePostView(Test).swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "253"
+            endingLineNumber = "253"
+            landmarkName = "fetchDetail(postID:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "AC89D38B-B753-4E8E-9C43-845B22044DED - 61c46f2b8a58b6cf"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for LiangJianForum.AlternativePostView.fetchDetail(postID: Swift.String) async -&gt; ()"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView(Test).swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "100"
+                  endingLineNumber = "100"
+                  offsetFromSymbolStart = "3316">
+               </Location>
+               <Location
+                  uuid = "AC89D38B-B753-4E8E-9C43-845B22044DED - 61c46f2b8a588830"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for LiangJianForum.AlternativePostView.fetchDetail(postID: Swift.String) async -&gt; ()"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView(Test).swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "113"
+                  endingLineNumber = "113"
+                  offsetFromSymbolStart = "3332">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9DDA18A8-EF12-41A7-A22A-4EDABF134843"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LiangJianForum/View/Post/AlternativePostView(Test).swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "213"
+            endingLineNumber = "213"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "9DDA18A8-EF12-41A7-A22A-4EDABF134843 - 7c9dce25909bd168"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI._ConditionalContent&lt;SwiftUI.ProgressView&lt;SwiftUI.EmptyView, SwiftUI.EmptyView&gt;, &lt;&lt;opaque return type of SwiftUI.View.opacity(Swift.Double) -&gt; some&gt;&gt;.0&gt;, SwiftUI.List&lt;Swift.Never, SwiftUI.ForEach&lt;Swift.Array&lt;LiangJianForum.Included4&gt;, Swift.String, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(Swift.Optional&lt;SwiftUI.Text&gt;, Swift.Optional&lt;SwiftUI.Text&gt;)&gt;&gt;&gt;&gt;, SwiftUI.List&lt;Swift.Never, SwiftUI.ForEach&lt;Swift.Array&lt;LiangJianForum.Included5&gt;, Swift.String, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(Swift.Optional&lt;SwiftUI.Text&gt;, Swift.Optional&lt;SwiftUI.Text&gt;)&gt;&gt;&gt;&gt;, SwiftUI.Spacer)&gt; in LiangJianForum.AlternativePostView.body.getter : some"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView(Test).swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "51"
+                  endingLineNumber = "51"
+                  offsetFromSymbolStart = "2244">
+               </Location>
+               <Location
+                  uuid = "9DDA18A8-EF12-41A7-A22A-4EDABF134843 - 1ea1d48da89c888f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #3 (LiangJianForum.Included5) -&gt; SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(Swift.Optional&lt;SwiftUI.Text&gt;, Swift.Optional&lt;SwiftUI.Text&gt;)&gt;&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI._ConditionalContent&lt;SwiftUI.ProgressView&lt;SwiftUI.EmptyView, SwiftUI.EmptyView&gt;, &lt;&lt;opaque return type of SwiftUI.View.opacity(Swift.Double) -&gt; some&gt;&gt;.0&gt;, SwiftUI.List&lt;Swift.Never, SwiftUI.ForEach&lt;Swift.Array&lt;LiangJianForum.Included4&gt;, Swift.String, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(Swift.Optional&lt;SwiftUI.Text&gt;, Swift.Optional&lt;SwiftUI.Text&gt;)&gt;&gt;&gt;&gt;, SwiftUI.List&lt;Swift.Never, SwiftUI.ForEach&lt;Swift.Array&lt;LiangJianForum.Included5&gt;, Swift.String, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(Swift.Optional&lt;SwiftUI.Text&gt;, Swift.Optional&lt;SwiftUI.Text&gt;)&gt;&gt;&gt;&gt;, SwiftUI.Spacer)&gt; in LiangJianForum.AlternativePostView.body.getter : some"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView(Test).swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "52"
+                  endingLineNumber = "52"
+                  offsetFromSymbolStart = "76">
+               </Location>
+               <Location
+                  uuid = "9DDA18A8-EF12-41A7-A22A-4EDABF134843 - c5825618c078d8a9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI._ConditionalContent&lt;SwiftUI.ProgressView&lt;SwiftUI.EmptyView, SwiftUI.EmptyView&gt;, &lt;&lt;opaque return type of SwiftUI.View.opacity(Swift.Double) -&gt; some&gt;&gt;.0&gt;, SwiftUI.List&lt;Swift.Never, SwiftUI.ForEach&lt;Swift.Array&lt;LiangJianForum.Included5&gt;, Swift.String, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(Swift.Optional&lt;SwiftUI.Text&gt;, Swift.Optional&lt;SwiftUI.Text&gt;)&gt;&gt;&gt;&gt;, SwiftUI.Spacer)&gt; in LiangJianForum.AlternativePostView.body.getter : some"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView(Test).swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "51"
+                  endingLineNumber = "51"
+                  offsetFromSymbolStart = "1952">
+               </Location>
+               <Location
+                  uuid = "9DDA18A8-EF12-41A7-A22A-4EDABF134843 - 7f8e48ab75f9c183"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (LiangJianForum.Included5) -&gt; SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(Swift.Optional&lt;SwiftUI.Text&gt;, Swift.Optional&lt;SwiftUI.Text&gt;)&gt;&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI._ConditionalContent&lt;SwiftUI.ProgressView&lt;SwiftUI.EmptyView, SwiftUI.EmptyView&gt;, &lt;&lt;opaque return type of SwiftUI.View.opacity(Swift.Double) -&gt; some&gt;&gt;.0&gt;, SwiftUI.List&lt;Swift.Never, SwiftUI.ForEach&lt;Swift.Array&lt;LiangJianForum.Included5&gt;, Swift.String, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(Swift.Optional&lt;SwiftUI.Text&gt;, Swift.Optional&lt;SwiftUI.Text&gt;)&gt;&gt;&gt;&gt;, SwiftUI.Spacer)&gt; in LiangJianForum.AlternativePostView.body.getter : some"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView(Test).swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "52"
+                  endingLineNumber = "52"
+                  offsetFromSymbolStart = "76">
+               </Location>
+               <Location
+                  uuid = "9DDA18A8-EF12-41A7-A22A-4EDABF134843 - d7749a3f292a9054"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI._ConditionalContent&lt;SwiftUI.ProgressView&lt;SwiftUI.EmptyView, SwiftUI.EmptyView&gt;, &lt;&lt;opaque return type of SwiftUI.View.opacity(Swift.Double) -&gt; some&gt;&gt;.0&gt;, SwiftUI._ConditionalContent&lt;SwiftUI.List&lt;Swift.Never, SwiftUI.ForEach&lt;Swift.Array&lt;LiangJianForum.Included4&gt;, Swift.String, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(Swift.Optional&lt;SwiftUI.Text&gt;, Swift.Optional&lt;SwiftUI.Text&gt;, Swift.Optional&lt;Swift.Optional&lt;SwiftUI.Group&lt;SwiftUI.Text&gt;&gt;&gt;)&gt;&gt;&gt;&gt;, SwiftUI.List&lt;Swift.Never, SwiftUI.ForEach&lt;Swift.Array&lt;LiangJianForum.Included5&gt;, Swift.String, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(Swift.Optional&lt;SwiftUI.Text&gt;, Swift.Optional&lt;SwiftUI.Text&gt;)&gt;&gt;&gt;&gt;&gt;, SwiftUI.Spacer)&gt; in LiangJianForum.AlternativePostView.body.getter : some"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView(Test).swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "74"
+                  endingLineNumber = "74"
+                  offsetFromSymbolStart = "3192">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EF6DE75E-BFE9-4AFA-BDF2-5126E4ABD975"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LiangJianForum/View/Post/AlternativePostView(Test).swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "266"
+            endingLineNumber = "266"
+            landmarkName = "processIncludedArray(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "EF6DE75E-BFE9-4AFA-BDF2-5126E4ABD975 - 97e9de49d48cd5fd"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "LiangJianForum.AlternativePostView.processIncludedArray(Swift.Array&lt;LiangJianForum.Included4&gt;) -&gt; ()"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView(Test).swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "112"
+                  endingLineNumber = "112"
+                  offsetFromSymbolStart = "96">
+               </Location>
+               <Location
+                  uuid = "EF6DE75E-BFE9-4AFA-BDF2-5126E4ABD975 - 97e9de49d48cd7ec"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "LiangJianForum.AlternativePostView.processIncludedArray(Swift.Array&lt;LiangJianForum.Included4&gt;) -&gt; ()"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView(Test).swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "127"
+                  endingLineNumber = "127"
+                  offsetFromSymbolStart = "96">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D9788EE3-7CDD-4998-9288-82C41E2EBB65"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LiangJianForum/View/Post/AlternativePostView(Test).swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "294"
+            endingLineNumber = "294"
+            landmarkName = "findDisplayName(_:in:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2C92E546-2F35-4C18-87BE-38812F5C0BFA"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LiangJianForum/View/Post/AlternativePostView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "322"
+            endingLineNumber = "322"
+            landmarkName = "findImgUrl(_:in:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "2C92E546-2F35-4C18-87BE-38812F5C0BFA - 278c0536cd43abe5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "LiangJianForum.AlternativePostView.findImgUrl(_: Swift.String, in: Swift.Array&lt;LiangJianForum.Included4&gt;) -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "322"
+                  endingLineNumber = "322"
+                  offsetFromSymbolStart = "2116">
+               </Location>
+               <Location
+                  uuid = "2C92E546-2F35-4C18-87BE-38812F5C0BFA - 278c0536cd43abe5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "LiangJianForum.AlternativePostView.findImgUrl(_: Swift.String, in: Swift.Array&lt;LiangJianForum.Included4&gt;) -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "322"
+                  endingLineNumber = "322"
+                  offsetFromSymbolStart = "120">
+               </Location>
+               <Location
+                  uuid = "2C92E546-2F35-4C18-87BE-38812F5C0BFA - b534870b633e2213"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (LiangJianForum.Included4) -&gt; Swift.Bool in LiangJianForum.AlternativePostView.findImgUrl(_: Swift.String, in: Swift.Array&lt;LiangJianForum.Included4&gt;) -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Post/AlternativePostView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "322"
+                  endingLineNumber = "322"
+                  offsetFromSymbolStart = "56">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E323B256-CCDC-43CB-BBEA-4159CCF7C562"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LiangJianForum/View/Profile/ProfileView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "188"
+            endingLineNumber = "188"
+            landmarkName = "fetchUserProfile()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "E323B256-CCDC-43CB-BBEA-4159CCF7C562 - 3a14c8fbbd8f0244"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for LiangJianForum.ProfileView.fetchUserProfile() async -&gt; ()"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Profile/ProfileView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "200"
+                  endingLineNumber = "200"
+                  offsetFromSymbolStart = "588">
+               </Location>
+               <Location
+                  uuid = "E323B256-CCDC-43CB-BBEA-4159CCF7C562 - 3a14c8fbbd8f0244"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for LiangJianForum.ProfileView.fetchUserProfile() async -&gt; ()"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Profile/ProfileView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "200"
+                  endingLineNumber = "200"
+                  offsetFromSymbolStart = "944">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "22CE89C5-B1BC-4AD1-A701-03079E13A373"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LiangJianForum/View/Profile/ProfileView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "192"
+            endingLineNumber = "192"
+            landmarkName = "fetchUserProfile()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C64D8205-5668-4524-AE5B-98228FB3F080"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LiangJianForum/View/Profile/ProfileView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "195"
+            endingLineNumber = "195"
+            landmarkName = "fetchUserProfile()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "C64D8205-5668-4524-AE5B-98228FB3F080 - 3a14c8fbbd8f01c0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for LiangJianForum.ProfileView.fetchUserProfile() async -&gt; ()"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Profile/ProfileView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "204"
+                  endingLineNumber = "204"
+                  offsetFromSymbolStart = "2592">
+               </Location>
+               <Location
+                  uuid = "C64D8205-5668-4524-AE5B-98228FB3F080 - 3a14c8fbbd8f01c0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for LiangJianForum.ProfileView.fetchUserProfile() async -&gt; ()"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Profile/ProfileView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "204"
+                  endingLineNumber = "204"
+                  offsetFromSymbolStart = "2824">
+               </Location>
+               <Location
+                  uuid = "C64D8205-5668-4524-AE5B-98228FB3F080 - 3a14c8fbbd8f02bf"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for LiangJianForum.ProfileView.fetchUserProfile() async -&gt; ()"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Profile/ProfileView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "195"
+                  endingLineNumber = "195"
+                  offsetFromSymbolStart = "2144">
+               </Location>
+               <Location
+                  uuid = "C64D8205-5668-4524-AE5B-98228FB3F080 - 3a14c8fbbd8f02bf"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for LiangJianForum.ProfileView.fetchUserProfile() async -&gt; ()"
+                  moduleName = "LiangJianForum"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Profile/ProfileView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "195"
+                  endingLineNumber = "195"
+                  offsetFromSymbolStart = "2328">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

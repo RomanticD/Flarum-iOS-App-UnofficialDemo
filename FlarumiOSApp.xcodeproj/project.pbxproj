@@ -1,0 +1,562 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0712DDA12A3DEA3B00A8AC0E /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0712DDA02A3DEA3B00A8AC0E /* ProfileView.swift */; };
+		072636452A4BD82D0030DF8A /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072636442A4BD82D0030DF8A /* AppSettings.swift */; };
+		072E24662A3F02DC00E58EE9 /* CircleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072E24652A3F02DC00E58EE9 /* CircleImage.swift */; };
+		073C192F2A4C058F001A2411 /* TextFieldWithIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C192E2A4C058F001A2411 /* TextFieldWithIcon.swift */; };
+		073C19312A4C7675001A2411 /* newReply.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C19302A4C7675001A2411 /* newReply.swift */; };
+		073C19332A4C89F8001A2411 /* SecureFieldWithIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C19322A4C89F8001A2411 /* SecureFieldWithIcon.swift */; };
+		073C19352A4D47E1001A2411 /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C19342A4D47E1001A2411 /* PostView.swift */; };
+		073C19372A4D550B001A2411 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C19362A4D550B001A2411 /* AsyncImage.swift */; };
+		074EF28F2A50500600D486A3 /* NoticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074EF28E2A50500600D486A3 /* NoticeView.swift */; };
+		075948DF2A56C9E60010AB55 /* TagsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075948DE2A56C9E60010AB55 /* TagsData.swift */; };
+		07697A662A53EF8E009C744E /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07697A652A53EF8E009C744E /* UserData.swift */; };
+		0779EE1B2A5461A600EE3D93 /* LinksProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0779EE1A2A5461A600EE3D93 /* LinksProfileView.swift */; };
+		0779EE1D2A556B4A00EE3D93 /* FavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0779EE1C2A556B4A00EE3D93 /* FavoriteButton.swift */; };
+		0783CE312A419008009A2F7D /* InfoDisplayWithTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0783CE302A419008009A2F7D /* InfoDisplayWithTitleView.swift */; };
+		07A868032A3D879E00311F65 /* FlarumiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A868022A3D879E00311F65 /* FlarumiOSApp.swift */; };
+		07A868052A3D879E00311F65 /* LoginPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A868042A3D879E00311F65 /* LoginPageView.swift */; };
+		07A868072A3D879F00311F65 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07A868062A3D879F00311F65 /* Assets.xcassets */; };
+		07A8680A2A3D879F00311F65 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07A868092A3D879F00311F65 /* Preview Assets.xcassets */; };
+		07B63C3A2A4976CC00594DA8 /* DiscussionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B63C392A4976CC00594DA8 /* DiscussionData.swift */; };
+		07CBD4672A4E8421007854DA /* PostDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07CBD4662A4E8421007854DA /* PostDetailModel.swift */; };
+		07CBD4692A4E9008007854DA /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07CBD4682A4E9008007854DA /* PostDetailView.swift */; };
+		07CBD46B2A4EC076007854DA /* PostData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07CBD46A2A4EC076007854DA /* PostData.swift */; };
+		07CBD46D2A4EC1F8007854DA /* FastPostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07CBD46C2A4EC1F8007854DA /* FastPostDetailView.swift */; };
+		07CBD46F2A4FD799007854DA /* PostDataWithTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07CBD46E2A4FD799007854DA /* PostDataWithTag.swift */; };
+		07CBD4712A4FFCB9007854DA /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07CBD4702A4FFCB9007854DA /* TagView.swift */; };
+		07DF6F3C2A557AEF0073CDE8 /* ChangeProfileDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07DF6F3B2A557AEF0073CDE8 /* ChangeProfileDetail.swift */; };
+		07E1FB1F2A3DB32D00F9049B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E1FB1E2A3DB32D00F9049B /* ContentView.swift */; };
+		07E1FB212A3DB34000F9049B /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E1FB202A3DB34000F9049B /* RegistrationView.swift */; };
+		07E1FB252A3DDC1500F9049B /* newPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E1FB242A3DDC1500F9049B /* newPostView.swift */; };
+		07EF7C9E2A49B998008E41D4 /* TagField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EF7C9D2A49B998008E41D4 /* TagField.swift */; };
+		07EF7CA42A49BE16008E41D4 /* TagDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EF7CA32A49BE16008E41D4 /* TagDetail.swift */; };
+		07EF7CAC2A4AA004008E41D4 /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EF7CAB2A4AA004008E41D4 /* DateHelper.swift */; };
+		07EF7CB22A4AE343008E41D4 /* LikesAndCommentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EF7CB12A4AE343008E41D4 /* LikesAndCommentButton.swift */; };
+		07EF7CB42A4B225C008E41D4 /* TagElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EF7CB32A4B225C008E41D4 /* TagElement.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0712DDA02A3DEA3B00A8AC0E /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		072636442A4BD82D0030DF8A /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		072E24652A3F02DC00E58EE9 /* CircleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImage.swift; sourceTree = "<group>"; };
+		073C192E2A4C058F001A2411 /* TextFieldWithIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithIcon.swift; sourceTree = "<group>"; };
+		073C19302A4C7675001A2411 /* newReply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newReply.swift; sourceTree = "<group>"; };
+		073C19322A4C89F8001A2411 /* SecureFieldWithIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureFieldWithIcon.swift; sourceTree = "<group>"; };
+		073C19342A4D47E1001A2411 /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
+		073C19362A4D550B001A2411 /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
+		074EF28E2A50500600D486A3 /* NoticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeView.swift; sourceTree = "<group>"; };
+		075948DE2A56C9E60010AB55 /* TagsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsData.swift; sourceTree = "<group>"; };
+		07697A652A53EF8E009C744E /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
+		0779EE1A2A5461A600EE3D93 /* LinksProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinksProfileView.swift; sourceTree = "<group>"; };
+		0779EE1C2A556B4A00EE3D93 /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
+		0783CE302A419008009A2F7D /* InfoDisplayWithTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoDisplayWithTitleView.swift; sourceTree = "<group>"; };
+		0783CE322A41A952009A2F7D /* LiangJianForum.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LiangJianForum.entitlements; sourceTree = "<group>"; };
+		07A867FF2A3D879E00311F65 /* FlarumiOSApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlarumiOSApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		07A868022A3D879E00311F65 /* FlarumiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlarumiOSApp.swift; sourceTree = "<group>"; };
+		07A868042A3D879E00311F65 /* LoginPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPageView.swift; sourceTree = "<group>"; };
+		07A868062A3D879F00311F65 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		07A868092A3D879F00311F65 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		07B63C392A4976CC00594DA8 /* DiscussionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionData.swift; sourceTree = "<group>"; };
+		07CBD4662A4E8421007854DA /* PostDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailModel.swift; sourceTree = "<group>"; };
+		07CBD4682A4E9008007854DA /* PostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailView.swift; sourceTree = "<group>"; };
+		07CBD46A2A4EC076007854DA /* PostData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostData.swift; sourceTree = "<group>"; };
+		07CBD46C2A4EC1F8007854DA /* FastPostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastPostDetailView.swift; sourceTree = "<group>"; };
+		07CBD46E2A4FD799007854DA /* PostDataWithTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDataWithTag.swift; sourceTree = "<group>"; };
+		07CBD4702A4FFCB9007854DA /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
+		07DF6F3B2A557AEF0073CDE8 /* ChangeProfileDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeProfileDetail.swift; sourceTree = "<group>"; };
+		07E1FB1E2A3DB32D00F9049B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		07E1FB202A3DB34000F9049B /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
+		07E1FB242A3DDC1500F9049B /* newPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newPostView.swift; sourceTree = "<group>"; };
+		07EF7C9D2A49B998008E41D4 /* TagField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagField.swift; sourceTree = "<group>"; };
+		07EF7CA32A49BE16008E41D4 /* TagDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagDetail.swift; sourceTree = "<group>"; };
+		07EF7CAB2A4AA004008E41D4 /* DateHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
+		07EF7CB12A4AE343008E41D4 /* LikesAndCommentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesAndCommentButton.swift; sourceTree = "<group>"; };
+		07EF7CB32A4B225C008E41D4 /* TagElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagElement.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		07A867FC2A3D879E00311F65 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		074EF28D2A504FF100D486A3 /* Notice */ = {
+			isa = PBXGroup;
+			children = (
+				074EF28E2A50500600D486A3 /* NoticeView.swift */,
+			);
+			path = Notice;
+			sourceTree = "<group>";
+		};
+		0751B14F2A4801A6007AEC9D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				07B63C392A4976CC00594DA8 /* DiscussionData.swift */,
+				07CBD4662A4E8421007854DA /* PostDetailModel.swift */,
+				07CBD46A2A4EC076007854DA /* PostData.swift */,
+				07CBD46E2A4FD799007854DA /* PostDataWithTag.swift */,
+				07697A652A53EF8E009C744E /* UserData.swift */,
+				075948DE2A56C9E60010AB55 /* TagsData.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		07697A642A516340009C744E /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				07EF7CAB2A4AA004008E41D4 /* DateHelper.swift */,
+				072636442A4BD82D0030DF8A /* AppSettings.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		07A867F62A3D879E00311F65 = {
+			isa = PBXGroup;
+			children = (
+				07A868012A3D879E00311F65 /* LiangJianForum */,
+				07A868002A3D879E00311F65 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		07A868002A3D879E00311F65 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				07A867FF2A3D879E00311F65 /* FlarumiOSApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		07A868012A3D879E00311F65 /* LiangJianForum */ = {
+			isa = PBXGroup;
+			children = (
+				0783CE322A41A952009A2F7D /* LiangJianForum.entitlements */,
+				0751B14F2A4801A6007AEC9D /* Model */,
+				07E1FB1D2A3DA16B00F9049B /* View */,
+				07A868022A3D879E00311F65 /* FlarumiOSApp.swift */,
+				07A868062A3D879F00311F65 /* Assets.xcassets */,
+				07A868082A3D879F00311F65 /* Preview Content */,
+			);
+			path = LiangJianForum;
+			sourceTree = "<group>";
+		};
+		07A868082A3D879F00311F65 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				07A868092A3D879F00311F65 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		07E1FB1D2A3DA16B00F9049B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				07697A642A516340009C744E /* Helper */,
+				074EF28D2A504FF100D486A3 /* Notice */,
+				07EF7CB72A4B2946008E41D4 /* Sub */,
+				07EF7CA22A49BA29008E41D4 /* Tag */,
+				07EF7CA12A49B9F6008E41D4 /* Post */,
+				07EF7CA02A49B9D9008E41D4 /* Profile */,
+				07EF7C9F2A49B99F008E41D4 /* Login */,
+				07E1FB1E2A3DB32D00F9049B /* ContentView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		07EF7C9F2A49B99F008E41D4 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				07E1FB202A3DB34000F9049B /* RegistrationView.swift */,
+				07A868042A3D879E00311F65 /* LoginPageView.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		07EF7CA02A49B9D9008E41D4 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				0712DDA02A3DEA3B00A8AC0E /* ProfileView.swift */,
+				0779EE1A2A5461A600EE3D93 /* LinksProfileView.swift */,
+				07DF6F3B2A557AEF0073CDE8 /* ChangeProfileDetail.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		07EF7CA12A49B9F6008E41D4 /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				07E1FB242A3DDC1500F9049B /* newPostView.swift */,
+				073C19302A4C7675001A2411 /* newReply.swift */,
+				073C19342A4D47E1001A2411 /* PostView.swift */,
+				07CBD4682A4E9008007854DA /* PostDetailView.swift */,
+				07CBD46C2A4EC1F8007854DA /* FastPostDetailView.swift */,
+			);
+			path = Post;
+			sourceTree = "<group>";
+		};
+		07EF7CA22A49BA29008E41D4 /* Tag */ = {
+			isa = PBXGroup;
+			children = (
+				07EF7C9D2A49B998008E41D4 /* TagField.swift */,
+				07EF7CA32A49BE16008E41D4 /* TagDetail.swift */,
+				07EF7CB32A4B225C008E41D4 /* TagElement.swift */,
+				07CBD4702A4FFCB9007854DA /* TagView.swift */,
+			);
+			path = Tag;
+			sourceTree = "<group>";
+		};
+		07EF7CB72A4B2946008E41D4 /* Sub */ = {
+			isa = PBXGroup;
+			children = (
+				07EF7CB12A4AE343008E41D4 /* LikesAndCommentButton.swift */,
+				0783CE302A419008009A2F7D /* InfoDisplayWithTitleView.swift */,
+				072E24652A3F02DC00E58EE9 /* CircleImage.swift */,
+				073C19362A4D550B001A2411 /* AsyncImage.swift */,
+				073C192E2A4C058F001A2411 /* TextFieldWithIcon.swift */,
+				073C19322A4C89F8001A2411 /* SecureFieldWithIcon.swift */,
+				0779EE1C2A556B4A00EE3D93 /* FavoriteButton.swift */,
+			);
+			path = Sub;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		07A867FE2A3D879E00311F65 /* FlarumiOSApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 07A8680D2A3D879F00311F65 /* Build configuration list for PBXNativeTarget "FlarumiOSApp" */;
+			buildPhases = (
+				07A867FB2A3D879E00311F65 /* Sources */,
+				07A867FC2A3D879E00311F65 /* Frameworks */,
+				07A867FD2A3D879E00311F65 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FlarumiOSApp;
+			productName = LiangJianForum;
+			productReference = 07A867FF2A3D879E00311F65 /* FlarumiOSApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		07A867F72A3D879E00311F65 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					07A867FE2A3D879E00311F65 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = 07A867FA2A3D879E00311F65 /* Build configuration list for PBXProject "FlarumiOSApp" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 07A867F62A3D879E00311F65;
+			productRefGroup = 07A868002A3D879E00311F65 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				07A867FE2A3D879E00311F65 /* FlarumiOSApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		07A867FD2A3D879E00311F65 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07A8680A2A3D879F00311F65 /* Preview Assets.xcassets in Resources */,
+				07A868072A3D879F00311F65 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		07A867FB2A3D879E00311F65 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0779EE1B2A5461A600EE3D93 /* LinksProfileView.swift in Sources */,
+				07CBD46D2A4EC1F8007854DA /* FastPostDetailView.swift in Sources */,
+				07CBD46B2A4EC076007854DA /* PostData.swift in Sources */,
+				073C192F2A4C058F001A2411 /* TextFieldWithIcon.swift in Sources */,
+				07CBD4692A4E9008007854DA /* PostDetailView.swift in Sources */,
+				07A868052A3D879E00311F65 /* LoginPageView.swift in Sources */,
+				0712DDA12A3DEA3B00A8AC0E /* ProfileView.swift in Sources */,
+				075948DF2A56C9E60010AB55 /* TagsData.swift in Sources */,
+				07B63C3A2A4976CC00594DA8 /* DiscussionData.swift in Sources */,
+				073C19372A4D550B001A2411 /* AsyncImage.swift in Sources */,
+				073C19332A4C89F8001A2411 /* SecureFieldWithIcon.swift in Sources */,
+				07E1FB252A3DDC1500F9049B /* newPostView.swift in Sources */,
+				07A868032A3D879E00311F65 /* FlarumiOSApp.swift in Sources */,
+				0783CE312A419008009A2F7D /* InfoDisplayWithTitleView.swift in Sources */,
+				07EF7CAC2A4AA004008E41D4 /* DateHelper.swift in Sources */,
+				07E1FB1F2A3DB32D00F9049B /* ContentView.swift in Sources */,
+				073C19312A4C7675001A2411 /* newReply.swift in Sources */,
+				07EF7CB42A4B225C008E41D4 /* TagElement.swift in Sources */,
+				07CBD4712A4FFCB9007854DA /* TagView.swift in Sources */,
+				07EF7C9E2A49B998008E41D4 /* TagField.swift in Sources */,
+				07EF7CA42A49BE16008E41D4 /* TagDetail.swift in Sources */,
+				074EF28F2A50500600D486A3 /* NoticeView.swift in Sources */,
+				07E1FB212A3DB34000F9049B /* RegistrationView.swift in Sources */,
+				07697A662A53EF8E009C744E /* UserData.swift in Sources */,
+				07EF7CB22A4AE343008E41D4 /* LikesAndCommentButton.swift in Sources */,
+				072636452A4BD82D0030DF8A /* AppSettings.swift in Sources */,
+				073C19352A4D47E1001A2411 /* PostView.swift in Sources */,
+				072E24662A3F02DC00E58EE9 /* CircleImage.swift in Sources */,
+				0779EE1D2A556B4A00EE3D93 /* FavoriteButton.swift in Sources */,
+				07CBD46F2A4FD799007854DA /* PostDataWithTag.swift in Sources */,
+				07DF6F3C2A557AEF0073CDE8 /* ChangeProfileDetail.swift in Sources */,
+				07CBD4672A4E8421007854DA /* PostDetailModel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		07A8680B2A3D879F00311F65 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		07A8680C2A3D879F00311F65 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		07A8680E2A3D879F00311F65 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LiangJianForum/LiangJianForum.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"LiangJianForum/Preview Content\"";
+				DEVELOPMENT_TEAM = 9XYPW6PMST;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = FlarumiOSApp;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.RomanticDi.FlarumApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		07A8680F2A3D879F00311F65 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LiangJianForum/LiangJianForum.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"LiangJianForum/Preview Content\"";
+				DEVELOPMENT_TEAM = 9XYPW6PMST;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = FlarumiOSApp;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.RomanticDi.FlarumApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		07A867FA2A3D879E00311F65 /* Build configuration list for PBXProject "FlarumiOSApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07A8680B2A3D879F00311F65 /* Debug */,
+				07A8680C2A3D879F00311F65 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		07A8680D2A3D879F00311F65 /* Build configuration list for PBXNativeTarget "FlarumiOSApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07A8680E2A3D879F00311F65 /* Debug */,
+				07A8680F2A3D879F00311F65 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 07A867F72A3D879E00311F65 /* Project object */;
+}
