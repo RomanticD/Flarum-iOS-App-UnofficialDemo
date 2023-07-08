@@ -45,22 +45,17 @@ extension String {
 }
 
 
-func extractImageURLs(from string: String) -> [String]? {
-    let pattern = #"\[upl-image-preview url=([^]]+)\]"#
+func extractImageURLs(from htmlString: String) -> [String]? {
+    var imageURLs: [String] = []
+    
+    let pattern = "<img[^>]+src\\s*=\\s*\"([^\"]+)\"[^>]*>"
     let regex = try! NSRegularExpression(pattern: pattern, options: [])
-    let range = NSRange(location: 0, length: string.utf16.count)
-    let matches = regex.matches(in: string, options: [], range: range)
-    
-    guard matches.count > 0 else {
-        return nil
-    }
-    
-    var imageURLs = [String]()
+    let matches = regex.matches(in: htmlString, options: [], range: NSRange(location: 0, length: htmlString.utf16.count))
     
     for match in matches {
-        let urlRange = match.range(at: 1)
-        if let urlRange = Range(urlRange, in: string) {
-            let url = String(string[urlRange])
+        let range = match.range(at: 1)
+        if let urlRange = Range(range, in: htmlString) {
+            let url = String(htmlString[urlRange])
             imageURLs.append(url)
         }
     }

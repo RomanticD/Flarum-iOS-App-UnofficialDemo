@@ -47,5 +47,5 @@ struct asyncImage: View {
 
 
 //#Preview {
-//    asyncImage(url: URL(string: "https://hk.maxmc.cc/assets/avatars/T3TfVXzgpPqaGC8F.png"), frameSize: 60)
+//    asyncImage(url: URL(string: "https://github.com/RomanticD/Flarum-iOS-App-UnofficialDemo/assets/96178954/aef96ee1-3e73-4a60-b0eb-8f40e9ce1963"),frameSize: 70, lineWidth: 2, shadow: 5)
 //}
