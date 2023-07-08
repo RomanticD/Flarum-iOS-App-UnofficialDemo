@@ -150,7 +150,7 @@ struct fastPostDetailView: View {
                                         }
                                         
                                         if let editedTime = item.attributes.editedAt{
-                                            Text("已编辑")
+                                            Text("Edited")
                                                 .font(.system(size: 8))
                                                 .foregroundColor(.gray)
                                                 .italic()
@@ -246,7 +246,7 @@ struct fastPostDetailView: View {
                                         }
                                         
                                         if let editedTime = item.attributes.editedAt{
-                                            Text("已编辑")
+                                            Text("Edited")
                                                 .font(.system(size: 8))
                                                 .foregroundColor(.gray)
                                                 .italic()
