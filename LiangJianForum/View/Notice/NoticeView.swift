@@ -167,11 +167,14 @@ struct NoticeView: View {
                                                     CommentCount = await fetchCommentCount(DiscussionId)
                                                 }
 
-                                                Text(contentHtml.htmlConvertedWithoutUrl)
-                                                    .padding(.bottom)
-                                                    .padding(.leading, 3)
-                                                    .font(.system(size: 15))
+                                                HStack {
+                                                    Text(contentHtml.htmlConvertedWithoutUrl)
+                                                        .padding(.bottom)
+                                                        .font(.system(size: 18))
                                                     .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
+                                                    
+                                                    Spacer()
+                                                }
                                             }
                                             .navigationDestination(for: Datum8.self){item in
                                                 fastPostDetailView(postTitle: DiscussionTitle, postID: DiscussionId, commentCount: CommentCount).environmentObject(appsettings)
