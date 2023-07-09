@@ -65,7 +65,7 @@ struct TagDetail: View {
                     if hasPrevPage || hasNextPage {
                         HStack{
                             Button(action: {
-                                if currentPageOffset > 20 {
+                                if currentPageOffset >= 20 {
                                     currentPageOffset -= 20
                                 }
                                 isLoading = true
@@ -127,7 +127,7 @@ struct TagDetail: View {
                             }
                             .padding(.trailing)
                             .disabled(!hasNextPage)
-                        }
+                        }.padding(.top)
                     }
   
                     List {
@@ -243,7 +243,9 @@ struct TagDetail: View {
                         newPostView().environmentObject(appsettings)
                             .presentationDetents([.height(480)])
                     }
+                    .toolbarBackground(.visible, for: .navigationBar)
                     .navigationTitle(self.selectedTag.attributes.name)
+                    .toolbarBackground(selectedTag.attributes.color.isEmpty ? Color.gray.opacity(0.8) : Color(hex: removeFirstCharacter(from: selectedTag.attributes.color)).opacity(0.8), for: .automatic)
                     .navigationBarTitleDisplayMode(.inline)
                     .navigationDestination(for: Datum.self){item in
                         fastPostDetailView(postTitle: item.attributes.title, postID: item.id, commentCount: item.attributes.commentCount).environmentObject(appsettings)

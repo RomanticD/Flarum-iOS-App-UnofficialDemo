@@ -16,6 +16,7 @@ class AppSettings: ObservableObject {
     @Published var FlarumUrl = "https://discuss.flarum.org"
     @Published var FlarumName = "Flarum"
     @Published var token = ""
+    @Published var username = ""
     @Published var userId = 0
     
     func refreshPost() {

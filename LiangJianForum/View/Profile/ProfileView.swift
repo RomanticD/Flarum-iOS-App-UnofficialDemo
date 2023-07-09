@@ -156,9 +156,9 @@ struct ProfileView: View {
 //        nickName = newNickName
 //        introduction = newIntroduction
         
-        buttonText = "保存成功!"
+        buttonText = "Successfully Saved!"
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            buttonText = "保存"
+            buttonText = "Save"
             savePersonalProfile = false
         }
     }
@@ -186,6 +186,8 @@ struct ProfileView: View {
             let (data, _) = try await URLSession.shared.data(from: url)
             
             if let decodedResponse = try? JSONDecoder().decode(UserData.self, from: data){
+                appSettings.username = decodedResponse.data.attributes.username
+                
                 if let includes = decodedResponse.included{
                     self.include = includes
                 }
@@ -213,6 +215,7 @@ struct ProfileView: View {
             print("Invalid user Data!" ,error)
         }
     }
+
 }
 
 //struct ProfileView_Previews: PreviewProvider {

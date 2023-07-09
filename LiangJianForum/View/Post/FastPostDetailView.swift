@@ -406,7 +406,7 @@ struct fastPostDetailView: View {
                 
                 processIncludedArray(includes)
             }else{
-                print("Decoding to PostData.self Falied!")
+                print("Decoding to PostData.self Failed!")
                 
                 if let decodedResponse = try? JSONDecoder().decode(PostDataWithTag.self, from: data){
                     print("Successfully finding an alternative decoding method")
@@ -421,7 +421,7 @@ struct fastPostDetailView: View {
                     
                     processIncludedTagsArray(includesTags)
                 }else{
-                    print("Decoding to PostDataWithTag.self Falied!")
+                    print("Decoding to PostDataWithTag.self Failed!")
                 }
             }
 

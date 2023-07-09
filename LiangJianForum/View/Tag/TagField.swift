@@ -12,17 +12,24 @@ struct TagField: View {
     
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(tags, id: \.id) { tag in
-                    NavigationLink(value: tag){
-                        TagElement(tag: tag, fontSize: 20)
+            if tags.isEmpty{
+                HStack {
+                    Text("Loading...")
+                    ProgressView()
+                }
+            }else{
+                List {
+                    ForEach(tags, id: \.id) { tag in
+                        NavigationLink(value: tag){
+                            TagElement(tag: tag, fontSize: 20)
+                        }
                     }
                 }
+                .navigationDestination(for: Datum6.self){data in
+                    TagDetail(selectedTag: data)
+                }
+                .navigationTitle("All Tags")
             }
-            .navigationDestination(for: Datum6.self){data in
-                TagDetail(selectedTag: data)
-            }
-            .navigationTitle("All Tags")
         }
         .task {
             await fetchTagsData()
