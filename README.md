@@ -63,9 +63,8 @@ _*Please note do not use com.flarum or any similar wording that could imply the 
 
 8. Check all your comment in Notification Center
 <div align="left">
-  <img src="https://github.com/RomanticD/Flarum-iOS-App-UnofficialDemo/assets/96178954/1133950b-6c0d-4a13-a823-9e30d3868547" alt="DarkMode" width="180">
+  <img src="https://github.com/RomanticD/Flarum-iOS-App-UnofficialDemo/assets/96178954/75b5c329-e4df-4d5a-a80e-5289cf16f6f2" alt="DarkMode" width="180">
 </div>
-
 
 ## Customization
 
@@ -75,7 +74,6 @@ If you want to adapt the app to your own Flarum installation, follow these steps
 2. Replace the values of `FlarumUrl` and `FlarumName` in the following code snippet with the URL and name of your Flarum installation:
 
 ```
-swiftCopy code
 @Published var FlarumUrl = "https://discuss.flarum.org"
 @Published var FlarumName = "Flarum"
 ```
