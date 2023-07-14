@@ -242,7 +242,7 @@ struct PostView: View {
                     }
                     .sheet(isPresented: $showingPostingArea) {
                         newPostView().environmentObject(appsettings)
-                            .presentationDetents([.height(480)])
+                            .presentationDetents([.height(560)])
                     }
                     .navigationTitle("All Discussions")
                     .navigationDestination(for: Datum.self){item in

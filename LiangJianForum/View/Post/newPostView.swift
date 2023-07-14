@@ -18,16 +18,13 @@ struct newPostView: View {
     @State private var newPostContent = ""
     @State private var message = "Post"
     @EnvironmentObject var appSettings: AppSettings
+    @State private var tags = [Datum6]()
+    @State private var selectedButtonIds: [String] = []
     
     
     var body: some View {
         ScrollView{
             VStack {
-//                Text("发布新帖")
-//                    .font(.title)
-//                    .bold()
-//                    .padding(.top, 50)
-//                
                 VStack {
                     HStack {
                         Image(systemName: "rectangle.and.text.magnifyingglass")
@@ -62,7 +59,7 @@ struct newPostView: View {
                             .foregroundColor(.blue)
                             .frame(width: 30, height: 30)
                         
-                        Text("content")
+                        Text("Content")
                             .font(.headline)
                             .opacity(0.8)
                         
@@ -83,31 +80,35 @@ struct newPostView: View {
                         }
                 }
                 
-//                VStack {
-//                    HStack {
-//                        Image(systemName: "tag")
-//                            .font(.system(size: 20))
-//                            .foregroundColor(.blue)
-//                            .frame(width: 30, height: 30)
-//                        
-//                        Text("标签")
-//                            .font(.headline)
-//                            .opacity(0.8)
-//                        
-//                        Spacer()
-//                    }
-//                    .padding(.top)
-//                    .padding(.leading)
-//                    
-//
-//                    ScrollView {
-//                        ForEach(TagManager.shared.tags, id: \.content) { tag in
-//                            TagView(tags: [TagViewItem(title: tag.content, isSelected: false)]).padding(.leading)
-//                        }
-//                    }
-//                    Spacer()
-//        
-//                }
+                VStack {
+                    HStack {
+                        Image(systemName: "tag.fill")
+                            .font(.system(size: 20))
+                            .foregroundColor(.blue)
+                            .frame(width: 30, height: 30)
+                        
+                        Text("Select Tags")
+                            .font(.headline)
+                            .opacity(0.8)
+                        
+                        Spacer()
+                    }
+                    .padding(.top)
+                    .padding(.leading)
+                    
+
+                    ScrollView {
+                        ForEach(tags, id: \.id) { tag in
+                            HStack {
+                                TagButton(id: tag.id, tagColor: tag.attributes.color.isEmpty ? Color.gray : Color(hex: removeFirstCharacter(from: tag.attributes.color)), title: tag.attributes.name, selectedButtonIds: $selectedButtonIds).padding(.leading)
+                                
+                                Spacer()
+                            }
+                        }
+                    }
+                    Spacer()
+        
+                }
 
                 Button(action: saveNewPost) {
                         Text(message)
@@ -118,15 +119,13 @@ struct newPostView: View {
                 .background(Color.blue)
                 .cornerRadius(10)
                 .opacity(0.8)
-//                .disabled(newPostContent.count < 3)
+                .padding(.top)
 
             }
             .onAppear{
                 newPostTitle = postTitle
                 newPostContent = postContent
             }
-//            .background(
-//                LinearGradient(gradient: Gradient(colors: [Color(hex: "c2e59c"), Color(hex: "64b3f4")]), startPoint: .leading, endPoint: .trailing))
             .alert(isPresented: $succeessfullyPosted) {
                 Alert(title: Text("Post successfully published"),
                       message: nil,
@@ -134,6 +133,9 @@ struct newPostView: View {
                         dismiss()
                     }))
             }
+        }
+        .task {
+            await fetchTagsData()
         }
     }
     
@@ -143,7 +145,15 @@ struct newPostView: View {
         sendPostRequest()
         
         if newPostTitle.count <= 3 {
-            message = "Title too shour！"
+            message = "Title too short！"
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                message = "post"
+            }
+        }
+        
+        if newPostContent.count <= 3 {
+            message = "Content too short！"
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 message = "post"
@@ -169,6 +179,12 @@ struct newPostView: View {
             return
         }
         
+        var selectedTags: [[String: Any]] = []
+        
+        for tagId in selectedButtonIds {
+            selectedTags.append(["type": "tags", "id": tagId])
+        }
+        
         let parameters: [String: Any] = [
             "data": [
                 "type": "discussions",
@@ -178,12 +194,7 @@ struct newPostView: View {
                 ],
                 "relationships": [
                     "tags": [
-                        "data": [
-                            [
-                                "type": "tags",
-                                "id": "20"
-                            ]
-                        ]
+                        "data": selectedTags
                     ]
                 ]
             ]
@@ -226,6 +237,23 @@ struct newPostView: View {
                 appSettings.refreshPost()
            }
         }.resume()
+    }
+    
+    private func fetchTagsData() async {
+        guard let url = URL(string: "\(appSettings.FlarumUrl)/api/tags") else {
+            print("Invalid URL")
+            return
+        }
+        
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            
+            if let decodedResponse = try? JSONDecoder().decode(TagsData.self, from: data) {
+                self.tags = decodedResponse.data
+            }
+        } catch {
+            print("Invalid Tags Data!", error)
+        }
     }
 }
 
