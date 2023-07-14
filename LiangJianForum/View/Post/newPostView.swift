@@ -99,7 +99,7 @@ struct newPostView: View {
                     ForEach(tags, id: \.id) { tag in
                         HStack {
                             TagButton(id: tag.id, tagColor: tag.attributes.color.isEmpty ? Color.gray : Color(hex: removeFirstCharacter(from: tag.attributes.color)), title: tag.attributes.name, selectedButtonIds: $selectedButtonIds).padding(.leading)
-                            
+
                             Spacer()
                         }
                     }
