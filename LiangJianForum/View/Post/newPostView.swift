@@ -85,7 +85,6 @@ struct newPostView: View {
                         Image(systemName: "tag.fill")
                             .font(.system(size: 20))
                             .foregroundColor(.blue)
-                            .frame(width: 30, height: 30)
                         
                         Text("Select Tags")
                             .font(.headline)
@@ -97,17 +96,15 @@ struct newPostView: View {
                     .padding(.leading)
                     
 
-                    ScrollView {
-                        ForEach(tags, id: \.id) { tag in
-                            HStack {
-                                TagButton(id: tag.id, tagColor: tag.attributes.color.isEmpty ? Color.gray : Color(hex: removeFirstCharacter(from: tag.attributes.color)), title: tag.attributes.name, selectedButtonIds: $selectedButtonIds).padding(.leading)
-                                
-                                Spacer()
-                            }
+                    ForEach(tags, id: \.id) { tag in
+                        HStack {
+                            TagButton(id: tag.id, tagColor: tag.attributes.color.isEmpty ? Color.gray : Color(hex: removeFirstCharacter(from: tag.attributes.color)), title: tag.attributes.name, selectedButtonIds: $selectedButtonIds).padding(.leading)
+
+                            Spacer()
                         }
                     }
+                    
                     Spacer()
-        
                 }
 
                 Button(action: saveNewPost) {
