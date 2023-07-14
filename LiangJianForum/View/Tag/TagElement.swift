@@ -14,7 +14,7 @@ struct TagElement: View {
     var body: some View {
         HStack {
             Image(systemName: "square.fill")
-                .foregroundStyle(tag.attributes.color.isEmpty ? Color.black : Color(hex: removeFirstCharacter(from: tag.attributes.color)))
+                .foregroundStyle(tag.attributes.color.isEmpty ? Color.gray : Color(hex: removeFirstCharacter(from: tag.attributes.color)))
                 .font(.system(size: fontSize))
                 .padding(.top, 10)
                 .padding(.bottom, 10)
