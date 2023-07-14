@@ -40,12 +40,15 @@ _*Please note do not use com.flarum or any similar wording that could imply the 
   <img src="https://github.com/RomanticD/Flarum-iOS-App-UnofficialDemo/assets/96178954/ecd34afa-477d-4b78-b9e6-de78a4898b84" alt="TagsPage" width="180">
 </div>
 
-5. Create new discussions and reply to existing discussions
+5. Create new discussions with tags and reply to existing discussions
 <div align="left">
   <img src="https://github.com/RomanticD/Flarum-iOS-App-UnofficialDemo/assets/96178954/f189906d-0df4-4184-bea3-5ff8c41613f5" alt="NewDiscussion" width="180">
 </div>
 <div align="left">
   <img src="https://github.com/RomanticD/Flarum-iOS-App-UnofficialDemo/assets/96178954/d2f82b58-e45b-4c5b-ab1d-1dcf019de766" alt="NewReply" width="180">
+</div>
+<div align="left">
+  <img src="https://github.com/RomanticD/Flarum-iOS-App-UnofficialDemo/assets/96178954/224035ed-70ea-4ddc-953a-1772d123163e" alt="Tags" width="180">
 </div>
 
 6. User profile page with the ability to view the profile of users who replied to a discussion
@@ -61,7 +64,7 @@ _*Please note do not use com.flarum or any similar wording that could imply the 
   <img src="https://github.com/RomanticD/Flarum-iOS-App-UnofficialDemo/assets/96178954/1133950b-6c0d-4a13-a823-9e30d3868547" alt="DarkMode" width="180">
 </div>
 
-8. Check all your comment in Notification Center
+8. Check all your comments in Notification Center
 <div align="left">
   <img src="https://github.com/RomanticD/Flarum-iOS-App-UnofficialDemo/assets/96178954/75b5c329-e4df-4d5a-a80e-5289cf16f6f2" alt="DarkMode" width="180">
 </div>
