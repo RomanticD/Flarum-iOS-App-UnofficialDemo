@@ -61,92 +61,86 @@ struct TagDetail: View {
             if discussionData.isEmpty {
                 ProgressView()
             } else {
-//                NavigationStack{
-                    if hasPrevPage || hasNextPage {
-                        HStack{
-                            Button(action: {
-                                if currentPageOffset >= 20 {
-                                    currentPageOffset -= 20
-                                }
-                                isLoading = true
-                                Task {
-                                    await fetchTagsDetailPosts()
-                                    isLoading = false
-                                }
-                            }) {
-                                HStack{
-                                    Image(systemName: "chevron.left")
-                                        .foregroundColor(hasPrevPage ? .blue : .secondary)
-                                        .font(.system(size: 20))
-                                        .padding(.top, 1)
-                                    Text("Prev")
-                                        .foregroundStyle(hasPrevPage ? .blue : .secondary)
-                                        .font(.system(size: 14))
-                                }
+                if hasPrevPage || hasNextPage {
+                    HStack{
+                        Button(action: {
+                            if currentPageOffset >= 20 {
+                                currentPageOffset -= 20
                             }
-                            .padding(.leading)
-                            .disabled(!hasPrevPage)
-                            
-                            Spacer()
-                            
-                            Button(action: {
-                                isLoading = true
-                                currentPageOffset = 0
+                            isLoading = true
+                            Task {
+                                await fetchTagsDetailPosts()
                                 isLoading = false
-                                Task {
-                                    await fetchTagsDetailPosts()
-                                    isLoading = false
-                                }
-                            }) {
-                                HStack{
-                                    Text("First Page")
-                                        .foregroundStyle(hasPrevPage ? .blue : .secondary)
-                                        .font(.system(size: 14))
-                                }
                             }
-                            
-                            Spacer()
-                            
-                            Button(action: {
-                                currentPageOffset += 20
-                                isLoading = true
-                                Task {
-                                    await fetchTagsDetailPosts()
-                                    isLoading = false
-                                }
-                            }) {
-                                HStack{
-                                    Text("Next")
-                                        .foregroundStyle(hasNextPage ? .blue : .secondary)
-                                        .font(.system(size: 14))
-                                    Image(systemName: "chevron.right")
-                                        .foregroundColor(hasNextPage ? .blue : .secondary)
-                                        .font(.system(size: 20))
-                                        .padding(.top, 1)
-                                }
+                        }) {
+                            HStack{
+                                Image(systemName: "chevron.left")
+                                    .foregroundColor(hasPrevPage ? .blue : .secondary)
+                                    .font(.system(size: 20))
+                                    .padding(.top, 1)
+                                Text("Prev")
+                                    .foregroundStyle(hasPrevPage ? .blue : .secondary)
+                                    .font(.system(size: 14))
                             }
-                            .padding(.trailing)
-                            .disabled(!hasNextPage)
-                        }.padding(.top)
-                    }
-  
+                        }
+                        .padding(.leading)
+                        .disabled(!hasPrevPage)
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            isLoading = true
+                            currentPageOffset = 0
+                            isLoading = false
+                            Task {
+                                await fetchTagsDetailPosts()
+                                isLoading = false
+                            }
+                        }) {
+                            HStack{
+                                Text("First Page")
+                                    .foregroundStyle(hasPrevPage ? .blue : .secondary)
+                                    .font(.system(size: 14))
+                            }
+                        }
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            currentPageOffset += 20
+                            isLoading = true
+                            Task {
+                                await fetchTagsDetailPosts()
+                                isLoading = false
+                            }
+                        }) {
+                            HStack{
+                                Text("Next")
+                                    .foregroundStyle(hasNextPage ? .blue : .secondary)
+                                    .font(.system(size: 14))
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(hasNextPage ? .blue : .secondary)
+                                    .font(.system(size: 20))
+                                    .padding(.top, 1)
+                            }
+                        }
+                        .padding(.trailing)
+                        .disabled(!hasNextPage)
+                    }.padding(.top)
+                }
+
+                ScrollViewReader { proxy in
                     List {
                         Section{
                             ForEach(filteredDiscussionData, id: \.id) { item in
                                 if item.attributes.lastPostedAt != nil{
-    //                                    NavigationLink(
-    //                                        destination: fastPostDetailView(postTitle: item.attributes.title, postID: item.id, commentCount: item.attributes.commentCount).environmentObject(appsettings),
-    //                                        tag: Int(item.id)!,
-    //                                        selection: $selectedRow
-    //                                )
-//                                    {
                                     HStack {
                                         VStack {
                                             NavigationLink(value: item){
                                                 //MARK: 头像及标题
                                                 HStack{
                                                     if let user = findUser(with: item.relationships.user.data.id) {
-
+                                                        
                                                         if let avatarURL = user.attributes.avatarUrl {
                                                             asyncImage(url: URL(string: avatarURL), frameSize: 70, lineWidth: 1, shadow: 3)
                                                         } else {
@@ -154,7 +148,7 @@ struct TagDetail: View {
                                                                 .opacity (0.3)
                                                         }
                                                     }
-          
+                                                    
                                                     VStack {
                                                         HStack {
                                                             Text(item.attributes.title)
@@ -170,7 +164,7 @@ struct TagDetail: View {
                                                 }
                                                 .padding(.top, 10)
                                             }
-
+                                            
                                             //MARK: 最后更新时间
                                             HStack {
                                                 Image(systemName: "clock.fill")
@@ -185,7 +179,7 @@ struct TagDetail: View {
                                                         .font(.system(size: 15))
                                                         .foregroundColor(.gray)
                                                 }
-
+                                                
                                                 Spacer()
                                             }
                                             .padding(.top, 10)
@@ -227,11 +221,18 @@ struct TagDetail: View {
                                     .listRowSeparator(.hidden)
                                 }
                             }
+                            .id("TagDetailList")
+                        }
+                    }
+                    .onChange(of: currentPageOffset) { _ in
+                        withAnimation {
+                            isLoading = true
+                            proxy.scrollTo("TagDetailList", anchor: .top)
+                            isLoading = false
                         }
                     }
                     .textSelection(.enabled)
                     .searchable(text: $searchTerm, prompt: "Search")
-//                    .listStyle(.inset)
                     .toolbar {
                         Button {
                             showingPostingArea.toggle()
@@ -250,7 +251,7 @@ struct TagDetail: View {
                     .navigationDestination(for: Datum.self){item in
                         fastPostDetailView(postTitle: item.attributes.title, postID: item.id, commentCount: item.attributes.commentCount).environmentObject(appsettings)
                     }
-//                }
+                }
             }
         }
         .refreshable {
