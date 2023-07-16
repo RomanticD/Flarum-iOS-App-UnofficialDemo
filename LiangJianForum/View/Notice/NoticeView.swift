@@ -154,7 +154,7 @@ struct NoticeView: View {
 
     private func fetchUserPosts() async {
 
-        guard let url = URL(string: "\(appsettings.FlarumUrl)/api/posts?filter%5Bauthor%5D=\(appsettings.username)&page%5Boffset%5D=\(currentPageOffset)") else{
+        guard let url = URL(string: "\(appsettings.FlarumUrl)/api/posts?filter%5Bauthor%5D=\(appsettings.username)&sort=-createdAt&page%5Boffset%5D=\(currentPageOffset)") else{
             print("Invalid URL")
             return
         }
