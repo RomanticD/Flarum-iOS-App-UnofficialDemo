@@ -49,8 +49,8 @@ If you want to adapt the app to your own Flarum installation, follow these steps
 
 3. View replies to discussions
 <div align="left">
-  <img src="https://github.com/RomanticD/Flarum-iOS-App-UnofficialDemo/assets/96178954/adc4b99d-2e4b-411a-ad5c-7d74f10ed166" alt="DiscussionPage" width="180">
-</div>
+  <img src="https://github.com/RomanticD/Flarum-iOS-App-UnofficialDemo/assets/96178954/04882ae0-6177-47d2-a547-0e9f60a5d22d" alt="DiscussionPage" width="180">
+</div
 
 4. Support for tags, allowing users to browse discussions by tags
 <div align="left">
