@@ -127,6 +127,7 @@ struct fastPostDetailView: View {
                 .pickerStyle(SegmentedPickerStyle())
                 .padding(.horizontal)
                 .animation(.easeInOut(duration: 1), value: sortOption)
+                .padding(.top, 5)
             
             if selectedSortOption == "Default"{
                 if (!postsArray.isEmpty && postsArrayTags.isEmpty){
