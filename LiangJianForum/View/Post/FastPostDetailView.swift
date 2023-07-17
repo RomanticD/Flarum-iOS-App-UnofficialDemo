@@ -12,6 +12,9 @@ struct fastPostDetailView: View {
     let postID: String
     let commentCount: Int
     
+    var sortOption = ["Default", "Latest"]
+    @State private var selectedSortOption = "Default"
+    
     @State private var currentPage = 1
     @State private var isLoading = false
     @Environment(\.colorScheme) var colorScheme
@@ -91,7 +94,10 @@ struct fastPostDetailView: View {
     var body: some View {
         VStack {
             if includes.isEmpty && includesTags.isEmpty {
-                ProgressView()
+                HStack {
+                    Text("Loading...").foregroundStyle(.secondary)
+                    ProgressView()
+                }
             } else {
                 if !tagsIdInPostDetail.isEmpty {
                     HStack {
@@ -110,204 +116,424 @@ struct fastPostDetailView: View {
                 }
             }
             
-            if (!postsArray.isEmpty && postsArrayTags.isEmpty){
-                List(filteredPostsArray, id: \.id){item in
-                    VStack {
-                        NavigationLink(value: item){
-                            HStack {
-                                VStack{
-                                    if let userid = item.relationships?.user?.data.id{
-                                        if let avatarURL = findImgUrl(userid, in: usersArray){
-                                            asyncImage(url: URL(string: avatarURL), frameSize: 50, lineWidth: 1, shadow: 3)
-                                                .padding(.top, 10)
-                                        }else{
-                                            CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 50, lineWidth: 0.7, shadow: 2)
-                                                .opacity(0.3)
-                                                .padding(.top, 10)
-                                        }
-                                    }
-                                    Spacer()
-                                }
-                                VStack {
-                                    HStack {
+            Picker(
+                selection : $selectedSortOption,
+                label: Text("Picker"),
+                content:{
+                    ForEach(sortOption.indices){index in
+                        Text(sortOption[index]).tag(sortOption[index])
+                    }
+                })
+                .pickerStyle(SegmentedPickerStyle())
+                .padding(.horizontal)
+                .animation(.easeInOut(duration: 1), value: sortOption)
+            
+            if selectedSortOption == "Default"{
+                if (!postsArray.isEmpty && postsArrayTags.isEmpty){
+                    // MARK: - Posts Without tags
+                    List(filteredPostsArray, id: \.id){item in
+                        VStack {
+                            NavigationLink(value: item){
+                                HStack {
+                                    VStack{
                                         if let userid = item.relationships?.user?.data.id{
-                                            if let displayName = findDisplayName(userid, in: usersArray){
-                                                Text(displayName)
-                                                    .font(.system(size: 12))
-                                                    .bold()
-                                                    .foregroundColor(colorScheme == .dark ? .white : .black)
-
-                                                    .padding(.leading, 3)
+                                            if let avatarURL = findImgUrl(userid, in: usersArray){
+                                                asyncImage(url: URL(string: avatarURL), frameSize: 50, lineWidth: 1, shadow: 3)
+                                                    .padding(.top, 10)
+                                            }else{
+                                                CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 50, lineWidth: 0.7, shadow: 2)
+                                                    .opacity(0.3)
+                                                    .padding(.top, 10)
                                             }
-                                        }else{
-                                            ProgressView()
                                         }
-     
-                                        if let createTime = item.attributes.createdAt{
-                                            Text(" \(calculateTimeDifference(from: createTime))")
-                                                .font(.system(size: 8))
-                                                .foregroundColor(.gray)
+                                        Spacer()
+                                    }
+                                    VStack {
+                                        HStack {
+                                            if let userid = item.relationships?.user?.data.id{
+                                                if let displayName = findDisplayName(userid, in: usersArray){
+                                                    Text(displayName)
+                                                        .font(.system(size: 12))
+                                                        .bold()
+                                                        .foregroundColor(colorScheme == .dark ? .white : .black)
+
+                                                        .padding(.leading, 3)
+                                                }
+                                            }else{
+                                                ProgressView()
+                                            }
+         
+                                            if let createTime = item.attributes.createdAt{
+                                                Text(" \(calculateTimeDifference(from: createTime))")
+                                                    .font(.system(size: 8))
+                                                    .foregroundColor(.gray)
+                                            }
+                                            
+                                            if let editedTime = item.attributes.editedAt{
+                                                Text("Edited")
+                                                    .font(.system(size: 8))
+                                                    .foregroundColor(.gray)
+                                                    .italic()
+                                            }
+                                            Spacer()
                                         }
                                         
-                                        if let editedTime = item.attributes.editedAt{
-                                            Text("Edited")
-                                                .font(.system(size: 8))
-                                                .foregroundColor(.gray)
-                                                .italic()
+                                        HStack {
+                                            if let content = item.attributes.contentHTML{
+                                                Text(content.htmlConvertedWithoutUrl)
+                                                    .padding(.top)
+                                                    .padding(.leading, 3)
+                                                    .font(.system(size: 15))
+                                                    .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
+                                            }else{
+                                                Text("unsupported")
+                                                    .foregroundColor(.gray)
+                                                    .padding(.top)
+                                                    .padding(.leading, 3)
+                                                    .font(.system(size: 20))
+                                                    .opacity(0.5)
+                                            }
+                                            Spacer()
                                         }
-                                        Spacer()
-                                    }
-                                    
-                                    HStack {
-                                        if let content = item.attributes.contentHTML{
-                                            Text(content.htmlConvertedWithoutUrl)
-                                                .padding(.top)
-                                                .padding(.leading, 3)
-                                                .font(.system(size: 15))
-                                                .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
-                                        }else{
-                                            Text("unsupported")
-                                                .foregroundColor(.gray)
-                                                .padding(.top)
-                                                .padding(.leading, 3)
-                                                .font(.system(size: 20))
-                                                .opacity(0.5)
-                                        }
-                                        Spacer()
-                                    }
-                                    if let includeImgReply = item.attributes.contentHTML{
-                                        if let imageUrls = extractImageURLs(from: includeImgReply){
-                                            ForEach(imageUrls, id: \.self) { url in
-                                                AsyncImage(url: URL(string: url)) { image in
-                                                    image
-                                                        .resizable()
-                                                        .aspectRatio(contentMode: .fit)
-                                                        .frame(width: 215)
-                                                        .cornerRadius(10)
-                                                        .shadow(radius: 3)
-                                                        .overlay(Rectangle()
-                                                            .stroke(.white, lineWidth: 1)
-                                                            .cornerRadius(10))
-                                                } placeholder: {
-                                                    ProgressView()
+                                        if let includeImgReply = item.attributes.contentHTML{
+                                            if let imageUrls = extractImageURLs(from: includeImgReply){
+                                                ForEach(imageUrls, id: \.self) { url in
+                                                    AsyncImage(url: URL(string: url)) { image in
+                                                        image
+                                                            .resizable()
+                                                            .aspectRatio(contentMode: .fit)
+                                                            .frame(width: 215)
+                                                            .cornerRadius(10)
+                                                            .shadow(radius: 3)
+                                                            .overlay(Rectangle()
+                                                                .stroke(.white, lineWidth: 1)
+                                                                .cornerRadius(10))
+                                                    } placeholder: {
+                                                        ProgressView()
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
+                                
                             }
-                            
+                            LikesAndCommentButton()
+                                .padding(.bottom, 5)
+                                .padding(.top, 5)
+                            Divider()
                         }
-                        LikesAndCommentButton()
-                            .padding(.bottom, 5)
-                            .padding(.top, 5)
-                        Divider()
+                        .listRowSeparator(.hidden)
                     }
-                    .listRowSeparator(.hidden)
-                }
-                .searchable(text: $searchTerm, prompt: "Search")
-            }else{
-                List(filteredPostsArrayTags, id: \.id){item in
-                    VStack {
-                        NavigationLink(value: item){
-                            HStack {
-                                VStack{
-                                    if let userid = item.relationships?.user?.data.id{
-                                        if let avatarURL = findImgUrl(userid, in: usersArrayTags){
-                                            asyncImage(url: URL(string: avatarURL), frameSize: 50, lineWidth: 1, shadow: 3)
-                                                .padding(.top, 10)
-                                        }else{
-                                            CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 50, lineWidth: 0.7, shadow: 2)
-                                                .opacity(0.3)
-                                                .padding(.top, 10)
-                                        }
-                                    }
-                                    Spacer()
-                                }
-                                VStack {
-                                    HStack {
+                    .searchable(text: $searchTerm, prompt: "Search")
+                }else{
+                    // MARK: - Posts With tags
+                    List(filteredPostsArrayTags, id: \.id){item in
+                        VStack {
+                            NavigationLink(value: item){
+                                HStack {
+                                    VStack{
                                         if let userid = item.relationships?.user?.data.id{
-                                            if let displayName = findDisplayName(userid, in: usersArrayTags){
-                                                Text(displayName)
-                                                    .font(.system(size: 12))
-                                                    .bold()
-                                                    .foregroundColor(colorScheme == .dark ? .white : .black)
-
-                                                    .padding(.leading, 3)
+                                            if let avatarURL = findImgUrl(userid, in: usersArrayTags){
+                                                asyncImage(url: URL(string: avatarURL), frameSize: 50, lineWidth: 1, shadow: 3)
+                                                    .padding(.top, 10)
+                                            }else{
+                                                CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 50, lineWidth: 0.7, shadow: 2)
+                                                    .opacity(0.3)
+                                                    .padding(.top, 10)
                                             }
-                                        }else{
-                                            ProgressView()
                                         }
-     
-                                        if let createTime = item.attributes.createdAt{
-                                            Text(" \(calculateTimeDifference(from: createTime))")
-                                                .font(.system(size: 8))
-                                                .foregroundColor(.gray)
+                                        Spacer()
+                                    }
+                                    VStack {
+                                        HStack {
+                                            if let userid = item.relationships?.user?.data.id{
+                                                if let displayName = findDisplayName(userid, in: usersArrayTags){
+                                                    Text(displayName)
+                                                        .font(.system(size: 12))
+                                                        .bold()
+                                                        .foregroundColor(colorScheme == .dark ? .white : .black)
+
+                                                        .padding(.leading, 3)
+                                                }
+                                            }else{
+                                                ProgressView()
+                                            }
+         
+                                            if let createTime = item.attributes.createdAt{
+                                                Text(" \(calculateTimeDifference(from: createTime))")
+                                                    .font(.system(size: 8))
+                                                    .foregroundColor(.gray)
+                                            }
+                                            
+                                            if let editedTime = item.attributes.editedAt{
+                                                Text("Edited")
+                                                    .font(.system(size: 8))
+                                                    .foregroundColor(.gray)
+                                                    .italic()
+                                            }
+                                            Spacer()
                                         }
                                         
-                                        if let editedTime = item.attributes.editedAt{
-                                            Text("Edited")
-                                                .font(.system(size: 8))
-                                                .foregroundColor(.gray)
-                                                .italic()
+                                        HStack {
+                                            if let content = item.attributes.contentHTML{
+                                                Text(content.htmlConvertedWithoutUrl)
+                                                    .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
+                                                    .padding(.top)
+                                                    .padding(.leading, 3)
+                                                    .font(.system(size: 15))
+                                            }else{
+                                                Text("unsupported")
+                                                    .foregroundColor(.gray)
+                                                    .padding(.top)
+                                                    .padding(.leading, 3)
+                                                    .font(.system(size: 20))
+                                                    .opacity(0.5)
+                                            }
+                                            Spacer()
                                         }
-                                        Spacer()
-                                    }
-                                    
-                                    HStack {
-                                        if let content = item.attributes.contentHTML{
-                                            Text(content.htmlConvertedWithoutUrl)
-                                                .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
-                                                .padding(.top)
-                                                .padding(.leading, 3)
-                                                .font(.system(size: 15))
-                                        }else{
-                                            Text("unsupported")
-                                                .foregroundColor(.gray)
-                                                .padding(.top)
-                                                .padding(.leading, 3)
-                                                .font(.system(size: 20))
-                                                .opacity(0.5)
-                                        }
-                                        Spacer()
-                                    }
-                                    if let includeImgReply = item.attributes.contentHTML{
-                                        if let imageUrls = extractImageURLs(from: includeImgReply){
-                                            ForEach(imageUrls, id: \.self) { url in
-                                                AsyncImage(url: URL(string: url)) { image in
-                                                    image
-                                                        .resizable()
-                                                        .aspectRatio(contentMode: .fit)
-                                                        .frame(width: 215)
-                                                        .cornerRadius(10)
-                                                        .shadow(radius: 3)
-                                                        .overlay(Rectangle()
-                                                            .stroke(.white, lineWidth: 1)
-                                                            .cornerRadius(10))
-                                                } placeholder: {
-                                                    ProgressView()
+                                        if let includeImgReply = item.attributes.contentHTML{
+                                            if let imageUrls = extractImageURLs(from: includeImgReply){
+                                                ForEach(imageUrls, id: \.self) { url in
+                                                    AsyncImage(url: URL(string: url)) { image in
+                                                        image
+                                                            .resizable()
+                                                            .aspectRatio(contentMode: .fit)
+                                                            .frame(width: 215)
+                                                            .cornerRadius(10)
+                                                            .shadow(radius: 3)
+                                                            .overlay(Rectangle()
+                                                                .stroke(.white, lineWidth: 1)
+                                                                .cornerRadius(10))
+                                                    } placeholder: {
+                                                        ProgressView()
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
+                                
                             }
-                            
+                            LikesAndCommentButton()
+                                .padding(.bottom, 5)
+                                .padding(.top, 5)
+                            Divider()
                         }
-                        LikesAndCommentButton()
-                            .padding(.bottom, 5)
-                            .padding(.top, 5)
-                        Divider()
+                        .listRowSeparator(.hidden)
                     }
-                    .listRowSeparator(.hidden)
+                    .searchable(text: $searchTerm, prompt: "Search")
                 }
-                .searchable(text: $searchTerm, prompt: "Search")
+            }else if selectedSortOption == "Latest"{
+                if (!postsArray.isEmpty && postsArrayTags.isEmpty){
+                    // MARK: - Posts Without tags
+                    List(filteredPostsArray.reversed(), id: \.id){item in
+                        VStack {
+                            NavigationLink(value: item){
+                                HStack {
+                                    VStack{
+                                        if let userid = item.relationships?.user?.data.id{
+                                            if let avatarURL = findImgUrl(userid, in: usersArray){
+                                                asyncImage(url: URL(string: avatarURL), frameSize: 50, lineWidth: 1, shadow: 3)
+                                                    .padding(.top, 10)
+                                            }else{
+                                                CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 50, lineWidth: 0.7, shadow: 2)
+                                                    .opacity(0.3)
+                                                    .padding(.top, 10)
+                                            }
+                                        }
+                                        Spacer()
+                                    }
+                                    VStack {
+                                        HStack {
+                                            if let userid = item.relationships?.user?.data.id{
+                                                if let displayName = findDisplayName(userid, in: usersArray){
+                                                    Text(displayName)
+                                                        .font(.system(size: 12))
+                                                        .bold()
+                                                        .foregroundColor(colorScheme == .dark ? .white : .black)
+
+                                                        .padding(.leading, 3)
+                                                }
+                                            }else{
+                                                ProgressView()
+                                            }
+         
+                                            if let createTime = item.attributes.createdAt{
+                                                Text(" \(calculateTimeDifference(from: createTime))")
+                                                    .font(.system(size: 8))
+                                                    .foregroundColor(.gray)
+                                            }
+                                            
+                                            if let editedTime = item.attributes.editedAt{
+                                                Text("Edited")
+                                                    .font(.system(size: 8))
+                                                    .foregroundColor(.gray)
+                                                    .italic()
+                                            }
+                                            Spacer()
+                                        }
+                                        
+                                        HStack {
+                                            if let content = item.attributes.contentHTML{
+                                                Text(content.htmlConvertedWithoutUrl)
+                                                    .padding(.top)
+                                                    .padding(.leading, 3)
+                                                    .font(.system(size: 15))
+                                                    .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
+                                            }else{
+                                                Text("unsupported")
+                                                    .foregroundColor(.gray)
+                                                    .padding(.top)
+                                                    .padding(.leading, 3)
+                                                    .font(.system(size: 20))
+                                                    .opacity(0.5)
+                                            }
+                                            Spacer()
+                                        }
+                                        if let includeImgReply = item.attributes.contentHTML{
+                                            if let imageUrls = extractImageURLs(from: includeImgReply){
+                                                ForEach(imageUrls, id: \.self) { url in
+                                                    AsyncImage(url: URL(string: url)) { image in
+                                                        image
+                                                            .resizable()
+                                                            .aspectRatio(contentMode: .fit)
+                                                            .frame(width: 215)
+                                                            .cornerRadius(10)
+                                                            .shadow(radius: 3)
+                                                            .overlay(Rectangle()
+                                                                .stroke(.white, lineWidth: 1)
+                                                                .cornerRadius(10))
+                                                    } placeholder: {
+                                                        ProgressView()
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                            }
+                            LikesAndCommentButton()
+                                .padding(.bottom, 5)
+                                .padding(.top, 5)
+                            Divider()
+                        }
+                        .listRowSeparator(.hidden)
+                    }
+                    .searchable(text: $searchTerm, prompt: "Search")
+                }else{
+                    // MARK: - Posts With tags
+                    List(filteredPostsArrayTags.reversed(), id: \.id){item in
+                        VStack {
+                            NavigationLink(value: item){
+                                HStack {
+                                    VStack{
+                                        if let userid = item.relationships?.user?.data.id{
+                                            if let avatarURL = findImgUrl(userid, in: usersArrayTags){
+                                                asyncImage(url: URL(string: avatarURL), frameSize: 50, lineWidth: 1, shadow: 3)
+                                                    .padding(.top, 10)
+                                            }else{
+                                                CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 50, lineWidth: 0.7, shadow: 2)
+                                                    .opacity(0.3)
+                                                    .padding(.top, 10)
+                                            }
+                                        }
+                                        Spacer()
+                                    }
+                                    VStack {
+                                        HStack {
+                                            if let userid = item.relationships?.user?.data.id{
+                                                if let displayName = findDisplayName(userid, in: usersArrayTags){
+                                                    Text(displayName)
+                                                        .font(.system(size: 12))
+                                                        .bold()
+                                                        .foregroundColor(colorScheme == .dark ? .white : .black)
+
+                                                        .padding(.leading, 3)
+                                                }
+                                            }else{
+                                                ProgressView()
+                                            }
+         
+                                            if let createTime = item.attributes.createdAt{
+                                                Text(" \(calculateTimeDifference(from: createTime))")
+                                                    .font(.system(size: 8))
+                                                    .foregroundColor(.gray)
+                                            }
+                                            
+                                            if let editedTime = item.attributes.editedAt{
+                                                Text("Edited")
+                                                    .font(.system(size: 8))
+                                                    .foregroundColor(.gray)
+                                                    .italic()
+                                            }
+                                            Spacer()
+                                        }
+                                        
+                                        HStack {
+                                            if let content = item.attributes.contentHTML{
+                                                Text(content.htmlConvertedWithoutUrl)
+                                                    .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
+                                                    .padding(.top)
+                                                    .padding(.leading, 3)
+                                                    .font(.system(size: 15))
+                                            }else{
+                                                Text("unsupported")
+                                                    .foregroundColor(.gray)
+                                                    .padding(.top)
+                                                    .padding(.leading, 3)
+                                                    .font(.system(size: 20))
+                                                    .opacity(0.5)
+                                            }
+                                            Spacer()
+                                        }
+                                        if let includeImgReply = item.attributes.contentHTML{
+                                            if let imageUrls = extractImageURLs(from: includeImgReply){
+                                                ForEach(imageUrls, id: \.self) { url in
+                                                    AsyncImage(url: URL(string: url)) { image in
+                                                        image
+                                                            .resizable()
+                                                            .aspectRatio(contentMode: .fit)
+                                                            .frame(width: 215)
+                                                            .cornerRadius(10)
+                                                            .shadow(radius: 3)
+                                                            .overlay(Rectangle()
+                                                                .stroke(.white, lineWidth: 1)
+                                                                .cornerRadius(10))
+                                                    } placeholder: {
+                                                        ProgressView()
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                            }
+                            LikesAndCommentButton()
+                                .padding(.bottom, 5)
+                                .padding(.top, 5)
+                            Divider()
+                        }
+                        .listRowSeparator(.hidden)
+                    }
+                    .searchable(text: $searchTerm, prompt: "Search")
+                }
             }
+            
 
             HStack {
                 Button(action: {
-                    currentPage += 1
-                    isLoading = true
+                    if selectedSortOption == "Default"{
+                        currentPage += 1
+                        isLoading = true
+                    }else if selectedSortOption == "Latest"{
+                        if currentPage > 1 {
+                            currentPage -= 1
+                        }
+                    }
+
                     Task {
                         await fetchDetail(postID: postID)
                         isLoading = false
@@ -330,6 +556,28 @@ struct fastPostDetailView: View {
             .cornerRadius(10)
             .opacity((loadMoreButtonDisabled()) ? 0 : 0.9)
             .padding(.bottom)
+            .onChange(of: selectedSortOption) { newValue in
+                if newValue == "Default" {
+                    currentPage = 1
+                } else if newValue == "Latest" {
+                    if commentCount % 20 == 0 {
+                        currentPage = commentCount / 20
+                    } else {
+                        currentPage = (commentCount / 20) + 1
+                    }
+                }
+                
+                Task {
+                    clearData()
+                    await fetchTagsData()
+                    if !isLoading {
+                        isLoading = true
+                        await fetchDetail(postID: postID)
+                        isLoading = false
+                    }
+                }
+            }
+
             
             Spacer()
         }
@@ -372,7 +620,16 @@ struct fastPostDetailView: View {
         .refreshable {
             Task {
                 clearData()
-                currentPage = 1
+                if selectedSortOption == "Default"{
+                    currentPage = 1
+                }else{
+                    if commentCount % 20 == 0 {
+                        currentPage = commentCount / 20
+                    } else {
+                        currentPage = (commentCount / 20) + 1
+                    }
+                }
+                
                 isLoading = true
                 await fetchDetail(postID: postID)
                 isLoading = false
@@ -392,7 +649,6 @@ struct fastPostDetailView: View {
  
     private func fetchDetail(postID: String) async {
 //        clearData()
-        
         guard let url = URL(string: "\(appsettings.FlarumUrl)/api/discussions/\(postID)?page[number]=\(currentPage)") else{
                 print("Invalid URL")
             return
@@ -405,11 +661,12 @@ struct fastPostDetailView: View {
                 includes = decodedResponse.included
                 
                 processIncludedArray(includes)
+                print("Successfully decoding use PostData.self")
             }else{
-                print("Decoding to PostData.self Failed!")
+                print("Decoding to PostData.self Failed, Post has tags!")
                 
                 if let decodedResponse = try? JSONDecoder().decode(PostDataWithTag.self, from: data){
-                    print("Successfully finding an alternative decoding method")
+                    print("Successfully decoding use PostDataWithTag.self")
                     includesTags = decodedResponse.included
                     
                     if let tagData = decodedResponse.data.relationships.tags?.data {
@@ -421,7 +678,7 @@ struct fastPostDetailView: View {
                     
                     processIncludedTagsArray(includesTags)
                 }else{
-                    print("Decoding to PostDataWithTag.self Failed!")
+                    print("Decoding to PostData Failed!")
                 }
             }
 
@@ -489,7 +746,7 @@ struct fastPostDetailView: View {
     }
     
     private func loadMoreButtonDisabled() -> Bool{
-        return self.commentCount <= 20 || currentPage * 20 >= self.commentCount || isLoading
+        return self.commentCount <= 20 || currentPage * 20 >= self.commentCount || isLoading || currentPage == 0
     }
     
     private func clearData() {

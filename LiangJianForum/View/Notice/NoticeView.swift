@@ -42,8 +42,8 @@ struct NoticeView: View {
         NavigationStack{
             if userCommentData.isEmpty || userCommentData.isEmpty{
                 HStack {
+                    Text("Loading...").foregroundStyle(.secondary)
                     ProgressView()
-                    Text("Loading...")
                 }
             }else{
                 Picker(
