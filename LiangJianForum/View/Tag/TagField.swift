@@ -14,7 +14,7 @@ struct TagField: View {
         NavigationStack {
             if tags.isEmpty{
                 HStack {
-                    Text("Loading...")
+                    Text("Loading...").foregroundStyle(.secondary)
                     ProgressView()
                 }
             }else{
