@@ -33,6 +33,8 @@ struct fastPostDetailView: View {
     @State private var showedTags = [Datum6]()
     @State var tagsIdInPostDetail: [String] = []
     
+    @State private var postsWithTagData : DataClass5?
+    
     var filteredPostsArray: [Included4] {
         var filteredItems: [Included4] = []
         var filteredByContent: [Included4] = []
@@ -273,7 +275,15 @@ struct fastPostDetailView: View {
                                                     .foregroundColor(.gray)
                                                     .italic()
                                             }
+                                            
                                             Spacer()
+                                            
+                                            if item.id == String(getBestAnswerID()) {
+                                                Text("Best Answer")
+                                                    .font(.system(size: 10))
+                                                    .fontWeight(.bold)
+                                                    .foregroundColor(.green)
+                                            }
                                         }
                                         
                                         HStack {
@@ -314,8 +324,9 @@ struct fastPostDetailView: View {
                                         }
                                     }
                                 }
-                                
                             }
+                            .background(item.id == String(getBestAnswerID()) ? Color.green.opacity(0.2) : Color.clear)
+                            .cornerRadius(15)
                             LikesAndCommentButton()
                                 .padding(.bottom, 5)
                                 .padding(.top, 5)
@@ -469,7 +480,15 @@ struct fastPostDetailView: View {
                                                     .foregroundColor(.gray)
                                                     .italic()
                                             }
+                                            
                                             Spacer()
+                                            
+                                            if item.id == String(getBestAnswerID()) {
+                                                Text("Best Answer")
+                                                    .font(.system(size: 10))
+                                                    .fontWeight(.bold)
+                                                    .foregroundColor(.green)
+                                            }
                                         }
                                         
                                         HStack {
@@ -510,7 +529,8 @@ struct fastPostDetailView: View {
                                         }
                                     }
                                 }
-                                
+                                .background(item.id == String(getBestAnswerID()) ? Color.green.opacity(0.2) : Color.clear)
+                                .cornerRadius(15)
                             }
                             LikesAndCommentButton()
                                 .padding(.bottom, 5)
@@ -669,6 +689,7 @@ struct fastPostDetailView: View {
                 if let decodedResponse = try? JSONDecoder().decode(PostDataWithTag.self, from: data){
                     print("Successfully decoding use PostDataWithTag.self")
                     includesTags = decodedResponse.included
+                    postsWithTagData = decodedResponse.data
                     
                     if let tagData = decodedResponse.data.relationships.tags?.data {
                         for tag in tagData {
@@ -775,6 +796,15 @@ struct fastPostDetailView: View {
         } catch {
             print("Invalid Tags Data!", error)
         }
+    }
+    
+    private func getBestAnswerID() -> Int{
+        if let ID = postsWithTagData?.attributes.hasBestAnswer{
+            if ID != 0{
+                return ID
+            }
+        }
+        return -1
     }
 }
 
