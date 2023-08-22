@@ -20,7 +20,7 @@ struct DataClass5: Codable,Hashable {
 }
 
 // MARK: - DataAttributesz
-struct DataAttributes5: Codable,Hashable {
+struct DataAttributes5: Codable, Hashable {
     let title, slug: String
     let commentCount, participantCount: Int?
     let createdAt, lastPostedAt: String?
@@ -31,7 +31,47 @@ struct DataAttributes5: Codable,Hashable {
     let isApproved, canTag: Bool?
     let subscription: JSONNull5?
     let isSticky, canSticky, isLocked, canLock: Bool?
+    let hasBestAnswer: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case title, slug, commentCount, participantCount, createdAt, lastPostedAt, lastPostNumber, canReply, canRename, canDelete, canHide, lastReadAt, lastReadPostNumber, isApproved, canTag, subscription, isSticky, canSticky, isLocked, canLock, hasBestAnswer
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        if let intVal = try? container.decode(Int.self, forKey: .hasBestAnswer) {
+            self.hasBestAnswer = intVal
+        } else if let boolVal = try? container.decode(Bool.self, forKey: .hasBestAnswer) {
+            self.hasBestAnswer = boolVal ? -1 : 0
+        } else {
+            self.hasBestAnswer = nil
+        }
+        
+        // Decode other properties
+        title = try container.decode(String.self, forKey: .title)
+        slug = try container.decode(String.self, forKey: .slug)
+        commentCount = try container.decodeIfPresent(Int.self, forKey: .commentCount)
+        participantCount = try container.decodeIfPresent(Int.self, forKey: .participantCount)
+        createdAt = try container.decodeIfPresent(String.self, forKey: .createdAt)
+        lastPostedAt = try container.decodeIfPresent(String.self, forKey: .lastPostedAt)
+        lastPostNumber = try container.decodeIfPresent(Int.self, forKey: .lastPostNumber)
+        canReply = try container.decodeIfPresent(Bool.self, forKey: .canReply)
+        canRename = try container.decodeIfPresent(Bool.self, forKey: .canRename)
+        canDelete = try container.decodeIfPresent(Bool.self, forKey: .canDelete)
+        canHide = try container.decodeIfPresent(Bool.self, forKey: .canHide)
+        lastReadAt = try container.decodeIfPresent(String.self, forKey: .lastReadAt)
+        lastReadPostNumber = try container.decodeIfPresent(Int.self, forKey: .lastReadPostNumber)
+        isApproved = try container.decodeIfPresent(Bool.self, forKey: .isApproved)
+        canTag = try container.decodeIfPresent(Bool.self, forKey: .canTag)
+        subscription = try container.decodeIfPresent(JSONNull5.self, forKey: .subscription)
+        isSticky = try container.decodeIfPresent(Bool.self, forKey: .isSticky)
+        canSticky = try container.decodeIfPresent(Bool.self, forKey: .canSticky)
+        isLocked = try container.decodeIfPresent(Bool.self, forKey: .isLocked)
+        canLock = try container.decodeIfPresent(Bool.self, forKey: .canLock)
+    }
 }
+
 
 // MARK: - DataRelationships
 struct DataRelationships5: Codable,Hashable {
