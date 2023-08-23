@@ -52,7 +52,6 @@
 "title_too_long_message" = "Title too long!";
 "Post successfully published" = "Post successfully published";
 "Reply successfully posted" = "Reply successfully posted";
-"post_button_text" = "Post";
 "default_sort_option" = "Default";
 "latest_sort_option" = "Latest";
 "Failed to sign in" = "Failed to sign in";

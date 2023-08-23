@@ -52,7 +52,6 @@
 "title_too_long_message" = "标题太长！";
 "Post successfully published" = "帖子发布成功";
 "Reply successfully posted" = "回复成功";
-"post_button_text" = "发布";
 "default_sort_option" = "发帖顺序";
 "latest_sort_option" = "最新回复";
 "Failed to sign in" = "登录失败";
