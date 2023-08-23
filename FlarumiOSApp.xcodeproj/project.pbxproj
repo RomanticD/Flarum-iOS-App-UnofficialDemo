@@ -23,6 +23,8 @@
 		0779EE1B2A5461A600EE3D93 /* LinksProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0779EE1A2A5461A600EE3D93 /* LinksProfileView.swift */; };
 		0779EE1D2A556B4A00EE3D93 /* FavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0779EE1C2A556B4A00EE3D93 /* FavoriteButton.swift */; };
 		0783CE312A419008009A2F7D /* InfoDisplayWithTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0783CE302A419008009A2F7D /* InfoDisplayWithTitleView.swift */; };
+		079B15A02A95B87000009FE3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 079B159E2A95B87000009FE3 /* Localizable.strings */; };
+		079B15A32A95B88500009FE3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 079B15A12A95B88500009FE3 /* Localizable.strings */; };
 		07A868032A3D879E00311F65 /* FlarumiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A868022A3D879E00311F65 /* FlarumiOSApp.swift */; };
 		07A868052A3D879E00311F65 /* LoginPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A868042A3D879E00311F65 /* LoginPageView.swift */; };
 		07A868072A3D879F00311F65 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07A868062A3D879F00311F65 /* Assets.xcassets */; };
@@ -65,6 +67,8 @@
 		0779EE1C2A556B4A00EE3D93 /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
 		0783CE302A419008009A2F7D /* InfoDisplayWithTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoDisplayWithTitleView.swift; sourceTree = "<group>"; };
 		0783CE322A41A952009A2F7D /* LiangJianForum.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LiangJianForum.entitlements; sourceTree = "<group>"; };
+		079B15A42A95B9EB00009FE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
+		079B15A52A95B9F700009FE3 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = Localizable.strings; sourceTree = "<group>"; };
 		07A867FF2A3D879E00311F65 /* FlarumiOSApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlarumiOSApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07A868022A3D879E00311F65 /* FlarumiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlarumiOSApp.swift; sourceTree = "<group>"; };
 		07A868042A3D879E00311F65 /* LoginPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPageView.swift; sourceTree = "<group>"; };
@@ -135,6 +139,31 @@
 			path = Helper;
 			sourceTree = "<group>";
 		};
+		079B159B2A95B7E700009FE3 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				079B159D2A95B83400009FE3 /* en.lproj */,
+				079B159C2A95B7FB00009FE3 /* zh-Hans.lproj */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
+		079B159C2A95B7FB00009FE3 /* zh-Hans.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				079B15A12A95B88500009FE3 /* Localizable.strings */,
+			);
+			path = "zh-Hans.lproj";
+			sourceTree = "<group>";
+		};
+		079B159D2A95B83400009FE3 /* en.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				079B159E2A95B87000009FE3 /* Localizable.strings */,
+			);
+			path = en.lproj;
+			sourceTree = "<group>";
+		};
 		07A867F62A3D879E00311F65 = {
 			isa = PBXGroup;
 			children = (
@@ -154,6 +183,7 @@
 		07A868012A3D879E00311F65 /* LiangJianForum */ = {
 			isa = PBXGroup;
 			children = (
+				079B159B2A95B7E700009FE3 /* Localization */,
 				0783CE322A41A952009A2F7D /* LiangJianForum.entitlements */,
 				0751B14F2A4801A6007AEC9D /* Model */,
 				07E1FB1D2A3DA16B00F9049B /* View */,
@@ -285,6 +315,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 07A867F62A3D879E00311F65;
 			productRefGroup = 07A868002A3D879E00311F65 /* Products */;
@@ -302,6 +333,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				07A8680A2A3D879F00311F65 /* Preview Assets.xcassets in Resources */,
+				079B15A32A95B88500009FE3 /* Localizable.strings in Resources */,
+				079B15A02A95B87000009FE3 /* Localizable.strings in Resources */,
 				07A868072A3D879F00311F65 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -353,6 +386,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		079B159E2A95B87000009FE3 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				079B15A42A95B9EB00009FE3 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		079B15A12A95B88500009FE3 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				079B15A52A95B9F700009FE3 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		07A8680B2A3D879F00311F65 /* Debug */ = {

@@ -144,9 +144,9 @@ struct PostView: View {
                                                         if let user = findUser(with: item.relationships.user.data.id) {
                                                             
                                                             if let avatarURL = user.attributes.avatarUrl {
-                                                                asyncImage(url: URL(string: avatarURL), frameSize: 70, lineWidth: 1, shadow: 3)
+                                                                asyncImage(url: URL(string: avatarURL), frameSize: 40, lineWidth: 1, shadow: 3)
                                                             } else {
-                                                                CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 70, lineWidth: 1, shadow: 3)
+                                                                CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 40, lineWidth: 1, shadow: 3)
                                                                     .opacity (0.3)
                                                             }
                                                         }
@@ -154,7 +154,7 @@ struct PostView: View {
                                                         VStack {
                                                             HStack {
                                                                 Text(item.attributes.title)
-                                                                    .font(.system(size: 25))
+                                                                    .font(.system(size: 20))
                                                                     .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : Color(hex: "243B55"))
                                                                     .bold()
                                                                     .fixedSize(horizontal: false, vertical: true)
@@ -164,59 +164,57 @@ struct PostView: View {
                                                         }
                                                         Spacer()
                                                     }
-                                                    .padding(.top, 10)
                                                 }
                                                 
-                                                //MARK: 最后更新时间
+                                                //MARK: 最后更新时间 评论数 阅读数量 收藏
                                                 HStack {
                                                     Image(systemName: "clock.fill")
                                                         .foregroundColor(.gray)
+                                                        .font(.system(size: 10))
                                                     
                                                     if let lastPostedAt = item.attributes.lastPostedAt {
                                                         Text(calculateTimeDifference(from: lastPostedAt))
-                                                            .font(.system(size: 15))
+                                                            .font(.system(size: 10))
                                                             .foregroundColor(.gray)
                                                     } else {
-                                                        Text("新帖审核中...")
-                                                            .font(.system(size: 15))
+                                                        Text("in review...")
+                                                            .font(.system(size: 10))
                                                             .foregroundColor(.gray)
                                                     }
                                                     
-                                                    Spacer()
-                                                }
-                                                .padding(.top, 10)
-                                                
-                                                //MARK: 评论数 阅读数量 收藏
-                                                HStack {
                                                     Image(systemName: "bubble.middle.bottom.fill")
                                                         .foregroundColor(.gray)
+                                                        .padding(.leading)
+                                                        .font(.system(size: 10))
                                                     Text("\(item.attributes.commentCount)")
                                                         .foregroundColor(.gray)
-                                                        .font(.system(size: 15))
+                                                        .font(.system(size: 10))
                                                     
                                                     if let viewcount = item.attributes.viewCount{
                                                         Image(systemName: "eye.fill")
                                                             .foregroundColor(.gray)
                                                             .padding(.leading)
+                                                            .font(.system(size: 10))
                                                         Text("\(viewcount)")
                                                             .foregroundColor(.gray)
-                                                            .font(.system(size: 15))
+                                                            .font(.system(size: 10))
                                                     }
-                                                    
-                                                    Spacer()
                                                     
                                                     if item.attributes.isSticky{
                                                         Spacer()
                                                         
-                                                        Image(systemName: "pin.fill")
-                                                            .frame(width: 12, height: 12)
+                                                        Image(systemName: "flag.fill")
+                                                            .font(.system(size: 15))
+                                                            .padding(.leading)
                                                             .foregroundColor(.red)
                                                             .opacity(0.8)
                                                     }
                                                     
                                                     FavoriteButton()
+                                                    
                                                 }
                                                 .padding(.top, 10)
+
                                                 Divider()
                                             }
                                         }

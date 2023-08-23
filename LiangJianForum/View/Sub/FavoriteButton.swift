@@ -20,11 +20,10 @@ struct FavoriteButton: View {
                 }
             }) {
                 Image(systemName: favoriteState.isFavorite ? "star.fill" : "star")
-                    .frame(width: 12, height: 12)
+                    .font(.system(size: 15))
                     .foregroundColor(favoriteState.isFavorite ? .yellow : Color(UIColor.quaternaryLabel))
             }
             .buttonStyle(.plain)
-            .padding(.trailing)
         }
     }
 }

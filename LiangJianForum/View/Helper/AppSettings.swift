@@ -13,7 +13,7 @@ class AppSettings: ObservableObject {
     @Published var refreshReplyView = false
     @Published var refreshProfileView = false
     @Published var isLoggedIn = true
-    @Published var FlarumUrl = "https://discuss.flarum.org"
+    @Published var FlarumUrl = "https://bbs.cjlu.cc"
     @Published var FlarumName = "Flarum"
     @Published var token = ""
     @Published var username = ""

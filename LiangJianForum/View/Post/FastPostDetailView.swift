@@ -12,8 +12,8 @@ struct fastPostDetailView: View {
     let postID: String
     let commentCount: Int
     
-    var sortOption = ["Default", "Latest"]
-    @State private var selectedSortOption = "Default"
+    var sortOption = [NSLocalizedString("default_sort_option", comment: ""), NSLocalizedString("latest_sort_option", comment: "")]
+    @State private var selectedSortOption = NSLocalizedString("default_sort_option", comment: "")
     
     @State private var currentPage = 1
     @State private var isLoading = false
@@ -111,7 +111,7 @@ struct fastPostDetailView: View {
                             }
                         }
                     }
-                    .frame(width: 350, height: 45)
+                    .frame(width: 350, height: 30)
                     .background((colorScheme == .dark ? Color(hex: "0D1117") : Color(hex: "f0f0f5")))
                     .cornerRadius(10)
                     .opacity(0.9)
@@ -123,7 +123,8 @@ struct fastPostDetailView: View {
                 label: Text("Picker"),
                 content:{
                     ForEach(sortOption.indices){index in
-                        Text(sortOption[index]).tag(sortOption[index])
+                        Text(NSLocalizedString(sortOption[index], comment: ""))
+                                        .tag(sortOption[index])
                     }
                 })
                 .pickerStyle(SegmentedPickerStyle())
@@ -131,7 +132,7 @@ struct fastPostDetailView: View {
                 .animation(.easeInOut(duration: 1), value: sortOption)
                 .padding(.top, 5)
             
-            if selectedSortOption == "Default"{
+            if selectedSortOption == NSLocalizedString("default_sort_option", comment: ""){
                 if (!postsArray.isEmpty && postsArrayTags.isEmpty){
                     // MARK: - Posts Without tags
                     List(filteredPostsArray, id: \.id){item in
@@ -323,10 +324,10 @@ struct fastPostDetailView: View {
                                             }
                                         }
                                     }
+                                    .background(item.id == String(getBestAnswerID()) ? Color.green.opacity(0.2) : Color.clear)
+                                    .cornerRadius(5)
                                 }
                             }
-                            .background(item.id == String(getBestAnswerID()) ? Color.green.opacity(0.2) : Color.clear)
-                            .cornerRadius(15)
                             LikesAndCommentButton()
                                 .padding(.bottom, 5)
                                 .padding(.top, 5)
@@ -336,7 +337,7 @@ struct fastPostDetailView: View {
                     }
                     .searchable(text: $searchTerm, prompt: "Search")
                 }
-            }else if selectedSortOption == "Latest"{
+            }else if selectedSortOption == NSLocalizedString("latest_sort_option", comment: "") {
                 if (!postsArray.isEmpty && postsArrayTags.isEmpty){
                     // MARK: - Posts Without tags
                     List(filteredPostsArray.reversed(), id: \.id){item in
@@ -528,9 +529,9 @@ struct fastPostDetailView: View {
                                             }
                                         }
                                     }
+                                    .background(item.id == String(getBestAnswerID()) ? Color.green.opacity(0.2) : Color.clear)
+                                    .cornerRadius(5)
                                 }
-                                .background(item.id == String(getBestAnswerID()) ? Color.green.opacity(0.2) : Color.clear)
-                                .cornerRadius(15)
                             }
                             LikesAndCommentButton()
                                 .padding(.bottom, 5)
@@ -546,10 +547,10 @@ struct fastPostDetailView: View {
 
             HStack {
                 Button(action: {
-                    if selectedSortOption == "Default"{
+                    if selectedSortOption == NSLocalizedString("default_sort_option", comment: ""){
                         currentPage += 1
                         isLoading = true
-                    }else if selectedSortOption == "Latest"{
+                    }else if selectedSortOption == NSLocalizedString("latest_sort_option", comment: ""){
                         if currentPage > 1 {
                             currentPage -= 1
                         }
@@ -578,9 +579,9 @@ struct fastPostDetailView: View {
             .opacity((loadMoreButtonDisabled()) ? 0 : 0.9)
             .padding(.bottom)
             .onChange(of: selectedSortOption) { newValue in
-                if newValue == "Default" {
+                if selectedSortOption == NSLocalizedString("default_sort_option", comment: "") {
                     currentPage = 1
-                } else if newValue == "Latest" {
+                } else if selectedSortOption == NSLocalizedString("latest_sort_option", comment: "") {
                     if commentCount % 20 == 0 {
                         currentPage = commentCount / 20
                     } else {
@@ -641,7 +642,7 @@ struct fastPostDetailView: View {
         .refreshable {
             Task {
                 clearData()
-                if selectedSortOption == "Default"{
+                if selectedSortOption == NSLocalizedString("default_sort_option", comment: ""){
                     currentPage = 1
                 }else{
                     if commentCount % 20 == 0 {
