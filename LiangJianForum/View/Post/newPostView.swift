@@ -16,7 +16,7 @@ struct newPostView: View {
     @AppStorage("postContent") var postContent: String = ""
     @State private var newPostTitle = ""
     @State private var newPostContent = ""
-    @State private var message = "Post"
+    @State private var message = NSLocalizedString("post_button_text", comment: "")
     @EnvironmentObject var appSettings: AppSettings
     @State private var tags = [Datum6]()
     @State private var selectedButtonIds: [String] = []
@@ -108,9 +108,9 @@ struct newPostView: View {
                 }
 
                 Button(action: saveNewPost) {
-                        Text(message)
-                            .bold()
-                    }
+                    Text(message)
+                        .bold()
+                }
                 .foregroundColor(.white)
                 .frame(width: 350, height: 50)
                 .background(Color.blue)
@@ -142,29 +142,28 @@ struct newPostView: View {
         sendPostRequest()
         
         if newPostTitle.count <= 3 {
-            message = "Title too short！"
+            message = NSLocalizedString("title_too_short_message", comment: "")
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                message = "post"
-            }
-        }
-        
-        if newPostContent.count <= 3 {
-            message = "Content too short！"
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                message = "post"
-            }
-        }
-        
-        if newPostTitle.count > 50 {
-            message = "Title too long！"
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                message = "post"
+                message = NSLocalizedString("post_button_text", comment: "")
             }
         }
 
+        if newPostContent.count <= 3 {
+            message = NSLocalizedString("content_too_short_message", comment: "")
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                message = NSLocalizedString("post_button_text", comment: "")
+            }
+        }
+
+        if newPostTitle.count > 50 {
+            message = NSLocalizedString("title_too_long_message", comment: "")
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                message = NSLocalizedString("post_button_text", comment: "")
+            }
+        }
     }
     
     private func sendPostRequest() {

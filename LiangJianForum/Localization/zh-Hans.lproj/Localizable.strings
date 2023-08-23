@@ -1,0 +1,69 @@
+/* 
+  Localizable.strings
+  FlarumiOSApp
+
+  Created by Romantic D on 2023/8/23.
+  
+*/
+"Sign in" = "登录";
+"Sign up" = "注册";
+"Remember Me" = "记住我";
+"All Discussions" = "所有讨论";
+"just now" = "刚刚";
+"Prev" = "上一页";
+"First Page" = "第一页";
+"Next" = "下一页";
+"Home" = "首页";
+"Tag" = "标签";
+"Message" = "消息";
+"Me" = "我的";
+"Search" = "搜索";
+"days ago" = "%d 天前";
+"hours ago" = "%d 小时前";
+"minutes ago" = "%d 分钟前";
+"Loading..." = "加载中...";
+"All Tags" = "所有标签";
+"Notification Center" = "通知中心";
+"Sign out" = "退出";
+"Cancel" = "取消";
+"Confirm" = "确认";
+"Quit?" = "确定要退出登录吗？";
+"Change Profile" = "更改个人资料";
+"Default" = "默认";
+"Latest" = "最新";
+"Title" = "标题";
+"Content" = "内容";
+"Select Tags" = "选择标签";
+"Enter a title" = "输入标题";
+"Enter the content of your discussion" = "输入您的讨论内容";
+"Comment" = "评论";
+"Like" = "点赞";
+"Follow" = "关注";
+"Account" = "帐户信息";
+"Flarum Contributions" = "论坛贡献";
+"Authentication Information" = "认证信息";
+"No authentication information available" = "无可用身份认证信息";
+"Say something here..." = "说点什么吧...";
+"Load More" = "加载更多";
+"Edited" = "已编辑";
+"post_button_text" = "发布";
+"title_too_short_message" = "标题太短！";
+"content_too_short_message" = "内容太短！";
+"title_too_long_message" = "标题太长！";
+"Post successfully published" = "帖子发布成功";
+"Reply successfully posted" = "回复成功";
+"post_button_text" = "发布";
+"default_sort_option" = "发帖顺序";
+"latest_sort_option" = "最新回复";
+"Failed to sign in" = "登录失败";
+"Please check your username/password or check the Internet connetction" = "请检查用户名/密码是否正确及网络连接情况";
+"🎀 Last seen at:" = "🎀 最后在线：";
+"🎉 Join Time:" = "🎉 加入时间：";
+"🎎 DisplayName: " = "🎎 显示昵称：";
+"🎊 Username: " = "🎊 用户名称：";
+"🏖️ Discussion Count: " = "🏖️ 讨论数量：";
+"🧬 Comment Count: " = "🧬 评论数量：";
+"comment_sector" = "🍿 评论";
+"like_sector" = "🍺 点赞";
+"follow_sector" = "⛳️ 关注";
+"🍾 In" = "🍾 于";

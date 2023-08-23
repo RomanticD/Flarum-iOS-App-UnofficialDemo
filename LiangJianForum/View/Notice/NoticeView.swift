@@ -11,8 +11,8 @@ struct NoticeView: View {
     @Environment(\.colorScheme) var colorScheme
     @State private var currentPageOffset = 0
     @State private var avatarUrl = ""
-    @State private var selection : String = "🍿Comment"
-    let filterOptions: [String] = ["🍿Comment", "🍺Like", "⛳️Follow"]
+    @State private var selection : String = NSLocalizedString("comment_sector", comment: "")
+    let filterOptions: [String] = [NSLocalizedString("comment_sector", comment: ""), NSLocalizedString("like_sector", comment: ""), NSLocalizedString("follow_sector", comment: "")]
     @State private var userCommentData = [Datum8]()
     @State private var userCommentInclude = [Included8]()
     @EnvironmentObject var appsettings: AppSettings
@@ -58,7 +58,7 @@ struct NoticeView: View {
                     .padding(.horizontal)
                     .animation(.easeInOut(duration: 1), value: selection)
 
-                if selection == "🍿Comment"{
+                if selection == NSLocalizedString("comment_sector", comment: ""){
                     CommentsView(
                         userCommentData: $userCommentData,
                         userCommentInclude: $userCommentInclude,
@@ -66,13 +66,13 @@ struct NoticeView: View {
                         searchTerm: $searchTerm
                     )
                     .navigationTitle("Notification Center")
-                }else if selection == "🍺Like"{
+                }else if selection == NSLocalizedString("like_sector", comment: ""){
                     List{
                         Section("🤩Like"){
                             Text("Developing...")
                         }
                     }.navigationTitle("Notification Center")
-                }else if selection == "⛳️Follow"{
+                }else if selection == NSLocalizedString("follow_sector", comment: ""){
                     List{
                         Section("🥳Follow"){
                             Text("Developing...")

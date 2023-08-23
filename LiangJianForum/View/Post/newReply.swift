@@ -51,7 +51,7 @@ struct newReply: View {
                 
                 ZStack {
                     Button(action: saveReply) {
-                        Text("post")
+                        Text(NSLocalizedString("post_button_text", comment: ""))
                             .bold()
                     }
                     .foregroundColor(.white)

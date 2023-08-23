@@ -24,7 +24,7 @@ struct Attributes2: Codable {
     let slug: String
     let joinTime: String
     let discussionCount, commentCount: Int
-    let lastSeenAt: String
+    let lastSeenAt: String?
     let isAdmin: Bool?
 
     enum CodingKeys: String, CodingKey {

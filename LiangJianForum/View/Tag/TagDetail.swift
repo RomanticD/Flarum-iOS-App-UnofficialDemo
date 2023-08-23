@@ -162,7 +162,6 @@ struct TagDetail: View {
                                                     }
                                                     Spacer()
                                                 }
-                                                .padding(.top, 10)
                                             }
                                             
                                             //MARK: 最后更新时间
@@ -206,8 +205,9 @@ struct TagDetail: View {
                                                 if item.attributes.isSticky{
                                                     Spacer()
                                                     
-                                                    Image(systemName: "pin.fill")
+                                                    Image(systemName: "flag.fill")
                                                         .frame(width: 12, height: 12)
+                                                        .padding(.leading)
                                                         .foregroundColor(.red)
                                                         .opacity(0.8)
                                                 }

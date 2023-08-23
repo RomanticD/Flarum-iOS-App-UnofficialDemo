@@ -111,7 +111,8 @@ struct CommentsView: View {
                         let DiscussionId = item.relationships.discussion.data.id
                         let DiscussionTitle = findDiscussionTitle(id: item.relationships.discussion.data.id)
                         var CommentCount = 0
-                        let sectionTitle = "🍾 In \"" + DiscussionTitle + "\""
+                        let sectionTitle = NSLocalizedString("🍾 In", comment: "") + " \"" + DiscussionTitle + "\""
+
                         
                         if item.attributes.contentType == "comment"{
                             Section(sectionTitle){

@@ -1,0 +1,69 @@
+/* 
+  Localizable.strings
+  FlarumiOSApp
+
+  Created by Romantic D on 2023/8/23.
+  
+*/
+"Sign in" = "Sign in";
+"Sign up" = "Sign up";
+"Remember Me" = "Remember Me";
+"All Discussions" = "All Discussions";
+"just now" = "just now";
+"Prev" = "Prev";
+"First Page" = "First Page";
+"Next" = "Next";
+"Home" = "Home";
+"Tag" = "Tag";
+"Message" = "Message";
+"Me" = "Me";
+"Search" = "Search";
+"days ago" = "%d days ago";
+"hours ago" = "%d hours ago";
+"minutes ago" = "%d minutes ago";
+"Loading..." = "Loading...";
+"All Tags" = "All Tags";
+"Notification Center" = "Notification Center";
+"Sign out" = "Sign out";
+"Cancel" = "Cancel";
+"Confirm" = "Confirm";
+"Quit?" = "Quit?";
+"Change Profile" = "Change Profile";
+"Default" = "Default";
+"Latest" = "Latest";
+"Title" = "Title";
+"Content" = "Content";
+"Select Tags" = "Select Tags";
+"Enter a title" = "Enter a title";
+"Enter the content of your discussion" = "Enter the content of your discussion";
+"Comment" = "Comment";
+"Like" = "Like";
+"Follow" = "Follow";
+"Account" = "Account";
+"Flarum Contributions" = "Flarum Contributions";
+"Authentication Information" = "Authentication Information";
+"No authentication information available" = "No authentication information available";
+"Say something here..." = "Say something here...";
+"Load More" = "Load More";
+"Edited" = "Edited";
+"post_button_text" = "Post";
+"title_too_short_message" = "Title too short!";
+"content_too_short_message" = "Content too short!";
+"title_too_long_message" = "Title too long!";
+"Post successfully published" = "Post successfully published";
+"Reply successfully posted" = "Reply successfully posted";
+"post_button_text" = "Post";
+"default_sort_option" = "Default";
+"latest_sort_option" = "Latest";
+"Failed to sign in" = "Failed to sign in";
+"Please check your username/password or check the Internet connetction" = "Please check your username/password or check the Internet connection";
+"🎀 Last seen at:" = "🎀 Last seen at:";
+"🎉 Join Time:" = "🎉 Join Time:";
+"🎎 DisplayName: " = "🎎 DisplayName:";
+"🎊 Username: " = "🎊 Username:";
+"🏖️ Discussion Count: " = "🏖️ Discussion Count:";
+"🧬 Comment Count: " = "🧬 Comment Count:";
+"comment_sector" = "🍿Comment";
+"like_sector" = "🍺Like";
+"follow_sector" = "⛳️Follow";
+"🍾 In" = "🍾 In";

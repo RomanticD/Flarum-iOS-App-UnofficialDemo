@@ -178,7 +178,7 @@ struct LinksProfileView: View {
                 print("Invalid URL")
             return
         }
-        print("Fetching User Info : id \(appSettings.userId) at: \(url)")
+        print("Fetching User Info : at: \(url)")
         
         do{
             let (data, _) = try await URLSession.shared.data(from: url)
@@ -194,7 +194,10 @@ struct LinksProfileView: View {
                     self.avatarUrl = avatar
                 }
                 self.joinTime = calculateTimeDifference(from: decodedResponse.data.attributes.joinTime)
-                self.lastSeenAt =  calculateTimeDifference(from: decodedResponse.data.attributes.lastSeenAt)
+                if let hasLastSeenTime = decodedResponse.data.attributes.lastSeenAt{
+                    self.lastSeenAt = calculateTimeDifference(from: hasLastSeenTime)
+                }
+//                self.lastSeenAt =  calculateTimeDifference(from: decodedResponse.data.attributes.lastSeenAt)
                 self.discussionCount = decodedResponse.data.attributes.discussionCount
                 self.commentCount = decodedResponse.data.attributes.commentCount
 
