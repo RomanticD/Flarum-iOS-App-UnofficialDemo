@@ -135,410 +135,452 @@ struct fastPostDetailView: View {
             if selectedSortOption == NSLocalizedString("default_sort_option", comment: ""){
                 if (!postsArray.isEmpty && postsArrayTags.isEmpty){
                     // MARK: - Posts Without tags
-                    List(filteredPostsArray, id: \.id){item in
-                        VStack {
-                            NavigationLink(value: item){
-                                HStack {
-                                    VStack{
-                                        if let userid = item.relationships?.user?.data.id{
-                                            if let avatarURL = findImgUrl(userid, in: usersArray){
-                                                asyncImage(url: URL(string: avatarURL), frameSize: 50, lineWidth: 1, shadow: 3)
-                                                    .padding(.top, 10)
-                                            }else{
-                                                CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 50, lineWidth: 0.7, shadow: 2)
-                                                    .opacity(0.3)
-                                                    .padding(.top, 10)
-                                            }
-                                        }
-                                        Spacer()
-                                    }
-                                    VStack {
+                    List{
+                        Section{
+                            ForEach(filteredPostsArray, id: \.id){item in
+                                VStack {
+                                    NavigationLink(value: item){
                                         HStack {
-                                            if let userid = item.relationships?.user?.data.id{
-                                                if let displayName = findDisplayName(userid, in: usersArray){
-                                                    Text(displayName)
-                                                        .font(.system(size: 12))
-                                                        .bold()
-                                                        .foregroundColor(colorScheme == .dark ? .white : .black)
+                                            VStack {
+                                                HStack {
+                                                    if let userid = item.relationships?.user?.data.id{
+                                                        if let avatarURL = findImgUrl(userid, in: usersArray){
+                                                            asyncImage(url: URL(string: avatarURL), frameSize: 50, lineWidth: 1, shadow: 3)
+                                                                .padding(.top, 10)
+                                                                .padding(.leading, 6)
+                                                        }else{
+                                                            CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 50, lineWidth: 0.7, shadow: 2)
+                                                                .opacity(0.3)
+                                                                .padding(.top, 10)
+                                                                .padding(.leading, 6)
+                                                        }
+                                                    }
+                                                    
+                                                    if let userid = item.relationships?.user?.data.id{
+                                                        if let displayName = findDisplayName(userid, in: usersArray){
+                                                            Text(displayName)
+                                                                .font(.system(size: 12))
+                                                                .bold()
+                                                                .foregroundColor(colorScheme == .dark ? .white : .black)
 
-                                                        .padding(.leading, 3)
-                                                }
-                                            }else{
-                                                ProgressView()
-                                            }
-         
-                                            if let createTime = item.attributes.createdAt{
-                                                Text(" \(calculateTimeDifference(from: createTime))")
-                                                    .font(.system(size: 8))
-                                                    .foregroundColor(.gray)
-                                            }
-                                            
-                                            if let editedTime = item.attributes.editedAt{
-                                                Text("Edited")
-                                                    .font(.system(size: 8))
-                                                    .foregroundColor(.gray)
-                                                    .italic()
-                                            }
-                                            Spacer()
-                                        }
-                                        
-                                        HStack {
-                                            if let content = item.attributes.contentHTML{
-                                                Text(content.htmlConvertedWithoutUrl)
-                                                    .padding(.top)
-                                                    .padding(.leading, 3)
-                                                    .font(.system(size: 15))
-                                                    .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
-                                            }else{
-                                                Text("unsupported")
-                                                    .foregroundColor(.gray)
-                                                    .padding(.top)
-                                                    .padding(.leading, 3)
-                                                    .font(.system(size: 20))
-                                                    .opacity(0.5)
-                                            }
-                                            Spacer()
-                                        }
-                                        if let includeImgReply = item.attributes.contentHTML{
-                                            if let imageUrls = extractImageURLs(from: includeImgReply){
-                                                ForEach(imageUrls, id: \.self) { url in
-                                                    AsyncImage(url: URL(string: url)) { image in
-                                                        image
-                                                            .resizable()
-                                                            .aspectRatio(contentMode: .fit)
-                                                            .frame(width: 215)
-                                                            .cornerRadius(10)
-                                                            .shadow(radius: 3)
-                                                            .overlay(Rectangle()
-                                                                .stroke(.white, lineWidth: 1)
-                                                                .cornerRadius(10))
-                                                    } placeholder: {
+                                                                .padding(.leading, 3)
+                                                        }
+                                                    }else{
                                                         ProgressView()
+                                                    }
+                 
+                                                    if let createTime = item.attributes.createdAt{
+                                                        Text(" \(calculateTimeDifference(from: createTime))")
+                                                            .font(.system(size: 8))
+                                                            .foregroundColor(.gray)
+                                                    }
+                                                    
+                                                    if let editedTime = item.attributes.editedAt{
+                                                        Text("Edited")
+                                                            .font(.system(size: 8))
+                                                            .foregroundColor(.gray)
+                                                            .italic()
+                                                    }
+                                                    
+                                                    Spacer()
+                                                    
+                                                    if item.id == String(getBestAnswerID()) {
+                                                        Text("Best Answer")
+                                                            .font(.system(size: 10))
+                                                            .fontWeight(.bold)
+                                                            .foregroundColor(.green)
+                                                    }
+                                                }
+                                                
+                                                HStack {
+                                                    if let content = item.attributes.contentHTML{
+                                                        Text(content.htmlConvertedWithoutUrl)
+                                                            .tracking(0.5)
+                                                            .lineSpacing(7)
+                                                            .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
+                                                            .padding(.top)
+                                                            .padding(.leading, 3)
+                                                            .font(.system(size: 15))
+                                                    }else{
+                                                        Text("unsupported")
+                                                            .foregroundColor(.gray)
+                                                            .padding(.top)
+                                                            .padding(.leading, 3)
+                                                            .font(.system(size: 10))
+                                                            .opacity(0.5)
+                                                    }
+                                                    Spacer()
+                                                }
+                                                if let includeImgReply = item.attributes.contentHTML{
+                                                    if let imageUrls = extractImageURLs(from: includeImgReply){
+                                                        ForEach(imageUrls, id: \.self) { url in
+                                                            AsyncImage(url: URL(string: url)) { image in
+                                                                image
+                                                                    .resizable()
+                                                                    .aspectRatio(contentMode: .fit)
+                                                                    .frame(width: 215)
+                                                                    .cornerRadius(10)
+                                                                    .shadow(radius: 3)
+                                                                    .overlay(Rectangle()
+                                                                        .stroke(.white, lineWidth: 1)
+                                                                        .cornerRadius(10))
+                                                            } placeholder: {
+                                                                ProgressView()
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }
+                                            .background(item.id == String(getBestAnswerID()) ? Color.green.opacity(0.2) : Color.clear)
+                                            .cornerRadius(5)
                                         }
                                     }
+                                    LikesAndCommentButton()
+                                        .padding(.bottom, 5)
+                                        .padding(.top, 5)
+                                    Divider()
                                 }
-                                
+                                .listRowSeparator(.hidden)
                             }
-                            LikesAndCommentButton()
-                                .padding(.bottom, 5)
-                                .padding(.top, 5)
-                            Divider()
                         }
-                        .listRowSeparator(.hidden)
                     }
                     .searchable(text: $searchTerm, prompt: "Search")
                 }else{
                     // MARK: - Posts With tags
-                    List(filteredPostsArrayTags, id: \.id){item in
-                        VStack {
-                            NavigationLink(value: item){
-                                HStack {
-                                    VStack{
-                                        if let userid = item.relationships?.user?.data.id{
-                                            if let avatarURL = findImgUrl(userid, in: usersArrayTags){
-                                                asyncImage(url: URL(string: avatarURL), frameSize: 50, lineWidth: 1, shadow: 3)
-                                                    .padding(.top, 10)
-                                            }else{
-                                                CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 50, lineWidth: 0.7, shadow: 2)
-                                                    .opacity(0.3)
-                                                    .padding(.top, 10)
-                                            }
-                                        }
-                                        Spacer()
-                                    }
-                                    VStack {
+                    List{
+                        Section{
+                            ForEach(filteredPostsArrayTags, id: \.id){item in
+                                VStack {
+                                    NavigationLink(value: item){
                                         HStack {
-                                            if let userid = item.relationships?.user?.data.id{
-                                                if let displayName = findDisplayName(userid, in: usersArrayTags){
-                                                    Text(displayName)
-                                                        .font(.system(size: 12))
-                                                        .bold()
-                                                        .foregroundColor(colorScheme == .dark ? .white : .black)
+                                            VStack {
+                                                HStack {
+                                                    if let userid = item.relationships?.user?.data.id{
+                                                        if let avatarURL = findImgUrl(userid, in: usersArrayTags){
+                                                            asyncImage(url: URL(string: avatarURL), frameSize: 50, lineWidth: 1, shadow: 3)
+                                                                .padding(.top, 10)
+                                                                .padding(.leading, 6)
+                                                        }else{
+                                                            CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 50, lineWidth: 0.7, shadow: 2)
+                                                                .opacity(0.3)
+                                                                .padding(.top, 10)
+                                                                .padding(.leading, 6)
+                                                        }
+                                                    }
+                                                    
+                                                    if let userid = item.relationships?.user?.data.id{
+                                                        if let displayName = findDisplayName(userid, in: usersArrayTags){
+                                                            Text(displayName)
+                                                                .font(.system(size: 12))
+                                                                .bold()
+                                                                .foregroundColor(colorScheme == .dark ? .white : .black)
 
-                                                        .padding(.leading, 3)
-                                                }
-                                            }else{
-                                                ProgressView()
-                                            }
-         
-                                            if let createTime = item.attributes.createdAt{
-                                                Text(" \(calculateTimeDifference(from: createTime))")
-                                                    .font(.system(size: 8))
-                                                    .foregroundColor(.gray)
-                                            }
-                                            
-                                            if let editedTime = item.attributes.editedAt{
-                                                Text("Edited")
-                                                    .font(.system(size: 8))
-                                                    .foregroundColor(.gray)
-                                                    .italic()
-                                            }
-                                            
-                                            Spacer()
-                                            
-                                            if item.id == String(getBestAnswerID()) {
-                                                Text("Best Answer")
-                                                    .font(.system(size: 10))
-                                                    .fontWeight(.bold)
-                                                    .foregroundColor(.green)
-                                            }
-                                        }
-                                        
-                                        HStack {
-                                            if let content = item.attributes.contentHTML{
-                                                Text(content.htmlConvertedWithoutUrl)
-                                                    .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
-                                                    .padding(.top)
-                                                    .padding(.leading, 3)
-                                                    .font(.system(size: 15))
-                                            }else{
-                                                Text("unsupported")
-                                                    .foregroundColor(.gray)
-                                                    .padding(.top)
-                                                    .padding(.leading, 3)
-                                                    .font(.system(size: 20))
-                                                    .opacity(0.5)
-                                            }
-                                            Spacer()
-                                        }
-                                        if let includeImgReply = item.attributes.contentHTML{
-                                            if let imageUrls = extractImageURLs(from: includeImgReply){
-                                                ForEach(imageUrls, id: \.self) { url in
-                                                    AsyncImage(url: URL(string: url)) { image in
-                                                        image
-                                                            .resizable()
-                                                            .aspectRatio(contentMode: .fit)
-                                                            .frame(width: 215)
-                                                            .cornerRadius(10)
-                                                            .shadow(radius: 3)
-                                                            .overlay(Rectangle()
-                                                                .stroke(.white, lineWidth: 1)
-                                                                .cornerRadius(10))
-                                                    } placeholder: {
+                                                                .padding(.leading, 3)
+                                                        }
+                                                    }else{
                                                         ProgressView()
+                                                    }
+                 
+                                                    if let createTime = item.attributes.createdAt{
+                                                        Text(" \(calculateTimeDifference(from: createTime))")
+                                                            .font(.system(size: 8))
+                                                            .foregroundColor(.gray)
+                                                    }
+                                                    
+                                                    if let editedTime = item.attributes.editedAt{
+                                                        Text("Edited")
+                                                            .font(.system(size: 8))
+                                                            .foregroundColor(.gray)
+                                                            .italic()
+                                                    }
+                                                    
+                                                    Spacer()
+                                                    
+                                                    if item.id == String(getBestAnswerID()) {
+                                                        Text("Best Answer")
+                                                            .font(.system(size: 10))
+                                                            .fontWeight(.bold)
+                                                            .foregroundColor(.green)
+                                                    }
+                                                }
+                                                
+                                                HStack {
+                                                    if let content = item.attributes.contentHTML{
+                                                        Text(content.htmlConvertedWithoutUrl)
+                                                            .tracking(0.5)
+                                                            .lineSpacing(7)
+                                                            .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
+                                                            .padding(.top)
+                                                            .padding(.leading, 3)
+                                                            .font(.system(size: 15))
+                                                    }else{
+                                                        Text("unsupported")
+                                                            .foregroundColor(.gray)
+                                                            .padding(.top)
+                                                            .padding(.leading, 3)
+                                                            .font(.system(size: 10))
+                                                            .opacity(0.5)
+                                                    }
+                                                    Spacer()
+                                                }
+                                                if let includeImgReply = item.attributes.contentHTML{
+                                                    if let imageUrls = extractImageURLs(from: includeImgReply){
+                                                        ForEach(imageUrls, id: \.self) { url in
+                                                            AsyncImage(url: URL(string: url)) { image in
+                                                                image
+                                                                    .resizable()
+                                                                    .aspectRatio(contentMode: .fit)
+                                                                    .frame(width: 215)
+                                                                    .cornerRadius(10)
+                                                                    .shadow(radius: 3)
+                                                                    .overlay(Rectangle()
+                                                                        .stroke(.white, lineWidth: 1)
+                                                                        .cornerRadius(10))
+                                                            } placeholder: {
+                                                                ProgressView()
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }
+                                            .background(item.id == String(getBestAnswerID()) ? Color.green.opacity(0.2) : Color.clear)
+                                            .cornerRadius(5)
                                         }
                                     }
-                                    .background(item.id == String(getBestAnswerID()) ? Color.green.opacity(0.2) : Color.clear)
-                                    .cornerRadius(5)
+                                    LikesAndCommentButton()
+                                        .padding(.bottom, 5)
+                                        .padding(.top, 5)
+                                    Divider()
                                 }
+                                .listRowSeparator(.hidden)
                             }
-                            LikesAndCommentButton()
-                                .padding(.bottom, 5)
-                                .padding(.top, 5)
-                            Divider()
                         }
-                        .listRowSeparator(.hidden)
                     }
                     .searchable(text: $searchTerm, prompt: "Search")
                 }
             }else if selectedSortOption == NSLocalizedString("latest_sort_option", comment: "") {
                 if (!postsArray.isEmpty && postsArrayTags.isEmpty){
                     // MARK: - Posts Without tags
-                    List(filteredPostsArray.reversed(), id: \.id){item in
-                        VStack {
-                            NavigationLink(value: item){
-                                HStack {
-                                    VStack{
-                                        if let userid = item.relationships?.user?.data.id{
-                                            if let avatarURL = findImgUrl(userid, in: usersArray){
-                                                asyncImage(url: URL(string: avatarURL), frameSize: 50, lineWidth: 1, shadow: 3)
-                                                    .padding(.top, 10)
-                                            }else{
-                                                CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 50, lineWidth: 0.7, shadow: 2)
-                                                    .opacity(0.3)
-                                                    .padding(.top, 10)
-                                            }
-                                        }
-                                        Spacer()
-                                    }
-                                    VStack {
+                    List{
+                        Section{
+                            ForEach(filteredPostsArray.reversed(), id: \.id){item in
+                                VStack {
+                                    NavigationLink(value: item){
                                         HStack {
-                                            if let userid = item.relationships?.user?.data.id{
-                                                if let displayName = findDisplayName(userid, in: usersArray){
-                                                    Text(displayName)
-                                                        .font(.system(size: 12))
-                                                        .bold()
-                                                        .foregroundColor(colorScheme == .dark ? .white : .black)
+                                            VStack {
+                                                HStack {
+                                                    if let userid = item.relationships?.user?.data.id{
+                                                        if let avatarURL = findImgUrl(userid, in: usersArray){
+                                                            asyncImage(url: URL(string: avatarURL), frameSize: 50, lineWidth: 1, shadow: 3)
+                                                                .padding(.top, 10)
+                                                                .padding(.leading, 6)
+                                                        }else{
+                                                            CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 50, lineWidth: 0.7, shadow: 2)
+                                                                .opacity(0.3)
+                                                                .padding(.top, 10)
+                                                                .padding(.leading, 6)
+                                                        }
+                                                    }
+                                                    
+                                                    if let userid = item.relationships?.user?.data.id{
+                                                        if let displayName = findDisplayName(userid, in: usersArray){
+                                                            Text(displayName)
+                                                                .font(.system(size: 12))
+                                                                .bold()
+                                                                .foregroundColor(colorScheme == .dark ? .white : .black)
 
-                                                        .padding(.leading, 3)
-                                                }
-                                            }else{
-                                                ProgressView()
-                                            }
-         
-                                            if let createTime = item.attributes.createdAt{
-                                                Text(" \(calculateTimeDifference(from: createTime))")
-                                                    .font(.system(size: 8))
-                                                    .foregroundColor(.gray)
-                                            }
-                                            
-                                            if let editedTime = item.attributes.editedAt{
-                                                Text("Edited")
-                                                    .font(.system(size: 8))
-                                                    .foregroundColor(.gray)
-                                                    .italic()
-                                            }
-                                            Spacer()
-                                        }
-                                        
-                                        HStack {
-                                            if let content = item.attributes.contentHTML{
-                                                Text(content.htmlConvertedWithoutUrl)
-                                                    .padding(.top)
-                                                    .padding(.leading, 3)
-                                                    .font(.system(size: 15))
-                                                    .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
-                                            }else{
-                                                Text("unsupported")
-                                                    .foregroundColor(.gray)
-                                                    .padding(.top)
-                                                    .padding(.leading, 3)
-                                                    .font(.system(size: 20))
-                                                    .opacity(0.5)
-                                            }
-                                            Spacer()
-                                        }
-                                        if let includeImgReply = item.attributes.contentHTML{
-                                            if let imageUrls = extractImageURLs(from: includeImgReply){
-                                                ForEach(imageUrls, id: \.self) { url in
-                                                    AsyncImage(url: URL(string: url)) { image in
-                                                        image
-                                                            .resizable()
-                                                            .aspectRatio(contentMode: .fit)
-                                                            .frame(width: 215)
-                                                            .cornerRadius(10)
-                                                            .shadow(radius: 3)
-                                                            .overlay(Rectangle()
-                                                                .stroke(.white, lineWidth: 1)
-                                                                .cornerRadius(10))
-                                                    } placeholder: {
+                                                                .padding(.leading, 3)
+                                                        }
+                                                    }else{
                                                         ProgressView()
+                                                    }
+                 
+                                                    if let createTime = item.attributes.createdAt{
+                                                        Text(" \(calculateTimeDifference(from: createTime))")
+                                                            .font(.system(size: 8))
+                                                            .foregroundColor(.gray)
+                                                    }
+                                                    
+                                                    if let editedTime = item.attributes.editedAt{
+                                                        Text("Edited")
+                                                            .font(.system(size: 8))
+                                                            .foregroundColor(.gray)
+                                                            .italic()
+                                                    }
+                                                    
+                                                    Spacer()
+                                                    
+                                                    if item.id == String(getBestAnswerID()) {
+                                                        Text("Best Answer")
+                                                            .font(.system(size: 10))
+                                                            .fontWeight(.bold)
+                                                            .foregroundColor(.green)
+                                                    }
+                                                }
+                                                
+                                                HStack {
+                                                    if let content = item.attributes.contentHTML{
+                                                        Text(content.htmlConvertedWithoutUrl)
+                                                            .tracking(0.5)
+                                                            .lineSpacing(7)
+                                                            .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
+                                                            .padding(.top)
+                                                            .padding(.leading, 3)
+                                                            .font(.system(size: 15))
+                                                    }else{
+                                                        Text("unsupported")
+                                                            .foregroundColor(.gray)
+                                                            .padding(.top)
+                                                            .padding(.leading, 3)
+                                                            .font(.system(size: 10))
+                                                            .opacity(0.5)
+                                                    }
+                                                    Spacer()
+                                                }
+                                                if let includeImgReply = item.attributes.contentHTML{
+                                                    if let imageUrls = extractImageURLs(from: includeImgReply){
+                                                        ForEach(imageUrls, id: \.self) { url in
+                                                            AsyncImage(url: URL(string: url)) { image in
+                                                                image
+                                                                    .resizable()
+                                                                    .aspectRatio(contentMode: .fit)
+                                                                    .frame(width: 215)
+                                                                    .cornerRadius(10)
+                                                                    .shadow(radius: 3)
+                                                                    .overlay(Rectangle()
+                                                                        .stroke(.white, lineWidth: 1)
+                                                                        .cornerRadius(10))
+                                                            } placeholder: {
+                                                                ProgressView()
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }
+                                            .background(item.id == String(getBestAnswerID()) ? Color.green.opacity(0.2) : Color.clear)
+                                            .cornerRadius(5)
                                         }
                                     }
+                                    LikesAndCommentButton()
+                                        .padding(.bottom, 5)
+                                        .padding(.top, 5)
+                                    Divider()
                                 }
-                                
+                                .listRowSeparator(.hidden)
                             }
-                            LikesAndCommentButton()
-                                .padding(.bottom, 5)
-                                .padding(.top, 5)
-                            Divider()
                         }
-                        .listRowSeparator(.hidden)
                     }
                     .searchable(text: $searchTerm, prompt: "Search")
                 }else{
                     // MARK: - Posts With tags
-                    List(filteredPostsArrayTags.reversed(), id: \.id){item in
-                        VStack {
-                            NavigationLink(value: item){
-                                HStack {
-                                    VStack{
-                                        if let userid = item.relationships?.user?.data.id{
-                                            if let avatarURL = findImgUrl(userid, in: usersArrayTags){
-                                                asyncImage(url: URL(string: avatarURL), frameSize: 50, lineWidth: 1, shadow: 3)
-                                                    .padding(.top, 10)
-                                            }else{
-                                                CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 50, lineWidth: 0.7, shadow: 2)
-                                                    .opacity(0.3)
-                                                    .padding(.top, 10)
-                                            }
-                                        }
-                                        Spacer()
-                                    }
-                                    VStack {
+                    List{
+                        Section{
+                            ForEach(filteredPostsArrayTags.reversed(), id: \.id){item in
+                                VStack {
+                                    NavigationLink(value: item){
                                         HStack {
-                                            if let userid = item.relationships?.user?.data.id{
-                                                if let displayName = findDisplayName(userid, in: usersArrayTags){
-                                                    Text(displayName)
-                                                        .font(.system(size: 12))
-                                                        .bold()
-                                                        .foregroundColor(colorScheme == .dark ? .white : .black)
+                                            VStack {
+                                                HStack {
+                                                    if let userid = item.relationships?.user?.data.id{
+                                                        if let avatarURL = findImgUrl(userid, in: usersArrayTags){
+                                                            asyncImage(url: URL(string: avatarURL), frameSize: 50, lineWidth: 1, shadow: 3)
+                                                                .padding(.top, 10)
+                                                                .padding(.leading, 6)
+                                                        }else{
+                                                            CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 50, lineWidth: 0.7, shadow: 2)
+                                                                .opacity(0.3)
+                                                                .padding(.top, 10)
+                                                                .padding(.leading, 6)
+                                                        }
+                                                    }
+                                                    
+                                                    if let userid = item.relationships?.user?.data.id{
+                                                        if let displayName = findDisplayName(userid, in: usersArrayTags){
+                                                            Text(displayName)
+                                                                .font(.system(size: 12))
+                                                                .bold()
+                                                                .foregroundColor(colorScheme == .dark ? .white : .black)
 
-                                                        .padding(.leading, 3)
-                                                }
-                                            }else{
-                                                ProgressView()
-                                            }
-         
-                                            if let createTime = item.attributes.createdAt{
-                                                Text(" \(calculateTimeDifference(from: createTime))")
-                                                    .font(.system(size: 8))
-                                                    .foregroundColor(.gray)
-                                            }
-                                            
-                                            if let editedTime = item.attributes.editedAt{
-                                                Text("Edited")
-                                                    .font(.system(size: 8))
-                                                    .foregroundColor(.gray)
-                                                    .italic()
-                                            }
-                                            
-                                            Spacer()
-                                            
-                                            if item.id == String(getBestAnswerID()) {
-                                                Text("Best Answer")
-                                                    .font(.system(size: 10))
-                                                    .fontWeight(.bold)
-                                                    .foregroundColor(.green)
-                                            }
-                                        }
-                                        
-                                        HStack {
-                                            if let content = item.attributes.contentHTML{
-                                                Text(content.htmlConvertedWithoutUrl)
-                                                    .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
-                                                    .padding(.top)
-                                                    .padding(.leading, 3)
-                                                    .font(.system(size: 15))
-                                            }else{
-                                                Text("unsupported")
-                                                    .foregroundColor(.gray)
-                                                    .padding(.top)
-                                                    .padding(.leading, 3)
-                                                    .font(.system(size: 20))
-                                                    .opacity(0.5)
-                                            }
-                                            Spacer()
-                                        }
-                                        if let includeImgReply = item.attributes.contentHTML{
-                                            if let imageUrls = extractImageURLs(from: includeImgReply){
-                                                ForEach(imageUrls, id: \.self) { url in
-                                                    AsyncImage(url: URL(string: url)) { image in
-                                                        image
-                                                            .resizable()
-                                                            .aspectRatio(contentMode: .fit)
-                                                            .frame(width: 215)
-                                                            .cornerRadius(10)
-                                                            .shadow(radius: 3)
-                                                            .overlay(Rectangle()
-                                                                .stroke(.white, lineWidth: 1)
-                                                                .cornerRadius(10))
-                                                    } placeholder: {
+                                                                .padding(.leading, 3)
+                                                        }
+                                                    }else{
                                                         ProgressView()
+                                                    }
+                 
+                                                    if let createTime = item.attributes.createdAt{
+                                                        Text(" \(calculateTimeDifference(from: createTime))")
+                                                            .font(.system(size: 8))
+                                                            .foregroundColor(.gray)
+                                                    }
+                                                    
+                                                    if let editedTime = item.attributes.editedAt{
+                                                        Text("Edited")
+                                                            .font(.system(size: 8))
+                                                            .foregroundColor(.gray)
+                                                            .italic()
+                                                    }
+                                                    
+                                                    Spacer()
+                                                    
+                                                    if item.id == String(getBestAnswerID()) {
+                                                        Text("Best Answer")
+                                                            .font(.system(size: 10))
+                                                            .fontWeight(.bold)
+                                                            .foregroundColor(.green)
+                                                    }
+                                                }
+                                                
+                                                HStack {
+                                                    if let content = item.attributes.contentHTML{
+                                                        Text(content.htmlConvertedWithoutUrl)
+                                                            .tracking(0.5)
+                                                            .lineSpacing(7)
+                                                            .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
+                                                            .padding(.top)
+                                                            .padding(.leading, 3)
+                                                            .font(.system(size: 15))
+                                                    }else{
+                                                        Text("unsupported")
+                                                            .foregroundColor(.gray)
+                                                            .padding(.top)
+                                                            .padding(.leading, 3)
+                                                            .font(.system(size: 10))
+                                                            .opacity(0.5)
+                                                    }
+                                                    Spacer()
+                                                }
+                                                if let includeImgReply = item.attributes.contentHTML{
+                                                    if let imageUrls = extractImageURLs(from: includeImgReply){
+                                                        ForEach(imageUrls, id: \.self) { url in
+                                                            AsyncImage(url: URL(string: url)) { image in
+                                                                image
+                                                                    .resizable()
+                                                                    .aspectRatio(contentMode: .fit)
+                                                                    .frame(width: 215)
+                                                                    .cornerRadius(10)
+                                                                    .shadow(radius: 3)
+                                                                    .overlay(Rectangle()
+                                                                        .stroke(.white, lineWidth: 1)
+                                                                        .cornerRadius(10))
+                                                            } placeholder: {
+                                                                ProgressView()
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }
+                                            .background(item.id == String(getBestAnswerID()) ? Color.green.opacity(0.2) : Color.clear)
+                                            .cornerRadius(5)
                                         }
                                     }
-                                    .background(item.id == String(getBestAnswerID()) ? Color.green.opacity(0.2) : Color.clear)
-                                    .cornerRadius(5)
+                                    LikesAndCommentButton()
+                                        .padding(.bottom, 5)
+                                        .padding(.top, 5)
+                                    Divider()
                                 }
+                                .listRowSeparator(.hidden)
                             }
-                            LikesAndCommentButton()
-                                .padding(.bottom, 5)
-                                .padding(.top, 5)
-                            Divider()
                         }
-                        .listRowSeparator(.hidden)
                     }
                     .searchable(text: $searchTerm, prompt: "Search")
                 }
@@ -599,9 +641,6 @@ struct fastPostDetailView: View {
                     }
                 }
             }
-
-            
-            Spacer()
         }
         .navigationDestination(for: Included4.self){item in
             if let userIdString = item.relationships?.user?.data.id, let userId = Int(userIdString) {

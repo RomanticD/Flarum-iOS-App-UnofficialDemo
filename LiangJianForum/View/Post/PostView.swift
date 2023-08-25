@@ -19,6 +19,7 @@ struct PostView: View {
     @State private var discussionLinksFirst : String = ""
     @EnvironmentObject var appsettings: AppSettings
     @State private var searchTerm = ""
+    @State private var isHeaderSlideViewEnabled = false
     
     private func findDisplayName(_ userid: String, in array: [Included]) -> String? {
         if let item = array.first(where: { $0.id == userid }) {
@@ -62,78 +63,20 @@ struct PostView: View {
             } else {
                 NavigationStack{
                     ScrollViewReader{ proxy in
-                        if hasPrevPage || hasNextPage {
-                            HStack{
-                                Button(action: {
-                                    if currentPage > 1 {
-                                        currentPage -= 1
-                                    }
-                                    isLoading = true
-                                    Task {
-                                        await fetchDiscussion()
-                                        isLoading = false
-                                    }
-                                }) {
-                                    HStack{
-                                        Image(systemName: "chevron.left")
-                                            .foregroundColor(hasPrevPage ? .blue : .secondary)
-                                            .font(.system(size: 20))
-                                            .padding(.top, 1)
-                                        Text("Prev")
-                                            .foregroundStyle(hasPrevPage ? .blue : .secondary)
-                                            .font(.system(size: 14))
-                                    }
-                                }
-                                .padding(.leading)
-                                .disabled(!hasPrevPage)
-                                
-                                Spacer()
-                                
-                                Button(action: {
-                                    isLoading = true
-                                    currentPage = 1
-                                    isLoading = false
-                                    Task {
-                                        await fetchDiscussion()
-                                        isLoading = false
-                                    }
-                                }) {
-                                    HStack{
-                                        Text("First Page")
-                                            .foregroundStyle(hasPrevPage ? .blue : .secondary)
-                                            .font(.system(size: 14))
-                                    }
-                                }
-                                .disabled(!hasPrevPage)
-                                
-                                Spacer()
-                                
-                                Button(action: {
-                                    currentPage += 1
-                                    isLoading = true
-                                    Task {
-                                        await fetchDiscussion()
-                                        isLoading = false
-                                    }
-                                }) {
-                                    HStack{
-                                        Text("Next")
-                                            .foregroundStyle(hasNextPage ? .blue : .secondary)
-                                            .font(.system(size: 14))
-                                        Image(systemName: "chevron.right")
-                                            .foregroundColor(hasNextPage ? .blue : .secondary)
-                                            .font(.system(size: 20))
-                                            .padding(.top, 1)
-                                    }
-                                }
-                                .padding(.trailing)
-                                .disabled(!hasNextPage)
-                            }
-                        }
-                        
-                        
                         List {
+                            // MARK: - if Flarum has HeaderSlide Plugin installed with api endpoint \(appsettings.FlarumUrl)/api/header-slideshow/list
+                            if isHeaderSlideViewEnabled{
+                                Section{
+                                    HeaderSlideView()
+                                        .frame(height: 100)
+                                }
+                                .listRowInsets(EdgeInsets())
+                                .id("Top")
+                            }
+                            
                             Section{
+                                PaginationView(hasPrevPage: hasPrevPage, hasNextPage: hasNextPage, currentPage: $currentPage, isLoading: $isLoading, fetchDiscussion: fetchDiscussion)
+                                
                                 ForEach(filteredDiscussionData, id: \.id) { item in
                                     if item.attributes.lastPostedAt != nil{
                                         HStack {
@@ -214,6 +157,7 @@ struct PostView: View {
                                                     
                                                 }
                                                 .padding(.top, 10)
+                                                .padding(.bottom, 5)
 
                                                 Divider()
                                             }
@@ -221,14 +165,20 @@ struct PostView: View {
                                         .listRowSeparator(.hidden)
                                     }
                                 }
-                                .id("DiscussionList")
+                                
+                                if filteredDiscussionData.count > 5 {
+                                    Section{
+                                        PaginationView(hasPrevPage: hasPrevPage, hasNextPage: hasNextPage, currentPage: $currentPage, isLoading: $isLoading, fetchDiscussion: fetchDiscussion)
+                                    }
+                                }
                             }
+ 
                         }
                         .onChange(of: currentPage) { _ in
                             // Whenever currentPage changes, scroll to the top of the list
                             withAnimation {
                                 isLoading = true
-                                proxy.scrollTo("DiscussionList", anchor: .top)
+                                proxy.scrollTo("Top", anchor: .top)
                                 isLoading = false
                             }
                         }
@@ -246,6 +196,7 @@ struct PostView: View {
                                 .presentationDetents([.height(560)])
                         }
                         .navigationTitle("All Discussions")
+                        .navigationBarTitleDisplayMode(.inline)
                         .navigationDestination(for: Datum.self){item in
                             fastPostDetailView(postTitle: item.attributes.title, postID: item.id, commentCount: item.attributes.commentCount).environmentObject(appsettings)
                         }
@@ -266,6 +217,14 @@ struct PostView: View {
         .task {
             await fetchDiscussion()
         }
+        .onAppear {
+            // Check the URL status and set isHeaderSlideViewEnabled accordingly
+            checkURLStatus(urlString: "\(appsettings.FlarumUrl)/api/header-slideshow/list") { success in
+                DispatchQueue.main.async {
+                    self.isHeaderSlideViewEnabled = success
+                }
+            }
+        }
     }
     
     private func findUser(with id: String) -> Included? {
@@ -280,7 +239,7 @@ struct PostView: View {
     private func fetchDiscussion() async {
         
         guard let url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?page[number]=\(currentPage)") else{
-                print("Invalid URL")
+            print("Invalid URL")
             return
         }
         
@@ -292,7 +251,9 @@ struct PostView: View {
                 discussionIncluded = decodedResponse.included
                 discussionLinksFirst = decodedResponse.links.first
                 
-                if decodedResponse.links.next != nil{
+                if decodedResponse.links.next == nil || decodedResponse.links.next == ""{
+                    self.hasNextPage = false
+                }else {
                     self.hasNextPage = true
                 }
                 
@@ -312,6 +273,24 @@ struct PostView: View {
         } catch {
             print("Invalid Discussions Overview And Title Data!" ,error)
         }
+    }
+    
+    func checkURLStatus(urlString: String, completion: @escaping (Bool) -> Void) {
+        guard let url = URL(string: urlString) else {
+            completion(false)
+            return
+        }
+
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let httpResponse = response as? HTTPURLResponse {
+                let statusCode = httpResponse.statusCode
+                completion(statusCode == 200) // Modify this condition as needed
+            } else {
+                completion(false)
+            }
+        }
+        
+        task.resume()
     }
 }
 
