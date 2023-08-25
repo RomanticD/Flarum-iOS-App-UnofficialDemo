@@ -63,6 +63,8 @@ struct PostView: View {
             } else {
                 NavigationStack{
                     ScrollViewReader{ proxy in
+                        PaginationView(hasPrevPage: hasPrevPage, hasNextPage: hasNextPage, currentPage: $currentPage, isLoading: $isLoading, fetchDiscussion: fetchDiscussion)
+                        
                         List {
                             // MARK: - if Flarum has HeaderSlide Plugin installed with api endpoint \(appsettings.FlarumUrl)/api/header-slideshow/list
                             if isHeaderSlideViewEnabled{
@@ -70,13 +72,11 @@ struct PostView: View {
                                     HeaderSlideView()
                                         .frame(height: 100)
                                 }
-                                .listRowInsets(EdgeInsets())
                                 .id("Top")
+                                .listRowInsets(EdgeInsets())
                             }
-                            
+
                             Section{
-                                PaginationView(hasPrevPage: hasPrevPage, hasNextPage: hasNextPage, currentPage: $currentPage, isLoading: $isLoading, fetchDiscussion: fetchDiscussion)
-                                
                                 ForEach(filteredDiscussionData, id: \.id) { item in
                                     if item.attributes.lastPostedAt != nil{
                                         HStack {
@@ -165,20 +165,19 @@ struct PostView: View {
                                         .listRowSeparator(.hidden)
                                     }
                                 }
-                                
-                                if filteredDiscussionData.count > 5 {
-                                    Section{
-                                        PaginationView(hasPrevPage: hasPrevPage, hasNextPage: hasNextPage, currentPage: $currentPage, isLoading: $isLoading, fetchDiscussion: fetchDiscussion)
-                                    }
-                                }
                             }
- 
+                            .id("TopWithoutSlide")
                         }
                         .onChange(of: currentPage) { _ in
                             // Whenever currentPage changes, scroll to the top of the list
                             withAnimation {
                                 isLoading = true
-                                proxy.scrollTo("Top", anchor: .top)
+                                if isHeaderSlideViewEnabled{
+                                    proxy.scrollTo("Top", anchor: .top)
+                                }else{
+                                    proxy.scrollTo("TopWithoutSlide", anchor: .top)
+                                }
+                                
                                 isLoading = false
                             }
                         }

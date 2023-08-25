@@ -227,6 +227,11 @@ struct fastPostDetailView: View {
                                                             } placeholder: {
                                                                 ProgressView()
                                                             }
+                                                            .onTapGesture {
+                                                                if let imgurl = URL(string: url) {
+                                                                    UIApplication.shared.open(imgurl)
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -338,6 +343,11 @@ struct fastPostDetailView: View {
                                                                         .cornerRadius(10))
                                                             } placeholder: {
                                                                 ProgressView()
+                                                            }
+                                                            .onTapGesture {
+                                                                if let imgurl = URL(string: url) {
+                                                                    UIApplication.shared.open(imgurl)
+                                                                }
                                                             }
                                                         }
                                                     }
@@ -453,6 +463,11 @@ struct fastPostDetailView: View {
                                                             } placeholder: {
                                                                 ProgressView()
                                                             }
+                                                            .onTapGesture {
+                                                                if let imgurl = URL(string: url) {
+                                                                    UIApplication.shared.open(imgurl)
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -564,6 +579,11 @@ struct fastPostDetailView: View {
                                                                         .cornerRadius(10))
                                                             } placeholder: {
                                                                 ProgressView()
+                                                            }
+                                                            .onTapGesture {
+                                                                if let imgurl = URL(string: url) {
+                                                                    UIApplication.shared.open(imgurl)
+                                                                }
                                                             }
                                                         }
                                                     }
