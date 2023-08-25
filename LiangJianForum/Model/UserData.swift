@@ -42,7 +42,7 @@ struct UserInclude: Codable {
 
 // MARK: - Attributes
 struct Attributes: Codable {
-    let nameSingular, namePlural, color, icon: String
-    let isHidden: Int
+    let nameSingular, namePlural, color, icon: String?
+    let isHidden: Int?
 }
 

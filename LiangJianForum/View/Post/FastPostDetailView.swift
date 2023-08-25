@@ -224,6 +224,7 @@ struct fastPostDetailView: View {
                                                                     .overlay(Rectangle()
                                                                         .stroke(.white, lineWidth: 1)
                                                                         .cornerRadius(10))
+                                                                    .padding(.bottom)
                                                             } placeholder: {
                                                                 ProgressView()
                                                             }
@@ -341,6 +342,7 @@ struct fastPostDetailView: View {
                                                                     .overlay(Rectangle()
                                                                         .stroke(.white, lineWidth: 1)
                                                                         .cornerRadius(10))
+                                                                    .padding(.bottom)
                                                             } placeholder: {
                                                                 ProgressView()
                                                             }
@@ -460,6 +462,7 @@ struct fastPostDetailView: View {
                                                                     .overlay(Rectangle()
                                                                         .stroke(.white, lineWidth: 1)
                                                                         .cornerRadius(10))
+                                                                    .padding(.bottom)
                                                             } placeholder: {
                                                                 ProgressView()
                                                             }
@@ -577,6 +580,7 @@ struct fastPostDetailView: View {
                                                                     .overlay(Rectangle()
                                                                         .stroke(.white, lineWidth: 1)
                                                                         .cornerRadius(10))
+                                                                    .padding(.bottom)
                                                             } placeholder: {
                                                                 ProgressView()
                                                             }

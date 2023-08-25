@@ -95,29 +95,28 @@ struct LinksProfileView: View {
                 
                 Section("Authentication Information") {
                     if let include = include, !include.isEmpty {
-                        ForEach(include, id: \.id) { item in
-                            HStack {
-                                Text("✅ \(item.attributes.nameSingular): ").foregroundStyle(.secondary)
-                                Text("\(item.attributes.namePlural)").bold()
+                        let groups = include.filter { $0.type == "groups" }
+                        if !groups.isEmpty {
+                            ForEach(groups, id: \.id) { item in
+                                HStack{
+                                    if let singular = item.attributes.nameSingular {
+                                        Text("✅ \(singular): ").foregroundStyle(.secondary)
+                                    }
+
+                                    if let plural = item.attributes.namePlural {
+                                        Text("\(plural)").bold()
+                                    }
+                                }
                             }
+                        } else {
+                            Text("No authentication information available")
+                                .foregroundColor(.secondary)
+                                .italic()
                         }
                     } else {
                         Text("No authentication information available")
                             .foregroundColor(.secondary)
                             .italic()
-                    }
-                }
-
-                Section{
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            saveProfile()
-                        }) {
-                            Text("Change Profile")
-                                .bold()
-                        }
-                        Spacer()
                     }
                 }
             }
