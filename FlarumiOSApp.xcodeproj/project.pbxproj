@@ -25,6 +25,9 @@
 		0783CE312A419008009A2F7D /* InfoDisplayWithTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0783CE302A419008009A2F7D /* InfoDisplayWithTitleView.swift */; };
 		079B15A02A95B87000009FE3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 079B159E2A95B87000009FE3 /* Localizable.strings */; };
 		079B15A32A95B88500009FE3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 079B15A12A95B88500009FE3 /* Localizable.strings */; };
+		07A37BCA2A979AE100915EB1 /* PaginationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A37BC92A979AE100915EB1 /* PaginationView.swift */; };
+		07A37BD02A98666A00915EB1 /* HeaderSlideData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A37BCF2A98666A00915EB1 /* HeaderSlideData.swift */; };
+		07A37BD22A9866DB00915EB1 /* HeaderSlideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A37BD12A9866DB00915EB1 /* HeaderSlideView.swift */; };
 		07A868032A3D879E00311F65 /* FlarumiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A868022A3D879E00311F65 /* FlarumiOSApp.swift */; };
 		07A868052A3D879E00311F65 /* LoginPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A868042A3D879E00311F65 /* LoginPageView.swift */; };
 		07A868072A3D879F00311F65 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07A868062A3D879F00311F65 /* Assets.xcassets */; };
@@ -69,6 +72,9 @@
 		0783CE322A41A952009A2F7D /* LiangJianForum.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LiangJianForum.entitlements; sourceTree = "<group>"; };
 		079B15A42A95B9EB00009FE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 		079B15A52A95B9F700009FE3 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = Localizable.strings; sourceTree = "<group>"; };
+		07A37BC92A979AE100915EB1 /* PaginationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginationView.swift; sourceTree = "<group>"; };
+		07A37BCF2A98666A00915EB1 /* HeaderSlideData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderSlideData.swift; sourceTree = "<group>"; };
+		07A37BD12A9866DB00915EB1 /* HeaderSlideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderSlideView.swift; sourceTree = "<group>"; };
 		07A867FF2A3D879E00311F65 /* FlarumiOSApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlarumiOSApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07A868022A3D879E00311F65 /* FlarumiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlarumiOSApp.swift; sourceTree = "<group>"; };
 		07A868042A3D879E00311F65 /* LoginPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPageView.swift; sourceTree = "<group>"; };
@@ -126,6 +132,7 @@
 				07428C762A59554400DE9F92 /* NotificationData.swift */,
 				42ED924319C2DF3E476F3CD1 /* UserCommentData.swift */,
 				42ED9B9C42BCB58DB6FFFFE5 /* DiscussionDataWithId.swift */,
+				07A37BCF2A98666A00915EB1 /* HeaderSlideData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -269,6 +276,8 @@
 				073C192E2A4C058F001A2411 /* TextFieldWithIcon.swift */,
 				073C19322A4C89F8001A2411 /* SecureFieldWithIcon.swift */,
 				0779EE1C2A556B4A00EE3D93 /* FavoriteButton.swift */,
+				07A37BC92A979AE100915EB1 /* PaginationView.swift */,
+				07A37BD12A9866DB00915EB1 /* HeaderSlideView.swift */,
 			);
 			path = Sub;
 			sourceTree = "<group>";
@@ -350,6 +359,7 @@
 				07CBD46D2A4EC1F8007854DA /* FastPostDetailView.swift in Sources */,
 				0774753A2A643FC700581DCE /* CommentsView.swift in Sources */,
 				07CBD46B2A4EC076007854DA /* PostData.swift in Sources */,
+				07A37BD02A98666A00915EB1 /* HeaderSlideData.swift in Sources */,
 				073C192F2A4C058F001A2411 /* TextFieldWithIcon.swift in Sources */,
 				07CBD4692A4E9008007854DA /* PostDetailView.swift in Sources */,
 				07A868052A3D879E00311F65 /* LoginPageView.swift in Sources */,
@@ -364,7 +374,9 @@
 				07EF7CAC2A4AA004008E41D4 /* DateHelper.swift in Sources */,
 				07E1FB1F2A3DB32D00F9049B /* ContentView.swift in Sources */,
 				073C19312A4C7675001A2411 /* newReply.swift in Sources */,
+				07A37BCA2A979AE100915EB1 /* PaginationView.swift in Sources */,
 				07EF7CB42A4B225C008E41D4 /* TagElement.swift in Sources */,
+				07A37BD22A9866DB00915EB1 /* HeaderSlideView.swift in Sources */,
 				07C57DD22A606A4300DCADB6 /* TagButton.swift in Sources */,
 				07EF7C9E2A49B998008E41D4 /* TagField.swift in Sources */,
 				07EF7CA42A49BE16008E41D4 /* TagDetail.swift in Sources */,

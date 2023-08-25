@@ -60,12 +60,12 @@ struct LoginPageView: View {
 
                         }
                   
-                    TextFieldWithIcon(iconName: "person.fill", inputText: $username, label: "username", isAnimating: $isAnimating, wrongInputRedBorder: $wrongUsername)
+                    TextFieldWithIcon(iconName: "person.fill", inputText: $username, label: NSLocalizedString("username", comment: ""), isAnimating: $isAnimating, wrongInputRedBorder: $wrongUsername)
                     .onAppear {
                         username = storedUsername
                     }
                     
-                    SecureFieldWithIcon(passwordIconName: "key.fill", inputPassword: $password , passwordLabel: "password", isAnimatingNow: $isAnimating, wrongPasswordRedBorder: $wrongPassword)
+                    SecureFieldWithIcon(passwordIconName: "key.fill", inputPassword: $password , passwordLabel: NSLocalizedString("password", comment: ""), isAnimatingNow: $isAnimating, wrongPasswordRedBorder: $wrongPassword)
                         .padding(.bottom)
                     .onAppear {
                         password = storedPassword

@@ -565,8 +565,8 @@
             filePath = "LiangJianForum/View/Profile/ProfileView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "188"
-            endingLineNumber = "188"
+            startingLineNumber = "184"
+            endingLineNumber = "184"
             landmarkName = "fetchUserProfile()"
             landmarkType = "7">
             <Locations>
@@ -613,8 +613,8 @@
             filePath = "LiangJianForum/View/Profile/ProfileView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "194"
-            endingLineNumber = "194"
+            startingLineNumber = "190"
+            endingLineNumber = "190"
             landmarkName = "fetchUserProfile()"
             landmarkType = "7">
          </BreakpointContent>
@@ -629,8 +629,8 @@
             filePath = "LiangJianForum/View/Profile/ProfileView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "197"
-            endingLineNumber = "197"
+            startingLineNumber = "193"
+            endingLineNumber = "193"
             landmarkName = "fetchUserProfile()"
             landmarkType = "7">
             <Locations>

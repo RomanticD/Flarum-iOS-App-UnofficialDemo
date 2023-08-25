@@ -18,10 +18,6 @@ struct ProfileView: View {
     @State private var commentCount: Int = 0
     @State private var include: [UserInclude]?
     @State private var savePersonalProfile = false
-//    @State private var newNickName: String = ""
-//    @State private var newIntroduction: String = ""
-//    @AppStorage("nickName") var nickName: String = ""
-//    @AppStorage("introduction") var introduction: String = ""
     @State private var showAlert = false
     @State private var showSaveAlert = false
     @State private var showLogoutAlert = false
