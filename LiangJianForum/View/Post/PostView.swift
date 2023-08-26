@@ -168,6 +168,7 @@ struct PostView: View {
                             }
                             .id("TopWithoutSlide")
                         }
+                        .listStyle(.inset)
                         .onChange(of: currentPage) { _ in
                             // Whenever currentPage changes, scroll to the top of the list
                             withAnimation {
