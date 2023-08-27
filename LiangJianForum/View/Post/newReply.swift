@@ -16,6 +16,7 @@ struct newReply: View {
     @AppStorage("postContent") var replyContent: String = ""
     @State private var newReplyContent = ""
     @EnvironmentObject var appSettings: AppSettings
+    @State private var isReplying = false
     
     var body: some View {
         NavigationStack {
@@ -50,16 +51,32 @@ struct newReply: View {
                 }
                 
                 ZStack {
-                    Button(action: saveReply) {
-                        Text(NSLocalizedString("post_button_text", comment: ""))
-                            .bold()
+                    Button(action: {
+                        // 调用 saveReply 函数，并在回调闭包中处理请求完成后的操作
+                        saveReply { success in
+                            if success {
+                                // 请求成功，可以执行其他操作
+                            } else {
+                                // 请求失败，可以执行其他操作或显示错误信息
+                            }
+                        }
+                    }) {
+                        HStack {
+                            Text(NSLocalizedString("post_button_text", comment: ""))
+                                .bold()
+                            
+                            if isReplying{
+                                ProgressView().padding(.leading)
+                            }
+                        }
                     }
+                    .disabled(isReplying)
                     .foregroundColor(.white)
                     .frame(width: 350, height: 50)
                     .background(Color.blue)
                     .cornerRadius(10)
                     .opacity(0.8)
-                .padding(.bottom)
+                    .padding(.bottom)
                 }
             }
             .onAppear{
@@ -75,12 +92,29 @@ struct newReply: View {
         }
     }
     
-    func saveReply(){
+    // 修改 saveReply 函数，添加一个回调闭包
+    func saveReply(completion: @escaping (Bool) -> Void) {
         replyContent = newReplyContent
-        sendPostRequest()
+        
+        // 显示进度视图
+        isReplying = true
+        
+        sendPostRequest { success in
+            // 隐藏进度视图
+            isReplying = false
+            
+            if success {
+                // 请求成功时可以执行其他操作
+            } else {
+                // 请求失败时可以执行其他操作或显示错误信息
+            }
+            
+            // 调用回调闭包通知调用方请求完成，并传递成功状态
+            completion(success)
+        }
     }
     
-    private func sendPostRequest() {
+    private func sendPostRequest(completion: @escaping (Bool) -> Void) {
         print("current Token: \(appSettings.token)")
         print("current FlarumUrl: \(appSettings.FlarumUrl)")
         
@@ -125,23 +159,26 @@ struct newReply: View {
         
         
         URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("Error: \(error)")
-                return
-            }
-            
-            guard let httpResponse = response as? HTTPURLResponse,
-                  (200...299).contains(httpResponse.statusCode) else {
-                print("Invalid response")
-                return
-            }
-            
-            DispatchQueue.main.async {
-                succeessfullyReply = true
-                replyContent = ""
-                appSettings.refreshComment()
-           }
-        }.resume()
+                    if let error = error {
+                        print("Error: \(error)")
+                        completion(false) // 请求失败时调用回调闭包并传递失败状态
+                        return
+                    }
+                    
+                    guard let httpResponse = response as? HTTPURLResponse,
+                          (200...299).contains(httpResponse.statusCode) else {
+                        print("Invalid response")
+                        completion(false) // 请求失败时调用回调闭包并传递失败状态
+                        return
+                    }
+                    
+                    DispatchQueue.main.async {
+                        succeessfullyReply = true
+                        replyContent = ""
+                        appSettings.refreshComment()
+                        completion(true) // 请求成功时调用回调闭包并传递成功状态
+                    }
+                }.resume()
     }
 
 }

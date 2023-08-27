@@ -20,6 +20,8 @@ struct newPostView: View {
     @EnvironmentObject var appSettings: AppSettings
     @State private var tags = [Datum6]()
     @State private var selectedButtonIds: [String] = []
+    @State private var isPosting = false
+    @State private var isLoading = false
     
     
     var body: some View {
@@ -108,8 +110,15 @@ struct newPostView: View {
                 }
 
                 Button(action: saveNewPost) {
-                    Text(message)
-                        .bold()
+                     HStack{
+                        Text(message)
+                            .bold()
+                         
+                         if isLoading{
+                             ProgressView()
+                                 .padding(.leading)
+                         }
+                    }
                 }
                 .foregroundColor(.white)
                 .frame(width: 350, height: 50)
@@ -117,6 +126,7 @@ struct newPostView: View {
                 .cornerRadius(10)
                 .opacity(0.8)
                 .padding(.top)
+                .disabled(isPosting)
 
             }
             .onAppear{
@@ -136,42 +146,79 @@ struct newPostView: View {
         }
     }
     
-    func saveNewPost(){
+    private func clearData(){
+        newPostTitle = ""
+        postTitle = ""
+        newPostContent = ""
+        postContent = ""
+    }
+    
+    func saveNewPost() {
+        isLoading = true
+        // 在按钮点击后设置isPosting为true，禁用按钮
+        isPosting = true
+        
         postTitle = newPostTitle
         postContent = newPostContent
-        sendPostRequest()
-        
+
         if newPostTitle.count <= 3 {
+            isPosting = false // 恢复按钮可用性
             message = NSLocalizedString("title_too_short_message", comment: "")
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 message = NSLocalizedString("post_button_text", comment: "")
             }
+            return
         }
 
         if newPostContent.count <= 3 {
+            isPosting = false // 恢复按钮可用性
             message = NSLocalizedString("content_too_short_message", comment: "")
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 message = NSLocalizedString("post_button_text", comment: "")
             }
+            return
         }
 
         if newPostTitle.count > 50 {
+            isPosting = false // 恢复按钮可用性
             message = NSLocalizedString("title_too_long_message", comment: "")
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 message = NSLocalizedString("post_button_text", comment: "")
             }
+            
+            return
+        }
+
+        sendPostRequest { success in
+            if success {
+                isLoading = false
+                // 发送成功的处理逻辑
+                succeessfullyPosted = true
+                isPosting = false // 恢复按钮可用性
+                clearData()
+            } else {
+                isLoading = false
+                // 发送失败的处理逻辑
+                message = "Failed to start a post"
+                isPosting = false // 恢复按钮可用性
+            }
+            
+            // 无论成功或失败，都在回调中恢复按钮可用性
+            isPosting = false
+            isLoading = false
         }
     }
     
-    private func sendPostRequest() {
+    private func sendPostRequest(completion: @escaping (Bool) -> Void) {
         print("current Token: \(appSettings.token)")
         print("current FlarumUrl: \(appSettings.FlarumUrl)")
         
         guard let url = URL(string: "\(appSettings.FlarumUrl)/api/discussions") else {
             print("invalid Url!")
+            completion(false)
             return
         }
         
@@ -199,6 +246,7 @@ struct newPostView: View {
         
         guard let httpBody = try? JSONSerialization.data(withJSONObject: parameters) else {
             print("Failed to serialize post data to JSON!")
+            completion(false)
             return
         }
         
@@ -217,21 +265,18 @@ struct newPostView: View {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 print("Error: \(error)")
+                completion(false)
                 return
             }
             
             guard let httpResponse = response as? HTTPURLResponse,
                   (200...299).contains(httpResponse.statusCode) else {
                 print("Invalid response")
+                completion(false)
                 return
             }
             
-            DispatchQueue.main.async {
-                succeessfullyPosted = true
-                postTitle = ""
-                postContent = ""
-                appSettings.refreshPost()
-           }
+            completion(true)
         }.resume()
     }
     
