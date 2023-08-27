@@ -70,3 +70,4 @@
 "password" = "密码";
 "Copy" = "复制回复内容";
 "Text Copied" = "复制成功！";
+"post_tags_exceed_limit" = "至多一个主标签与一个副标签！";

@@ -276,7 +276,7 @@ struct fastPostDetailView: View {
                     // MARK: - Posts With tags
                     List{
                         Section{
-                            ForEach(filteredPostsArrayTags, id: \.id){item in
+                            ForEach(filteredPostsArrayTags.reversed(), id: \.id){item in
                                 VStack {
                                     HStack {
                                         VStack {

@@ -198,8 +198,7 @@ struct newPostView: View {
                 clearData()
             } else {
                 // 发送失败的处理逻辑
-                message = "Failed to start a post"
-                isPosting = false // 恢复按钮可用性
+                showMessageAndEnableButton(message: NSLocalizedString("post_tags_exceed_limit", comment: ""))
             }
             
             // 无论成功或失败，都在回调中恢复按钮可用性
@@ -289,6 +288,15 @@ struct newPostView: View {
             }
         } catch {
             print("Invalid Tags Data!", error)
+        }
+    }
+    
+    private func showMessageAndEnableButton(message: String) {
+        isPosting = false // 恢复按钮可用性
+        self.message = message
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.message = NSLocalizedString("post_button_text", comment: "")
         }
     }
 }
