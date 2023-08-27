@@ -39,11 +39,25 @@ var htmlConvertedString : String{
 
 extension String {
     var htmlConvertedWithoutUrl: String {
-        let htmlRemovedString = self.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
-        let bracketsAndImageRemovedString = htmlRemovedString.replacingOccurrences(of: "\\[.*?\\]", with: "", options: .regularExpression, range: nil)
-        return bracketsAndImageRemovedString
+        // Remove the specific content
+        let contentToRemove = "\n                    if(window.hljsLoader && !document.currentScript.parentNode.hasAttribute('data-s9e-livepreview-onupdate')) {\n                        window.hljsLoader.highlightBlocks(document.currentScript.parentNode);\n                    }\n                "
+        var stringWithoutContent = self.replacingOccurrences(of: contentToRemove, with: "")
+        
+        // Remove JavaScript code
+        stringWithoutContent = stringWithoutContent.replacingOccurrences(of: "<script[^>]*?>.*?</script>", with: "", options: .regularExpression, range: nil)
+        
+        // Remove HTML tags
+        let htmlRemovedString = stringWithoutContent.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
+        
+        // Preserve Markdown code
+        let markdownPreservedString = htmlRemovedString.replacingOccurrences(of: "\\[.*?\\]", with: "", options: .regularExpression, range: nil)
+        
+        return markdownPreservedString
     }
 }
+
+
+
 
 
 func extractImageURLs(from htmlString: String) -> [String]? {
