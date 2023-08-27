@@ -21,7 +21,6 @@ struct newPostView: View {
     @State private var tags = [Datum6]()
     @State private var selectedButtonIds: [String] = []
     @State private var isPosting = false
-    @State private var isLoading = false
     
     
     var body: some View {
@@ -114,7 +113,7 @@ struct newPostView: View {
                         Text(message)
                             .bold()
                          
-                         if isLoading{
+                         if isPosting{
                              ProgressView()
                                  .padding(.leading)
                          }
@@ -154,7 +153,6 @@ struct newPostView: View {
     }
     
     func saveNewPost() {
-        isLoading = true
         // 在按钮点击后设置isPosting为true，禁用按钮
         isPosting = true
         
@@ -194,13 +192,11 @@ struct newPostView: View {
 
         sendPostRequest { success in
             if success {
-                isLoading = false
                 // 发送成功的处理逻辑
                 succeessfullyPosted = true
                 isPosting = false // 恢复按钮可用性
                 clearData()
             } else {
-                isLoading = false
                 // 发送失败的处理逻辑
                 message = "Failed to start a post"
                 isPosting = false // 恢复按钮可用性
@@ -208,7 +204,6 @@ struct newPostView: View {
             
             // 无论成功或失败，都在回调中恢复按钮可用性
             isPosting = false
-            isLoading = false
         }
     }
     
