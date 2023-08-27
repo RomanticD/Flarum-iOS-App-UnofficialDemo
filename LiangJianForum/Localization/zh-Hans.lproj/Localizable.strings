@@ -14,7 +14,7 @@
 "First Page" = "第一页";
 "Next" = "下一页";
 "Home" = "首页";
-"Tag" = "标签";
+"Tag" = "版块";
 "Message" = "消息";
 "Me" = "我的";
 "Search" = "搜索";
@@ -22,7 +22,7 @@
 "hours ago" = "%d 小时前";
 "minutes ago" = "%d 分钟前";
 "Loading..." = "加载中...";
-"All Tags" = "所有标签";
+"All Tags" = "所有版块";
 "Notification Center" = "通知中心";
 "Sign out" = "退出";
 "Cancel" = "取消";
@@ -33,7 +33,7 @@
 "Latest" = "最新";
 "Title" = "标题";
 "Content" = "内容";
-"Select Tags" = "选择标签";
+"Select Tags" = "选择版块";
 "Enter a title" = "输入标题";
 "Enter the content of your discussion" = "输入您的讨论内容";
 "Comment" = "评论";
