@@ -13,75 +13,106 @@ struct PaginationView: View {
     @Binding var currentPage: Int
     @Binding var isLoading: Bool
     let fetchDiscussion: () async -> Void
+    @State private var prevButtonDisabled = false
+    @State private var firstPageButtonDisabled = false
+    @State private var nextButtonDisabled = false
 
     var body: some View {
         if hasPrevPage || hasNextPage {
-            HStack {
-                Button(action: {
-                    if currentPage > 1 {
-                        currentPage -= 1
-                    }
-                    isLoading = true
-                    Task {
-                        await fetchDiscussion()
-                        isLoading = false
-                    }
-                }) {
-                    HStack {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(hasPrevPage ? .blue : .secondary)
-                            .font(.system(size: 20))
-                            .padding(.top, 1)
-                        Text("Prev")
-                            .foregroundStyle(hasPrevPage ? .blue : .secondary)
-                            .font(.system(size: 14))
-                    }
+            ZStack{
+                if isLoading {
+                    ProgressView().padding(.bottom, 10)
                 }
-                .padding(.leading)
-                .disabled(!hasPrevPage)
 
-                Spacer()
+                HStack {
+                    Button(action: {
+                        if currentPage > 1 && !prevButtonDisabled {
+                            currentPage -= 1
+                            disableButtons()
+                            Task {
+                                await fetchDiscussion()
+                                enableButtons()
+                            }
+                        }
+                    }) {
+                        HStack {
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(hasPrevPage ? .blue : .secondary)
+                                .font(.system(size: 20))
+                                .padding(.top, 1)
+                            Text("Prev")
+                                .foregroundStyle(hasPrevPage ? .blue : .secondary)
+                                .font(.system(size: 14))
+                        }
+                    }
+                    .padding(.leading)
+                    .disabled(!hasPrevPage || isLoading || prevButtonDisabled)
 
-                Button(action: {
-                    isLoading = true
-                    currentPage = 1
-                    isLoading = false
-                    Task {
-                        await fetchDiscussion()
-                        isLoading = false
+                    Spacer()
+
+                    Button(action: {
+                        if !firstPageButtonDisabled {
+                            disableButtons()
+                            currentPage = 1
+                            Task {
+                                await fetchDiscussion()
+                                enableButtons()
+                            }
+                        }
+                    }) {
+                        HStack {
+                            Text("First Page")
+                                .foregroundStyle(hasPrevPage ? .blue : .secondary)
+                                .font(.system(size: 14))
+                        }
                     }
-                }) {
-                    HStack {
-                        Text("First Page")
-                            .foregroundStyle(hasPrevPage ? .blue : .secondary)
-                            .font(.system(size: 14))
+                    .disabled(!hasPrevPage || isLoading || firstPageButtonDisabled)
+
+                    Spacer()
+
+                    Button(action: {
+                        if !nextButtonDisabled {
+                            disableButtons()
+                            currentPage += 1
+                            Task {
+                                await fetchDiscussion()
+                                enableButtons()
+                            }
+                        }
+                    }) {
+                        HStack {
+                            Text("Next")
+                                .foregroundStyle(hasNextPage ? .blue : .secondary)
+                                .font(.system(size: 14))
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(hasNextPage ? .blue : .secondary)
+                                .font(.system(size: 20))
+                                .padding(.top, 1)
+                        }
                     }
+                    .padding(.trailing)
+                    .disabled(!hasNextPage || isLoading || nextButtonDisabled)
                 }
-                .disabled(!hasPrevPage)
-
-                Spacer()
-
-                Button(action: {
-                    currentPage += 1
-                    isLoading = true
-                    Task {
-                        await fetchDiscussion()
-                        isLoading = false
-                    }
-                }) {
-                    HStack {
-                        Text("Next")
-                            .foregroundStyle(hasNextPage ? .blue : .secondary)
-                            .font(.system(size: 14))
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(hasNextPage ? .blue : .secondary)
-                            .font(.system(size: 20))
-                            .padding(.top, 1)
-                    }
-                }
-                .padding(.trailing)
-                .disabled(!hasNextPage)
             }
         }
+    }
+
+    private func disableButtons() {
+        isLoading = true
+        prevButtonDisabled = true
+        firstPageButtonDisabled = true
+        nextButtonDisabled = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+            prevButtonDisabled = false
+            firstPageButtonDisabled = false
+            nextButtonDisabled = false
+        }
+    }
+
+    private func enableButtons() {
+        isLoading = false
+        prevButtonDisabled = false
+        firstPageButtonDisabled = false
+        nextButtonDisabled = false
     }
 }

@@ -55,7 +55,8 @@ struct newReply: View {
                         // 调用 saveReply 函数，并在回调闭包中处理请求完成后的操作
                         saveReply { success in
                             if success {
-                                // 请求成功，可以执行其他操作
+                                newReplyContent = ""
+                                replyContent = ""
                             } else {
                                 // 请求失败，可以执行其他操作或显示错误信息
                             }
@@ -92,7 +93,6 @@ struct newReply: View {
         }
     }
     
-    // 修改 saveReply 函数，添加一个回调闭包
     func saveReply(completion: @escaping (Bool) -> Void) {
         replyContent = newReplyContent
         

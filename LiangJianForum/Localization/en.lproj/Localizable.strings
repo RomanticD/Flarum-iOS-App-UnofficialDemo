@@ -70,3 +70,7 @@
 "password" = "password";
 "Copy" = "Copy";
 "Text Copied" = "Text Copied";
+"post_tags_exceed_limit" = "Selected tags exceed the limit!";
+"latest_sort" = "Default";
+"default_sort" = "Latest";
+"sorted_by_text" = "Sorted by";
