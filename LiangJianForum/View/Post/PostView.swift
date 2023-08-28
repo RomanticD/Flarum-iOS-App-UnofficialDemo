@@ -20,6 +20,8 @@ struct PostView: View {
     @EnvironmentObject var appsettings: AppSettings
     @State private var searchTerm = ""
     @State private var isHeaderSlideViewEnabled = false
+    @State private var isSortingMenuVisible = false
+    @State private var selectedSortingOption = NSLocalizedString("default_sort", comment: "")
     
     private func findDisplayName(_ userid: String, in array: [Included]) -> String? {
         if let item = array.first(where: { $0.id == userid }) {
@@ -200,14 +202,36 @@ struct PostView: View {
                         .navigationDestination(for: Datum.self){item in
                             fastPostDetailView(postTitle: item.attributes.title, postID: item.id, commentCount: item.attributes.commentCount).environmentObject(appsettings)
                         }
+                        .navigationBarItems(leading:
+                            Menu {
+                            
+                            Section(NSLocalizedString("sorted_by_text", comment: "")){
+                                Button {
+                                    //选择默认的逻辑
+                                    selectedSortingOption = NSLocalizedString("default_sort", comment: "")
+                                } label: {
+                                    Label(NSLocalizedString("default_sort", comment: ""), systemImage: "seal")
+                                }
+                            
+                                Button {
+                                    //选择最新的逻辑
+                                    selectedSortingOption = NSLocalizedString("latest_sort", comment: "")
+                                } label: {
+                                    Label(NSLocalizedString("latest_sort", comment: ""), systemImage: "timer")
+                                }
+                            }
+                                
+                            } label: {
+                                Image(systemName: "slider.horizontal.3")
+                            }
+                        )
+
                     }
                 }
             }
         }
         .refreshable {
-            isLoading = true
             await fetchDiscussion()
-            isLoading = false
         }
         .onReceive(appsettings.$refreshPostView) { _ in
             Task {
@@ -225,6 +249,12 @@ struct PostView: View {
                 }
             }
         }
+        .onChange(of: selectedSortingOption){ newValue in
+            currentPage = 1
+            Task {
+                await fetchDiscussion()
+            }
+        }
     }
     
     private func findUser(with id: String) -> Included? {
@@ -237,29 +267,37 @@ struct PostView: View {
     }
     
     private func fetchDiscussion() async {
+        var url: URL? = nil // 声明url变量并初始化为nil
         
-        guard let url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?page[number]=\(currentPage)") else{
+        if selectedSortingOption == NSLocalizedString("default_sort", comment: "") {
+            url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?page[number]=\(currentPage)")
+        } else if selectedSortingOption == NSLocalizedString("latest_sort", comment: "") {
+            url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?page[number]=\(currentPage)&sort=-createdAt")
+        }
+        
+        // 检查url是否为nil
+        guard let url = url else {
             print("Invalid URL")
             return
         }
-        
-        do{
+
+        do {
             let (data, _) = try await URLSession.shared.data(from: url)
             
-            if let decodedResponse = try? JSONDecoder().decode(Discussion.self, from: data){
+            if let decodedResponse = try? JSONDecoder().decode(Discussion.self, from: data) {
                 discussionData = decodedResponse.data
                 discussionIncluded = decodedResponse.included
                 discussionLinksFirst = decodedResponse.links.first
                 
-                if decodedResponse.links.next == nil || decodedResponse.links.next == ""{
+                if decodedResponse.links.next == nil || decodedResponse.links.next == "" {
                     self.hasNextPage = false
-                }else {
+                } else {
                     self.hasNextPage = true
                 }
                 
-                if decodedResponse.links.prev != nil && currentPage != 1{
+                if decodedResponse.links.prev != nil && currentPage != 1 {
                     self.hasPrevPage = true
-                }else{
+                } else {
                     self.hasPrevPage = false
                 }
                 
@@ -271,9 +309,10 @@ struct PostView: View {
             }
 
         } catch {
-            print("Invalid Discussions Overview And Title Data!" ,error)
+            print("Invalid Discussions Overview And Title Data!", error)
         }
     }
+
     
     func checkURLStatus(urlString: String, completion: @escaping (Bool) -> Void) {
         guard let url = URL(string: urlString) else {
@@ -284,7 +323,7 @@ struct PostView: View {
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let httpResponse = response as? HTTPURLResponse {
                 let statusCode = httpResponse.statusCode
-                completion(statusCode == 200) // Modify this condition as needed
+                completion(statusCode == 200)
             } else {
                 completion(false)
             }

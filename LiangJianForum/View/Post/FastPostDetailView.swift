@@ -22,9 +22,6 @@ struct fastPostDetailView: View {
     @State private var showingPostingArea = false
     @State private var isLiked = false
     @State private var isReplied = false
-    @State private var includes = [Included4]()
-    @State var postsArray: [Included4] = []
-    @State var usersArray: [Included4] = []
     @State private var includesTags = [Included5]()
     @State var postsArrayTags: [Included5] = []
     @State var usersArrayTags: [Included5] = []
@@ -34,35 +31,6 @@ struct fastPostDetailView: View {
     @State var tagsIdInPostDetail: [String] = []
     @State private var copiedText: String?
     @State private var postsWithTagData : DataClass5?
-    
-//    var filteredPostsArray: [Included4] {
-//        var filteredItems: [Included4] = []
-//        var filteredByContent: [Included4] = []
-//        var filteredByDisplayName: [Included4] = []
-//        
-//        guard !searchTerm.isEmpty else { return postsArray }
-//        
-//        for item in postsArray {
-//            if let content = item.attributes.contentHTML {
-//                if content.htmlConvertedWithoutUrl.localizedCaseInsensitiveContains(searchTerm) {
-//                    filteredByContent.append(item)
-//                }
-//            }
-//            
-//            if let userid = item.relationships?.user?.data.id {
-//                if let displayName = findDisplayName(userid, in: usersArray) {
-//                    if displayName.localizedCaseInsensitiveContains(searchTerm) {
-//                        filteredByDisplayName.append(item)
-//                    }
-//                }
-//            }
-//        }
-//        
-//        filteredItems.append(contentsOf: filteredByContent)
-//        filteredItems.append(contentsOf: filteredByDisplayName)
-//        
-//        return filteredItems
-//    }
 
     var filteredPostsArrayTags: [Included5] {
         var filteredItems: [Included5] = []
@@ -95,7 +63,7 @@ struct fastPostDetailView: View {
     
     var body: some View {
         VStack {
-            if includes.isEmpty && includesTags.isEmpty {
+            if includesTags.isEmpty {
                 HStack {
                     Text("Loading...").foregroundStyle(.secondary)
                     ProgressView()
@@ -132,282 +100,144 @@ struct fastPostDetailView: View {
                 .animation(.easeInOut(duration: 1), value: sortOption)
                 .padding(.top, 5)
             
-            if selectedSortOption == NSLocalizedString("default_sort_option", comment: ""){
-                if (!postsArray.isEmpty && postsArrayTags.isEmpty){
-                    // MARK: - Posts Without tags
-                }else{
-                    // MARK: - Posts With tags
-                    List{
-                        Section{
-                            ForEach(filteredPostsArrayTags, id: \.id){item in
-                                VStack {
-                                    HStack {
-                                        VStack {
-                                            NavigationLink(value: item){
-                                                HStack {
-                                                    if let userid = item.relationships?.user?.data.id{
-                                                        if let avatarURL = findImgUrl(userid, in: usersArrayTags){
-                                                            asyncImage(url: URL(string: avatarURL), frameSize: 50, lineWidth: 1, shadow: 3)
-                                                                .padding(.top, 10)
-                                                                .padding(.leading, 6)
-                                                        }else{
-                                                            CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 50, lineWidth: 0.7, shadow: 2)
-                                                                .opacity(0.3)
-                                                                .padding(.top, 10)
-                                                                .padding(.leading, 6)
-                                                        }
-                                                    }
-                                                    
-                                                    if let userid = item.relationships?.user?.data.id{
-                                                        if let displayName = findDisplayName(userid, in: usersArrayTags){
-                                                            Text(displayName)
-                                                                .font(.system(size: 12))
-                                                                .bold()
-                                                                .foregroundColor(colorScheme == .dark ? .white : .black)
-                                                            
-                                                                .padding(.leading, 3)
-                                                        }
+            if (postsArrayTags.isEmpty){
+                List{
+                    EmptyView()
+                }
+            }else{
+                // MARK: - Posts With tags
+                List{
+                    Section{
+                        ForEach(filteredPostsArrayTags, id: \.id){item in
+                            VStack {
+                                HStack {
+                                    VStack {
+                                        NavigationLink(value: item){
+                                            HStack {
+                                                if let userid = item.relationships?.user?.data.id{
+                                                    if let avatarURL = findImgUrl(userid, in: usersArrayTags){
+                                                        asyncImage(url: URL(string: avatarURL), frameSize: 50, lineWidth: 1, shadow: 3)
+                                                            .padding(.top, 10)
+                                                            .padding(.leading, 6)
                                                     }else{
+                                                        CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 50, lineWidth: 0.7, shadow: 2)
+                                                            .opacity(0.3)
+                                                            .padding(.top, 10)
+                                                            .padding(.leading, 6)
+                                                    }
+                                                }
+                                                
+                                                if let userid = item.relationships?.user?.data.id{
+                                                    if let displayName = findDisplayName(userid, in: usersArrayTags){
+                                                        Text(displayName)
+                                                            .font(.system(size: 12))
+                                                            .bold()
+                                                            .foregroundColor(colorScheme == .dark ? .white : .black)
+                                                        
+                                                            .padding(.leading, 3)
+                                                    }
+                                                }else{
+                                                    ProgressView()
+                                                }
+                                                
+                                                if let createTime = item.attributes.createdAt{
+                                                    Text(" \(calculateTimeDifference(from: createTime))")
+                                                        .font(.system(size: 8))
+                                                        .foregroundColor(.gray)
+                                                }
+                                                
+                                                if let editedTime = item.attributes.editedAt{
+                                                    Text("Edited")
+                                                        .font(.system(size: 8))
+                                                        .foregroundColor(.gray)
+                                                        .italic()
+                                                }
+                                                
+                                                Spacer()
+                                                
+                                                if item.id == String(getBestAnswerID()) {
+                                                    Text("Best Answer")
+                                                        .font(.system(size: 10))
+                                                        .fontWeight(.bold)
+                                                        .foregroundColor(.green)
+                                                        .padding(.trailing)
+                                                }
+                                            }
+                                        }
+                                        
+                                        HStack {
+                                            if let content = item.attributes.contentHTML{
+                                                Text(content.htmlConvertedWithoutUrl)
+                                                    .tracking(0.5)
+                                                    .lineSpacing(7)
+                                                    .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
+                                                    .padding(.top)
+                                                    .padding(.leading, 3)
+                                                    .font(.system(size: 15))
+                                            }else{
+                                                Text("unsupported")
+                                                    .foregroundColor(.gray)
+                                                    .padding(.top)
+                                                    .padding(.leading, 3)
+                                                    .font(.system(size: 10))
+                                                    .opacity(0.5)
+                                            }
+                                            Spacer()
+                                        }
+                                        .contextMenu {
+                                            Button(action: {
+                                                if let content = item.attributes.contentHTML{
+                                                    copyTextToClipboard(content.htmlConvertedWithoutUrl)
+                                                }
+                                            }) {
+                                                Label("Copy", systemImage: "doc.on.clipboard")
+                                            }
+                                        }
+                                        
+                                        if let includeImgReply = item.attributes.contentHTML{
+                                            if let imageUrls = extractImageURLs(from: includeImgReply){
+                                                ForEach(imageUrls, id: \.self) { url in
+                                                    AsyncImage(url: URL(string: url)) { image in
+                                                        image
+                                                            .resizable()
+                                                            .aspectRatio(contentMode: .fit)
+                                                            .frame(width: 270)
+                                                            .cornerRadius(10)
+                                                            .shadow(radius: 3)
+                                                            .overlay(Rectangle()
+                                                                .stroke(.white, lineWidth: 1)
+                                                                .cornerRadius(10))
+                                                            .padding(.bottom)
+                                                    } placeholder: {
                                                         ProgressView()
                                                     }
-                                                    
-                                                    if let createTime = item.attributes.createdAt{
-                                                        Text(" \(calculateTimeDifference(from: createTime))")
-                                                            .font(.system(size: 8))
-                                                            .foregroundColor(.gray)
-                                                    }
-                                                    
-                                                    if let editedTime = item.attributes.editedAt{
-                                                        Text("Edited")
-                                                            .font(.system(size: 8))
-                                                            .foregroundColor(.gray)
-                                                            .italic()
-                                                    }
-                                                    
-                                                    Spacer()
-                                                    
-                                                    if item.id == String(getBestAnswerID()) {
-                                                        Text("Best Answer")
-                                                            .font(.system(size: 10))
-                                                            .fontWeight(.bold)
-                                                            .foregroundColor(.green)
-                                                            .padding(.trailing)
-                                                    }
-                                                }
-                                            }
-                                            
-                                            HStack {
-                                                if let content = item.attributes.contentHTML{
-                                                    Text(content.htmlConvertedWithoutUrl)
-                                                        .tracking(0.5)
-                                                        .lineSpacing(7)
-                                                        .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
-                                                        .padding(.top)
-                                                        .padding(.leading, 3)
-                                                        .font(.system(size: 15))
-                                                }else{
-                                                    Text("unsupported")
-                                                        .foregroundColor(.gray)
-                                                        .padding(.top)
-                                                        .padding(.leading, 3)
-                                                        .font(.system(size: 10))
-                                                        .opacity(0.5)
-                                                }
-                                                Spacer()
-                                            }
-                                            .contextMenu {
-                                                Button(action: {
-                                                    if let content = item.attributes.contentHTML{
-                                                        copyTextToClipboard(content.htmlConvertedWithoutUrl)
-                                                    }
-                                                }) {
-                                                    Label("Copy", systemImage: "doc.on.clipboard")
-                                                }
-                                            }
-                                            
-                                            if let includeImgReply = item.attributes.contentHTML{
-                                                if let imageUrls = extractImageURLs(from: includeImgReply){
-                                                    ForEach(imageUrls, id: \.self) { url in
-                                                        AsyncImage(url: URL(string: url)) { image in
-                                                            image
-                                                                .resizable()
-                                                                .aspectRatio(contentMode: .fit)
-                                                                .frame(width: 270)
-                                                                .cornerRadius(10)
-                                                                .shadow(radius: 3)
-                                                                .overlay(Rectangle()
-                                                                    .stroke(.white, lineWidth: 1)
-                                                                    .cornerRadius(10))
-                                                                .padding(.bottom)
-                                                        } placeholder: {
-                                                            ProgressView()
-                                                        }
-                                                        .onTapGesture {
-                                                            if let imgurl = URL(string: url) {
-                                                                UIApplication.shared.open(imgurl)
-                                                            }
+                                                    .onTapGesture {
+                                                        if let imgurl = URL(string: url) {
+                                                            UIApplication.shared.open(imgurl)
                                                         }
                                                     }
                                                 }
                                             }
                                         }
-                                        .background(item.id == String(getBestAnswerID()) ? Color.green.opacity(0.2) : Color.clear)
-                                        .cornerRadius(5)
                                     }
-                                    
-                                    LikesAndCommentButton()
-                                        .padding(.bottom, 5)
-                                        .padding(.top, 5)
-                                    Divider()
+                                    .background(item.id == String(getBestAnswerID()) ? Color.green.opacity(0.2) : Color.clear)
+                                    .cornerRadius(5)
                                 }
-                                .listRowSeparator(.hidden)
+                                
+                                LikesAndCommentButton()
+                                    .padding(.bottom, 5)
+                                    .padding(.top, 5)
+                                Divider()
                             }
+                            .listRowSeparator(.hidden)
                         }
                     }
-                    .overlay(
-                        CopiedTextView(copiedText: $copiedText)
-                    )
-                    .searchable(text: $searchTerm, prompt: "Search")
                 }
-            }else if selectedSortOption == NSLocalizedString("latest_sort_option", comment: "") {
-                if (!postsArray.isEmpty && postsArrayTags.isEmpty){
-                    // MARK: - Posts Without tags
-                }else{
-                    // MARK: - Posts With tags
-                    List{
-                        Section{
-                            ForEach(filteredPostsArrayTags.reversed(), id: \.id){item in
-                                VStack {
-                                    HStack {
-                                        VStack {
-                                            NavigationLink(value: item){
-                                                HStack {
-                                                    if let userid = item.relationships?.user?.data.id{
-                                                        if let avatarURL = findImgUrl(userid, in: usersArrayTags){
-                                                            asyncImage(url: URL(string: avatarURL), frameSize: 50, lineWidth: 1, shadow: 3)
-                                                                .padding(.top, 10)
-                                                                .padding(.leading, 6)
-                                                        }else{
-                                                            CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 50, lineWidth: 0.7, shadow: 2)
-                                                                .opacity(0.3)
-                                                                .padding(.top, 10)
-                                                                .padding(.leading, 6)
-                                                        }
-                                                    }
-                                                    
-                                                    if let userid = item.relationships?.user?.data.id{
-                                                        if let displayName = findDisplayName(userid, in: usersArrayTags){
-                                                            Text(displayName)
-                                                                .font(.system(size: 12))
-                                                                .bold()
-                                                                .foregroundColor(colorScheme == .dark ? .white : .black)
-                                                            
-                                                                .padding(.leading, 3)
-                                                        }
-                                                    }else{
-                                                        ProgressView()
-                                                    }
-                                                    
-                                                    if let createTime = item.attributes.createdAt{
-                                                        Text(" \(calculateTimeDifference(from: createTime))")
-                                                            .font(.system(size: 8))
-                                                            .foregroundColor(.gray)
-                                                    }
-                                                    
-                                                    if let editedTime = item.attributes.editedAt{
-                                                        Text("Edited")
-                                                            .font(.system(size: 8))
-                                                            .foregroundColor(.gray)
-                                                            .italic()
-                                                    }
-                                                    
-                                                    Spacer()
-                                                    
-                                                    if item.id == String(getBestAnswerID()) {
-                                                        Text("Best Answer")
-                                                            .font(.system(size: 10))
-                                                            .fontWeight(.bold)
-                                                            .foregroundColor(.green)
-                                                            .padding(.trailing)
-                                                    }
-                                                }
-                                            }
-                                            
-                                            HStack {
-                                                if let content = item.attributes.contentHTML{
-                                                    Text(content.htmlConvertedWithoutUrl)
-                                                        .tracking(0.5)
-                                                        .lineSpacing(7)
-                                                        .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
-                                                        .padding(.top)
-                                                        .padding(.leading, 3)
-                                                        .font(.system(size: 15))
-                                                }else{
-                                                    Text("unsupported")
-                                                        .foregroundColor(.gray)
-                                                        .padding(.top)
-                                                        .padding(.leading, 3)
-                                                        .font(.system(size: 10))
-                                                        .opacity(0.5)
-                                                }
-                                                Spacer()
-                                            }
-                                            .contextMenu {
-                                                Button(action: {
-                                                    if let content = item.attributes.contentHTML{
-                                                        copyTextToClipboard(content.htmlConvertedWithoutUrl)
-                                                    }
-                                                }) {
-                                                    Label("Copy", systemImage: "doc.on.clipboard")
-                                                }
-                                            }
-                                            
-                                            if let includeImgReply = item.attributes.contentHTML{
-                                                if let imageUrls = extractImageURLs(from: includeImgReply){
-                                                    ForEach(imageUrls, id: \.self) { url in
-                                                        AsyncImage(url: URL(string: url)) { image in
-                                                            image
-                                                                .resizable()
-                                                                .aspectRatio(contentMode: .fit)
-                                                                .frame(width: 270)
-                                                                .cornerRadius(10)
-                                                                .shadow(radius: 3)
-                                                                .overlay(Rectangle()
-                                                                    .stroke(.white, lineWidth: 1)
-                                                                    .cornerRadius(10))
-                                                                .padding(.bottom)
-                                                        } placeholder: {
-                                                            ProgressView()
-                                                        }
-                                                        .onTapGesture {
-                                                            if let imgurl = URL(string: url) {
-                                                                UIApplication.shared.open(imgurl)
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        .background(item.id == String(getBestAnswerID()) ? Color.green.opacity(0.2) : Color.clear)
-                                        .cornerRadius(5)
-                                    }
-                                    
-                                    LikesAndCommentButton()
-                                        .padding(.bottom, 5)
-                                        .padding(.top, 5)
-                                    Divider()
-                                }
-                                .listRowSeparator(.hidden)
-                            }
-                        }
-                    }
-                    .overlay(
-                        CopiedTextView(copiedText: $copiedText)
-                    )
-                    .searchable(text: $searchTerm, prompt: "Search")
-                }
+                .overlay(
+                    CopiedTextView(copiedText: $copiedText)
+                )
+                .searchable(text: $searchTerm, prompt: "Search")
             }
-            
 
             HStack {
                 Button(action: {
@@ -464,11 +294,6 @@ struct fastPostDetailView: View {
                 }
             }
         }
-//        .navigationDestination(for: Included4.self){item in
-//            if let userIdString = item.relationships?.user?.data.id, let userId = Int(userIdString) {
-//                LinksProfileView(userId: userId)
-//            }
-//        }
         .navigationDestination(for: Included5.self){item in
             if let userIdString = item.relationships?.user?.data.id, let userId = Int(userIdString) {
                 LinksProfileView(userId: userId)
@@ -538,83 +363,70 @@ struct fastPostDetailView: View {
         }
         
         do{
+            print("current page: \(currentPage)")
             print("fetching postID: \(postID)")
             let (data, _) = try await URLSession.shared.data(from: url)
             
-            if let decodedResponse = try? JSONDecoder().decode(PostData.self, from: data){
-                includes = decodedResponse.included
+            print("Decoding to PostData.self Failed, Post has tags!")
+            
+            if let decodedResponse = try? JSONDecoder().decode(PostDataWithTag.self, from: data){
+                print("Successfully decoding use PostDataWithTag.self")
+                includesTags = decodedResponse.included
+                postsWithTagData = decodedResponse.data
                 
-//                processIncludedArray(includes)
-                print("Successfully decoding use PostData.self")
-            }else{
-                print("Decoding to PostData.self Failed, Post has tags!")
-                
-                if let decodedResponse = try? JSONDecoder().decode(PostDataWithTag.self, from: data){
-                    print("Successfully decoding use PostDataWithTag.self")
-                    includesTags = decodedResponse.included
-                    postsWithTagData = decodedResponse.data
-                    
-                    if let tagData = decodedResponse.data.relationships.tags?.data {
-                        for tag in tagData {
-                            tagsIdInPostDetail.append(tag.id)
-                            print("current post has tag with id: \(tag.id)")
-                        }
+                if let tagData = decodedResponse.data.relationships.tags?.data {
+                    for tag in tagData {
+                        tagsIdInPostDetail.append(tag.id)
+                        print("current post has tag with id: \(tag.id)")
                     }
-                    
-                    processIncludedTagsArray(includesTags)
+                }
+                processIncludedTagsArray(includesTags)
+                
                 }else{
                     print("Decoding to PostData Failed!")
                 }
-            }
 
         } catch {
             print("Invalid post data!" ,error)
         }
     }
-    
-//    private func processIncludedArray(_ includedArray: [Included4]) {
-//        for included in includedArray {
-//            switch included.type {
-//            case "posts":
-//                if let contentType = included.attributes.contentType, contentType == "comment" {
-//                    self.postsArray.append(included)
-//                }
-//            case "users":
-//                self.usersArray.append(included)
-//            default:
-//                break
-//            }
-//        }
-//    }
- 
+
     private func processIncludedTagsArray(_ includedArray: [Included5]) {
-        for included in includedArray {
-            switch included.type {
-            case "posts":
-                if let contentType = included.attributes.contentType, contentType == "comment" {
-                    self.postsArrayTags.append(included)
+        //默认发帖顺序排序
+        if selectedSortOption == NSLocalizedString("default_sort_option", comment: ""){
+            for included in includedArray {
+                switch included.type {
+                case "posts":
+                    if let contentType = included.attributes.contentType, contentType == "comment" {
+                        self.postsArrayTags.append(included)
+                    }
+                case "users":
+                    self.usersArrayTags.append(included)
+                default:
+                    break
                 }
-            case "users":
-                self.usersArrayTags.append(included)
-            default:
-                break
+            }
+        }
+        
+        //按最新发帖排序
+        if selectedSortOption == NSLocalizedString("latest_sort_option", comment: ""){
+            for included in includedArray.reversed() {
+                switch included.type {
+                case "posts":
+                    if let contentType = included.attributes.contentType, contentType == "comment" {
+                        var tempArray: [Included5] = []
+                        tempArray.append(included)
+                        self.postsArrayTags.append(contentsOf: tempArray.reversed())
+                    }
+
+                case "users":
+                    self.usersArrayTags.append(included)
+                default:
+                    break
+                }
             }
         }
     }
-
-//    private func findDisplayName(_ userid: String, in array: [Included4]) -> String? {
-//        if let item = array.first(where: { $0.id == userid }) {
-//            return item.attributes.displayName
-//        }
-//        return nil
-//    }
-    
-//    private func findImgUrl(_ userid: String, in array: [Included4]) -> String? {
-//        if let item = array.first(where: { $0.id == userid }) {
-//            return item.attributes.avatarURL
-//        }
-//        return nil
-//    }
 
     private func findDisplayName(_ userid: String, in array: [Included5]) -> String? {
         if let item = array.first(where: { $0.id == userid }) {
@@ -630,9 +442,14 @@ struct fastPostDetailView: View {
         return nil
     }
     
-    private func loadMoreButtonDisabled() -> Bool{
-        return self.commentCount <= 20 || currentPage * 20 >= self.commentCount || isLoading || currentPage == 0
+    private func loadMoreButtonDisabled() -> Bool {
+        if selectedSortOption == NSLocalizedString("default_sort_option", comment: "") {
+            return self.commentCount <= 20 || currentPage * 20 >= self.commentCount || isLoading || currentPage == 0
+        } else {
+            return isLoading || currentPage == 1
+        }
     }
+
     
     private func copyTextToClipboard(_ text: String) {
         UIPasteboard.general.string = text
@@ -643,9 +460,6 @@ struct fastPostDetailView: View {
     }
     
     private func clearData() {
-        includes = []
-        postsArray = []
-        usersArray = []
         postsArrayTags = []
         usersArrayTags = []
         includesTags = []
@@ -688,7 +502,7 @@ struct CopiedTextView: View {
                 .resizable()
                 .frame(width: 50, height: 50) // 调整图标大小
                 .foregroundColor(Color.green)
-                .animation(.easeInOut)
+                .animation(.easeInOut, value: copiedText)
         }
         .opacity(copiedText != nil ? 1 : 0)
     }
