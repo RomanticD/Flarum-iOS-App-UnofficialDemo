@@ -167,7 +167,7 @@ struct fastPostDetailView: View {
                                         
                                         HStack {
                                             if let content = item.attributes.contentHTML{
-                                                Text(content.htmlConvertedWithoutUrl)
+                                                Text(LocalizedStringKey(content.htmlConvertedWithoutUrl))
                                                     .tracking(0.5)
                                                     .lineSpacing(7)
                                                     .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
@@ -251,7 +251,8 @@ struct fastPostDetailView: View {
                     }
 
                     Task {
-                        await fetchDetail(postID: postID)
+                        await fetchDetail(postID: postID){success in
+                        }
                         isLoading = false
                     }
                 }) {
@@ -288,7 +289,8 @@ struct fastPostDetailView: View {
                     await fetchTagsData()
                     if !isLoading {
                         isLoading = true
-                        await fetchDetail(postID: postID)
+                        await fetchDetail(postID: postID){success in
+                        }
                         isLoading = false
                     }
                 }
@@ -321,7 +323,8 @@ struct fastPostDetailView: View {
             Task {
                 clearData()
                 isLoading = true
-                await fetchDetail(postID: postID)
+                await fetchDetail(postID: postID){success in
+                }
                 isLoading = false
             }
         }
@@ -339,7 +342,8 @@ struct fastPostDetailView: View {
                 }
                 
                 isLoading = true
-                await fetchDetail(postID: postID)
+                await fetchDetail(postID: postID){success in
+                }
                 isLoading = false
             }
         }
@@ -349,47 +353,80 @@ struct fastPostDetailView: View {
             if !isLoading {
                 isLoading = true
                 clearData()
-                await fetchDetail(postID: postID)
+                fetchDetail(postID: postID){success in
+                }
                 isLoading = false
             }
         }
     }
  
-    private func fetchDetail(postID: String) async {
-//        clearData()
-        guard let url = URL(string: "\(appsettings.FlarumUrl)/api/discussions/\(postID)?page[number]=\(currentPage)") else{
-                print("Invalid URL")
+    private func fetchDetail(postID: String, completion: @escaping (Bool) -> Void) {
+        // clearData()
+        guard let url = URL(string: "\(appsettings.FlarumUrl)/api/discussions/\(postID)?page[number]=\(currentPage)") else {
+            print("Invalid URL")
+            completion(false)
             return
         }
         
-        do{
-            print("current page: \(currentPage)")
-            print("fetching postID: \(postID)")
-            let (data, _) = try await URLSession.shared.data(from: url)
+        // 创建URLRequest
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET" // 使用GET方法
+        
+        // 设置请求头
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        if appsettings.token != "" {
+            request.setValue("Token \(appsettings.token)", forHTTPHeaderField: "Authorization")
+        } else {
+            print("Invalid Token Or Not Logged in Yet!")
+        }
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error: \(error)")
+                completion(false)
+                return
+            }
             
-            print("Decoding to PostData.self Failed, Post has tags!")
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200...299).contains(httpResponse.statusCode) else {
+                print("Invalid response")
+                completion(false)
+                return
+            }
             
-            if let decodedResponse = try? JSONDecoder().decode(PostDataWithTag.self, from: data){
-                print("Successfully decoding use PostDataWithTag.self")
-                includesTags = decodedResponse.included
-                postsWithTagData = decodedResponse.data
+            // 在请求成功时处理数据
+            if let data = data {
+                print("current page: \(currentPage)")
+                print("fetching postID: \(postID)")
                 
-                if let tagData = decodedResponse.data.relationships.tags?.data {
-                    for tag in tagData {
-                        tagsIdInPostDetail.append(tag.id)
-                        print("current post has tag with id: \(tag.id)")
+                print("Decoding to PostData.self Failed, Post has tags!")
+                
+                if let decodedResponse = try? JSONDecoder().decode(PostDataWithTag.self, from: data) {
+                    print("Successfully decoding use PostDataWithTag.self")
+                    includesTags = decodedResponse.included
+                    postsWithTagData = decodedResponse.data
+                    
+                    if let tagData = decodedResponse.data.relationships.tags?.data {
+                        for tag in tagData {
+                            tagsIdInPostDetail.append(tag.id)
+                            print("current post has tag with id: \(tag.id)")
+                        }
                     }
-                }
-                processIncludedTagsArray(includesTags)
-                
-                }else{
+                    processIncludedTagsArray(includesTags)
+                } else {
                     print("Decoding to PostData Failed!")
                 }
-
-        } catch {
-            print("Invalid post data!" ,error)
-        }
+            }
+            
+            // 请求成功后调用回调
+            completion(true)
+            
+        }.resume()
     }
+
+
+
 
     private func processIncludedTagsArray(_ includedArray: [Included5]) {
         //默认发帖顺序排序
