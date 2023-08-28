@@ -170,7 +170,7 @@ struct PostView: View {
                             }
                             .id("TopWithoutSlide")
                         }
-                        .listStyle(.inset)
+//                        .listStyle(.inset)
                         .onChange(of: currentPage) { _ in
                             // Whenever currentPage changes, scroll to the top of the list
                             withAnimation {
@@ -208,6 +208,11 @@ struct PostView: View {
                             Section(NSLocalizedString("sorted_by_text", comment: "")){
                                 Button {
                                     //选择默认的逻辑
+                                    if isHeaderSlideViewEnabled{
+                                        proxy.scrollTo("Top", anchor: .top)
+                                    }else{
+                                        proxy.scrollTo("TopWithoutSlide", anchor: .top)
+                                    }
                                     selectedSortingOption = NSLocalizedString("default_sort", comment: "")
                                 } label: {
                                     Label(NSLocalizedString("default_sort", comment: ""), systemImage: "seal")
@@ -215,6 +220,11 @@ struct PostView: View {
                             
                                 Button {
                                     //选择最新的逻辑
+                                    if isHeaderSlideViewEnabled{
+                                        proxy.scrollTo("Top", anchor: .top)
+                                    }else{
+                                        proxy.scrollTo("TopWithoutSlide", anchor: .top)
+                                    }
                                     selectedSortingOption = NSLocalizedString("latest_sort", comment: "")
                                 } label: {
                                     Label(NSLocalizedString("latest_sort", comment: ""), systemImage: "timer")
