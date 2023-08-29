@@ -36,6 +36,7 @@ struct DatumAttributes: Codable, Hashable {
     let lastPostedAt: String?
     let lastPostNumber: Int
     let isSticky: Bool
+    let frontpage: Bool?
 //    let canReply, canRename, canDelete, canHide: Bool
 //    let isApproved, hasBestAnswer: Bool
 //    let bestAnswerSetAt, subscription: JSONNull?

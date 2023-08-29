@@ -31,6 +31,10 @@ struct PostView: View {
         }
         return nil
     }
+    
+    var shadowColor: Color {
+        return colorScheme == .dark ? Color.white : Color.black
+    }
    
     var filteredDiscussionData : [Datum] {
         var filteredItems: [Datum] = []
@@ -65,177 +69,198 @@ struct PostView: View {
             } else {
                 NavigationStack{
                     ScrollViewReader{ proxy in
-                        PaginationView(hasPrevPage: hasPrevPage, hasNextPage: hasNextPage, currentPage: $currentPage, isLoading: $isLoading, fetchDiscussion: fetchDiscussion)
-                        
-                        List {
-                            // MARK: - if Flarum has HeaderSlide Plugin installed with api endpoint \(appsettings.FlarumUrl)/api/header-slideshow/list
-                            if isHeaderSlideViewEnabled{
-                                Section{
-                                    HeaderSlideView()
-                                        .frame(height: 100)
-                                }
-                                .id("Top")
-                                .listRowInsets(EdgeInsets())
-                            }
+                        ZStack(alignment: .bottomTrailing) {
+                            VStack {
+                                PaginationView(hasPrevPage: hasPrevPage, hasNextPage: hasNextPage, currentPage: $currentPage, isLoading: $isLoading, fetchDiscussion: fetchDiscussion)
+                                
+                                List {
+                                    // MARK: - if Flarum has HeaderSlide Plugin installed with api endpoint \(appsettings.FlarumUrl)/api/header-slideshow/list
+                                    if isHeaderSlideViewEnabled{
+                                        Section{
+                                            HeaderSlideView()
+                                                .frame(height: 100)
+                                        }
+                                        .id("Top")
+                                        .listRowInsets(EdgeInsets())
+                                    }
 
-                            Section{
-                                ForEach(filteredDiscussionData, id: \.id) { item in
-                                    if item.attributes.lastPostedAt != nil{
-                                        HStack {
-                                            VStack {
-                                                NavigationLink(value: item){
-                                                    //MARK: 头像及标题
-                                                    HStack{
-                                                        if let user = findUser(with: item.relationships.user.data.id) {
-                                                            
-                                                            if let avatarURL = user.attributes.avatarUrl {
-                                                                asyncImage(url: URL(string: avatarURL), frameSize: 40, lineWidth: 1, shadow: 3)
-                                                            } else {
-                                                                CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 40, lineWidth: 1, shadow: 3)
-                                                                    .opacity (0.3)
-                                                            }
-                                                        }
-                                                        
-                                                        VStack {
-                                                            HStack {
-                                                                Text(item.attributes.title)
-                                                                    .font(.system(size: 20))
-                                                                    .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : Color(hex: "243B55"))
-                                                                    .bold()
-                                                                    .fixedSize(horizontal: false, vertical: true)
-                                                                    .padding(.leading)
+                                    Section{
+                                        ForEach(filteredDiscussionData, id: \.id) { item in
+                                            if item.attributes.lastPostedAt != nil{
+                                                HStack {
+                                                    VStack {
+                                                        NavigationLink(value: item){
+                                                            //MARK: 头像及标题
+                                                            HStack{
+                                                                if let user = findUser(with: item.relationships.user.data.id) {
+                                                                    
+                                                                    if let avatarURL = user.attributes.avatarUrl {
+                                                                        asyncImage(url: URL(string: avatarURL), frameSize: 40, lineWidth: 1, shadow: 3)
+                                                                    } else {
+                                                                        CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 40, lineWidth: 1, shadow: 3)
+                                                                            .opacity (0.3)
+                                                                    }
+                                                                }
+                                                                
+                                                                VStack {
+                                                                    HStack {
+                                                                        Text(item.attributes.title)
+                                                                            .font(.system(size: 20))
+                                                                            .foregroundColor(
+                                                                                item.attributes.isSticky ?//置顶贴子标题为红色
+                                                                                Color.red :
+                                                                                (item.attributes.frontpage ?? false ?
+                                                                                    Color.blue ://精华帖子标题为蓝色
+                                                                                    (colorScheme == .dark ? Color(hex: "EFEFEF") : Color(hex: "243B55")))
+                                                                            )
+                                                                            .bold()
+                                                                            .fixedSize(horizontal: false, vertical: true)
+                                                                            .padding(.leading)
+                                                                        Spacer()
+                                                                    }
+
+
+                                                                }
                                                                 Spacer()
                                                             }
                                                         }
-                                                        Spacer()
-                                                    }
-                                                }
-                                                
-                                                //MARK: 最后更新时间 评论数 阅读数量 收藏
-                                                HStack {
-                                                    Image(systemName: "clock.fill")
-                                                        .foregroundColor(.gray)
-                                                        .font(.system(size: 10))
-                                                    
-                                                    if let lastPostedAt = item.attributes.lastPostedAt {
-                                                        Text(calculateTimeDifference(from: lastPostedAt))
-                                                            .font(.system(size: 10))
-                                                            .foregroundColor(.gray)
-                                                    } else {
-                                                        Text("in review...")
-                                                            .font(.system(size: 10))
-                                                            .foregroundColor(.gray)
-                                                    }
-                                                    
-                                                    Image(systemName: "bubble.middle.bottom.fill")
-                                                        .foregroundColor(.gray)
-                                                        .padding(.leading)
-                                                        .font(.system(size: 10))
-                                                    Text("\(item.attributes.commentCount)")
-                                                        .foregroundColor(.gray)
-                                                        .font(.system(size: 10))
-                                                    
-                                                    if let viewcount = item.attributes.viewCount{
-                                                        Image(systemName: "eye.fill")
-                                                            .foregroundColor(.gray)
-                                                            .padding(.leading)
-                                                            .font(.system(size: 10))
-                                                        Text("\(viewcount)")
-                                                            .foregroundColor(.gray)
-                                                            .font(.system(size: 10))
-                                                    }
-                                                    
-                                                    if item.attributes.isSticky{
-                                                        Spacer()
                                                         
-                                                        Image(systemName: "flag.fill")
-                                                            .font(.system(size: 15))
-                                                            .padding(.leading)
-                                                            .foregroundColor(.red)
-                                                            .opacity(0.8)
-                                                    }
-                                                    
-                                                    FavoriteButton()
-                                                    
-                                                }
-                                                .padding(.top, 10)
-                                                .padding(.bottom, 5)
+                                                        //MARK: 最后更新时间 评论数 阅读数量 收藏
+                                                        HStack {
+                                                            Image(systemName: "clock.fill")
+                                                                .foregroundColor(.gray)
+                                                                .font(.system(size: 10))
+                                                            
+                                                            if let lastPostedAt = item.attributes.lastPostedAt {
+                                                                Text(calculateTimeDifference(from: lastPostedAt))
+                                                                    .font(.system(size: 10))
+                                                                    .foregroundColor(.gray)
+                                                            } else {
+                                                                Text("in review...")
+                                                                    .font(.system(size: 10))
+                                                                    .foregroundColor(.gray)
+                                                            }
+                                                            
+                                                            Image(systemName: "bubble.middle.bottom.fill")
+                                                                .foregroundColor(.gray)
+                                                                .padding(.leading)
+                                                                .font(.system(size: 10))
+                                                            Text("\(item.attributes.commentCount)")
+                                                                .foregroundColor(.gray)
+                                                                .font(.system(size: 10))
+                                                            
+                                                            if let viewcount = item.attributes.viewCount{
+                                                                Image(systemName: "eye.fill")
+                                                                    .foregroundColor(.gray)
+                                                                    .padding(.leading)
+                                                                    .font(.system(size: 10))
+                                                                Text("\(viewcount)")
+                                                                    .foregroundColor(.gray)
+                                                                    .font(.system(size: 10))
+                                                            }
+                                                            
+                                                            if let isFrontPage = item.attributes.frontpage{
+                                                                PostAttributes(isSticky: item.attributes.isSticky, isFrontPage: isFrontPage)
+                                                            }
+                                                            
+                                                            FavoriteButton()
+                                                            
+                                                        }
+                                                        .padding(.top, 10)
+                                                        .padding(.bottom, 5)
 
-                                                Divider()
+                                                        Divider()
+                                                    }
+                                                }
+                                                .listRowSeparator(.hidden)
                                             }
                                         }
-                                        .listRowSeparator(.hidden)
+                                    }
+                                    .id("TopWithoutSlide")
+                                }
+                                .onChange(of: currentPage) { _ in
+                                    // Whenever currentPage changes, scroll to the top of the list
+                                    withAnimation {
+                                        isLoading = true
+                                        if isHeaderSlideViewEnabled{
+                                            proxy.scrollTo("Top", anchor: .top)
+                                        }else{
+                                            proxy.scrollTo("TopWithoutSlide", anchor: .top)
+                                        }
+                                        
+                                        isLoading = false
                                     }
                                 }
-                            }
-                            .id("TopWithoutSlide")
-                        }
-//                        .listStyle(.inset)
-                        .onChange(of: currentPage) { _ in
-                            // Whenever currentPage changes, scroll to the top of the list
-                            withAnimation {
-                                isLoading = true
-                                if isHeaderSlideViewEnabled{
-                                    proxy.scrollTo("Top", anchor: .top)
-                                }else{
-                                    proxy.scrollTo("TopWithoutSlide", anchor: .top)
+                                .textSelection(.enabled)
+                                .searchable(text: $searchTerm, prompt: "Search")
+                                .sheet(isPresented: $showingPostingArea) {
+                                    newPostView().environmentObject(appsettings)
+                                        .presentationDetents([.height(560)])
                                 }
-                                
-                                isLoading = false
+                                .navigationTitle("All Discussions")
+                                .navigationBarTitleDisplayMode(.inline)
+                                .navigationDestination(for: Datum.self){item in
+                                    fastPostDetailView(postTitle: item.attributes.title, postID: item.id, commentCount: item.attributes.commentCount).environmentObject(appsettings)
+                                }
+                                .navigationBarItems(trailing:
+                                    Menu {
+                                        Section(NSLocalizedString("sorted_by_text", comment: "")){
+                                            Button {
+                                                //选择默认的逻辑
+                                                if isHeaderSlideViewEnabled{
+                                                    proxy.scrollTo("Top", anchor: .top)
+                                                }else{
+                                                    proxy.scrollTo("TopWithoutSlide", anchor: .top)
+                                                }
+                                                selectedSortingOption = NSLocalizedString("default_sort", comment: "")
+                                            } label: {
+                                                Label(NSLocalizedString("default_sort", comment: ""), systemImage: "seal")
+                                            }
+                                        
+                                            Button {
+                                                //选择最新帖子的逻辑
+                                                if isHeaderSlideViewEnabled{
+                                                    proxy.scrollTo("Top", anchor: .top)
+                                                }else{
+                                                    proxy.scrollTo("TopWithoutSlide", anchor: .top)
+                                                }
+                                                selectedSortingOption = NSLocalizedString("latest_sort_discussion", comment: "")
+                                            } label: {
+                                                Label(NSLocalizedString("latest_sort_discussion", comment: ""), systemImage: "timer")
+                                            }
+                                            
+                                            Button {
+                                                //选择最新回复的逻辑
+                                                if isHeaderSlideViewEnabled{
+                                                    proxy.scrollTo("Top", anchor: .top)
+                                                }else{
+                                                    proxy.scrollTo("TopWithoutSlide", anchor: .top)
+                                                }
+                                                selectedSortingOption = NSLocalizedString("latest_sort_comment", comment: "")
+                                            } label: {
+                                                Label(NSLocalizedString("latest_sort_comment", comment: ""), systemImage: "message.badge")
+                                            }
+                                        }
+                                    } label: {
+                                        Image(systemName: "slider.horizontal.3")
+                                    }
+                                )
                             }
-                        }
-                        .textSelection(.enabled)
-                        .searchable(text: $searchTerm, prompt: "Search")
-                        .toolbar {
+                            
                             Button {
                                 showingPostingArea.toggle()
                             } label: {
                                 Image(systemName: "plus.bubble.fill")
+                                    .font(.title.weight(.semibold))
+                                    .padding()
+                                    .background(Color(hex: "565dd9"))
+                                    .foregroundColor(.white)
+                                    .clipShape(Circle())
+                                    .shadow(color: shadowColor, radius: 4, x: 0, y: 4)
                             }
+                            .padding()
+                            .padding(.trailing, 10)
                         }
-                        .sheet(isPresented: $showingPostingArea) {
-                            newPostView().environmentObject(appsettings)
-                                .presentationDetents([.height(560)])
-                        }
-                        .navigationTitle("All Discussions")
-                        .navigationBarTitleDisplayMode(.inline)
-                        .navigationDestination(for: Datum.self){item in
-                            fastPostDetailView(postTitle: item.attributes.title, postID: item.id, commentCount: item.attributes.commentCount).environmentObject(appsettings)
-                        }
-                        .navigationBarItems(leading:
-                            Menu {
-                            
-                            Section(NSLocalizedString("sorted_by_text", comment: "")){
-                                Button {
-                                    //选择默认的逻辑
-                                    if isHeaderSlideViewEnabled{
-                                        proxy.scrollTo("Top", anchor: .top)
-                                    }else{
-                                        proxy.scrollTo("TopWithoutSlide", anchor: .top)
-                                    }
-                                    selectedSortingOption = NSLocalizedString("default_sort", comment: "")
-                                } label: {
-                                    Label(NSLocalizedString("default_sort", comment: ""), systemImage: "seal")
-                                }
-                            
-                                Button {
-                                    //选择最新的逻辑
-                                    if isHeaderSlideViewEnabled{
-                                        proxy.scrollTo("Top", anchor: .top)
-                                    }else{
-                                        proxy.scrollTo("TopWithoutSlide", anchor: .top)
-                                    }
-                                    selectedSortingOption = NSLocalizedString("latest_sort", comment: "")
-                                } label: {
-                                    Label(NSLocalizedString("latest_sort", comment: ""), systemImage: "timer")
-                                }
-                            }
-                                
-                            } label: {
-                                Image(systemName: "slider.horizontal.3")
-                            }
-                        )
-
                     }
                 }
             }
@@ -281,8 +306,10 @@ struct PostView: View {
         
         if selectedSortingOption == NSLocalizedString("default_sort", comment: "") {
             url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?page[number]=\(currentPage)")
-        } else if selectedSortingOption == NSLocalizedString("latest_sort", comment: "") {
+        } else if selectedSortingOption == NSLocalizedString("latest_sort_discussion", comment: "") {
             url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?page[number]=\(currentPage)&sort=-createdAt")
+        }else if selectedSortingOption == NSLocalizedString("latest_sort_comment", comment: "") {
+            url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?page[number]=\(currentPage)&sort=-lastPostedAt")
         }
         
         // 检查url是否为nil

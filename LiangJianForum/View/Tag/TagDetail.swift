@@ -153,12 +153,20 @@ struct TagDetail: View {
                                                         HStack {
                                                             Text(item.attributes.title)
                                                                 .font(.system(size: 20))
-                                                                .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : Color(hex: "243B55"))
+                                                                .foregroundColor(
+                                                                    item.attributes.isSticky ?//置顶贴子标题为红色
+                                                                    Color.red :
+                                                                    (item.attributes.frontpage ?? false ?
+                                                                        Color.blue ://精华帖子标题为蓝色
+                                                                        (colorScheme == .dark ? Color(hex: "EFEFEF") : Color(hex: "243B55")))
+                                                                )
                                                                 .bold()
                                                                 .fixedSize(horizontal: false, vertical: true)
                                                                 .padding(.leading)
                                                             Spacer()
                                                         }
+
+
                                                     }
                                                     Spacer()
                                                 }
@@ -198,14 +206,8 @@ struct TagDetail: View {
                                                         .font(.system(size: 10))
                                                 }
                                                 
-                                                if item.attributes.isSticky{
-                                                    Spacer()
-                                                    
-                                                    Image(systemName: "flag.fill")
-                                                        .font(.system(size: 15))
-                                                        .padding(.leading)
-                                                        .foregroundColor(.red)
-                                                        .opacity(0.8)
+                                                if let isFrontPage = item.attributes.frontpage{
+                                                    PostAttributes(isSticky: item.attributes.isSticky, isFrontPage: isFrontPage)  
                                                 }
                                                 
                                                 FavoriteButton()
@@ -213,15 +215,16 @@ struct TagDetail: View {
                                             }
                                             .padding(.top, 10)
                                             .padding(.bottom, 5)
-                                            
+
                                             Divider()
                                         }
                                     }
+//                                        .listRowBackground(colorScheme == .dark ? LinearGradient(gradient: Gradient(colors: [Color(hex: "780206"), Color(hex: "061161")]), startPoint: .leading, endPoint: .trailing) : LinearGradient(gradient: Gradient(colors: [Color(hex: "A1FFCE"), Color(hex: "FAFFD1")]), startPoint: .leading, endPoint: .trailing))
                                     .listRowSeparator(.hidden)
                                 }
                             }
-                            .id("TagDetailList")
                         }
+                        .id("TagDetailList")
                     }
                     .onChange(of: currentPageOffset) { _ in
                         withAnimation {
