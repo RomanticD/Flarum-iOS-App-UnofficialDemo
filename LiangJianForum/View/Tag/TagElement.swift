@@ -13,18 +13,16 @@ struct TagElement: View {
     
     var body: some View {
         HStack {
+//            Spacer()
             Image(systemName: "square.fill")
                 .foregroundStyle(tag.attributes.color.isEmpty ? Color.gray : Color(hex: removeFirstCharacter(from: tag.attributes.color)))
                 .font(.system(size: fontSize))
-                .padding(.top, 10)
-                .padding(.bottom, 10)
             
             Text(tag.attributes.name)
                 .font(.system(size: fontSize))
                 .bold()
-                .padding(.top, 10)
-                .padding(.bottom,10)
                 .padding(.leading,5)
+//            Spacer()
         }
     }
 }

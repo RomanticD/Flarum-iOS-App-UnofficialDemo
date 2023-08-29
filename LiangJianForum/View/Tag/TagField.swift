@@ -21,14 +21,19 @@ struct TagField: View {
                 List {
                     ForEach(tags, id: \.id) { tag in
                         NavigationLink(value: tag){
-                            TagElement(tag: tag, fontSize: 20)
+                            HStack {
+                                TagElement(tag: tag, fontSize: 20)
+                                    .padding(.top, 8)
+                                    .padding(.bottom, 8)
+                                Spacer()
+                            }
                         }
                     }
                 }
+                .navigationTitle("All Tags")
                 .navigationDestination(for: Datum6.self){data in
                     TagDetail(selectedTag: data)
                 }
-                .navigationTitle("All Tags")
             }
         }
         .task {

@@ -60,6 +60,7 @@ struct NoticeView: View {
 
                 if selection == NSLocalizedString("comment_sector", comment: ""){
                     CommentsView(
+                        username: appsettings.username,
                         userCommentData: $userCommentData,
                         userCommentInclude: $userCommentInclude,
                         avatarUrl: $avatarUrl,
@@ -130,7 +131,7 @@ struct NoticeView: View {
 //        }
 //    }
 
-    private func fetchUserProfile() async {
+    public func fetchUserProfile() async {
         guard let url = URL(string: "\(appsettings.FlarumUrl)/api/users/\(appsettings.userId)") else{
             print("Invalid URL")
             return
@@ -152,7 +153,7 @@ struct NoticeView: View {
         }
     }
 
-    private func fetchUserPosts() async {
+    public func fetchUserPosts() async {
 
         guard let url = URL(string: "\(appsettings.FlarumUrl)/api/posts?filter%5Bauthor%5D=\(appsettings.username)&sort=-createdAt&page%5Boffset%5D=\(currentPageOffset)") else{
             print("Invalid URL")
