@@ -206,9 +206,7 @@ struct TagDetail: View {
                                                         .font(.system(size: 10))
                                                 }
                                                 
-                                                if let isFrontPage = item.attributes.frontpage{
-                                                    PostAttributes(isSticky: item.attributes.isSticky, isFrontPage: isFrontPage)  
-                                                }
+                                                PostAttributes(isSticky: item.attributes.isSticky, isFrontPage: item.attributes.frontpage, isLocked: item.attributes.isLocked, hasBestAnswer: checkIfHasBestAnswer(dataIn: item.attributes.hasBestAnswer), hasPoll: item.attributes.hasPoll)
                                                 
                                                 FavoriteButton()
                                                 
@@ -270,6 +268,19 @@ struct TagDetail: View {
             }
         }
 
+    }
+    
+    private func checkIfHasBestAnswer(dataIn: HasBestAnswer) -> Bool {
+        var hasBestAnswer = false
+        
+        switch dataIn {
+        case .integer:
+            hasBestAnswer = true
+        default:
+            hasBestAnswer = false
+        }
+        
+        return hasBestAnswer
     }
     
     private func findUser(with id: String) -> Included? {

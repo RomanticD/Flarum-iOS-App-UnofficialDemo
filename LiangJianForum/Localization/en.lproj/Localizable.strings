@@ -59,12 +59,16 @@
 "🎀 Last seen at:" = "🎀 Last seen at:";
 "🎉 Join Time:" = "🎉 Join Time:";
 "🎎 DisplayName: " = "🎎 DisplayName:";
+"💰 money: " = "💰 money: ";
 "🎊 Username: " = "🎊 Username:";
 "🏖️ Discussion Count: " = "🏖️ Discussion Count:";
 "🧬 Comment Count: " = "🧬 Comment Count:";
 "comment_sector" = "🍿Comment";
 "like_sector" = "🍺Like";
 "follow_sector" = "⛳️Follow";
+"Information has been hidden" = "Information has been hidden";
+"Earned Badges" = "Earned Badges";
+"No Badges Earned Yet" = "No Badges Earned Yet";
 "🍾 In" = "🍾 In";
 "username" = "username";
 "password" = "password";
@@ -75,3 +79,7 @@
 "latest_sort_comment" = "Latest comments";
 "default_sort" = "Homepage default";
 "sorted_by_text" = "Sorted by";
+"days later" = "%d days later";
+"hours later" = "%d hours later";
+"minutes later" = "%d minutes later";
+"very soon" = "very soon";

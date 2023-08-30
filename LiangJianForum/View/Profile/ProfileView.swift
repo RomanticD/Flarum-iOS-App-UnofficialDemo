@@ -16,6 +16,7 @@ struct ProfileView: View {
     @State private var lastSeenAt: String = ""
     @State private var discussionCount: Int = 0
     @State private var commentCount: Int = 0
+    @State private var money: Double = -1
     @State private var include: [UserInclude]?
     @State private var savePersonalProfile = false
     @State private var showAlert = false
@@ -68,7 +69,12 @@ struct ProfileView: View {
                     }
                     HStack{
                         Text("🎀 Last seen at:").foregroundStyle(.secondary)
-                        Text("\(lastSeenAt)").bold()
+                        if lastSeenAt.isEmpty{
+                            Text("Information has been hidden")
+                                .bold()
+                        }else{
+                            Text("\(lastSeenAt)").bold()
+                        }
                     }
                 } header: {
                     Text("Account")
@@ -82,6 +88,12 @@ struct ProfileView: View {
                     HStack{
                         Text("🧬 Comment Count: ").foregroundStyle(.secondary)
                         Text("\(commentCount)").bold()
+                    }
+                    if self.money != -1 {
+                        HStack {
+                            Text("💰 money: ").foregroundStyle(.secondary)
+                            Text(String(format: "%.1f", self.money)).bold()
+                        }
                     }
                 }
                 
@@ -112,6 +124,32 @@ struct ProfileView: View {
                     }
                 }
 
+                Section("Earned Badges") {
+                    if let include = include, !include.isEmpty {
+                        let groups = include.filter { $0.type == "badges" }
+                        if !groups.isEmpty {
+                            ForEach(groups, id: \.id) { item in
+                                HStack{
+                                    if let badgeName = item.attributes.name {
+                                        Text("🎖️ \(badgeName): ").foregroundStyle(.secondary)
+                                    }
+
+                                    if let badgeDescription = item.attributes.description {
+                                        Text("\(badgeDescription)").bold()
+                                    }
+                                }
+                            }
+                        } else {
+                            Text("No Badges Earned Yet")
+                                .foregroundColor(.secondary)
+                                .italic()
+                        }
+                    } else {
+                        Text("No Badges Earned Yet")
+                            .foregroundColor(.secondary)
+                            .italic()
+                    }
+                }
 
                 Section{
                     HStack {
@@ -162,8 +200,6 @@ struct ProfileView: View {
         showAlert = true
         savePersonalProfile = true
         showSaveAlert = true
-//        nickName = newNickName
-//        introduction = newIntroduction
         
         buttonText = "Successfully Saved!"
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -214,6 +250,10 @@ struct ProfileView: View {
 //                self.lastSeenAt =  calculateTimeDifference(from: decodedResponse.data.attributes.lastSeenAt)
                 self.discussionCount = decodedResponse.data.attributes.discussionCount
                 self.commentCount = decodedResponse.data.attributes.commentCount
+                
+                if let flarumMoney = decodedResponse.data.attributes.money{
+                    self.money = flarumMoney
+                }
 
                 print("Successfully decoded user data")
                 print("Username: \(self.username)")
@@ -223,6 +263,7 @@ struct ProfileView: View {
                 print("Last Seen At: \(self.lastSeenAt)")
                 print("Discussion Count: \(self.discussionCount)")
                 print("Comment Count: \(self.commentCount)")
+                print("money: \(self.money)")
             }
         } catch {
             print("Invalid user Data!" ,error)

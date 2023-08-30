@@ -62,6 +62,10 @@
 "🎊 Username: " = "🎊 用户名称：";
 "🏖️ Discussion Count: " = "🏖️ 讨论数量：";
 "🧬 Comment Count: " = "🧬 评论数量：";
+"💰 money: " = "💰 量见币数: ";
+"Information has been hidden" = "信息已隐藏";
+"Earned Badges" = "获得徽章";
+"No Badges Earned Yet" = "还没有获得的徽章哦";
 "comment_sector" = "🍿 评论";
 "like_sector" = "🍺 点赞";
 "follow_sector" = "⛳️ 关注";
@@ -75,3 +79,7 @@
 "latest_sort_comment" = "最新回复";
 "default_sort" = "主页默认";
 "sorted_by_text" = "排序方式";
+"days later" = "%d 天后";
+"hours later" = "%d 小时后";
+"minutes later" = "%d 分钟后";
+"very soon" = "马上";

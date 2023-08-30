@@ -18,7 +18,7 @@ struct Datum8: Codable, Hashable {
     let id: String
     let attributes: DatumAttributes8
     let relationships: DatumRelationships8
-    let commentCount : Int?
+//    let commentCount : Int?
 }
 
 // MARK: - DatumAttributes
@@ -27,19 +27,18 @@ struct DatumAttributes8: Codable, Hashable {
     let createdAt: String
     let contentType: String
     let contentHTML: String?
-    let renderFailed: Bool?
-    let canEdit, canDelete, canHide: Bool
+//    let renderFailed: Bool?
+//    let canEdit, canDelete, canHide: Bool
     let mentionedByCount: Int?
-    let canFlag, isApproved, canApprove: Bool
-//    let votes: JSONNull8?
-    let canVote, seeVoters, canLike: Bool?
+//    let canFlag, isApproved, canApprove: Bool
+//    let canVote, seeVoters, canLike: Bool?
     let likesCount: Int?
     let editedAt: String?
 
     enum CodingKeys: String, CodingKey {
         case number, createdAt, contentType
         case contentHTML = "contentHtml"
-        case renderFailed, canEdit, canDelete, canHide, mentionedByCount, canFlag, isApproved, canApprove,canVote, seeVoters, canLike, likesCount, editedAt
+        case mentionedByCount, likesCount, editedAt
     }
 }
 
@@ -71,7 +70,7 @@ struct Included8: Codable, Hashable {
     let type: String
     let id: String
     let attributes: IncludedAttributes8
-    let relationships: IncludedRelationships8?
+//    let relationships: IncludedRelationships8?
 }
 
 // MARK: - IncludedAttributes
@@ -81,39 +80,37 @@ struct IncludedAttributes8: Codable, Hashable {
     let slug: String?
     let joinTime: String?
     let discussionCount, commentCount: Int?
-    let canEdit, canEditCredentials, canEditGroups, canDelete: Bool?
+//    let canEdit, canEditCredentials, canEditGroups, canDelete: Bool?
     let lastSeenAt: String?
     let isEmailConfirmed: Bool?
     let email: String?
 //    let suspendMessage, suspendedUntil: JSONNull8?
-    let canSuspend: Bool?
+//    let canSuspend: Bool?
 //    let usernameHistory: JSONNull8?
     let bio: String?
-    let canViewBio, canEditBio, canSpamblock, blocksPD: Bool?
-    let cannotBeDirectMessaged: Bool?
-    let points: Int?
-    let canHaveVotingNotifications, ignored, canBeIgnored: Bool?
-    let bestAnswerCount: Int?
-    let canViewWarnings, canManageWarnings, canDeleteWarnings: Bool?
-    let visibleWarningCount: Int?
+//    let canViewBio, canEditBio, canSpamblock, blocksPD: Bool?
+//    let cannotBeDirectMessaged: Bool?
+//    let points: Int?
+//    let canHaveVotingNotifications, ignored, canBeIgnored: Bool?
+//    let bestAnswerCount: Int?
+//    let canViewWarnings, canManageWarnings, canDeleteWarnings: Bool?
+//    let visibleWarningCount: Int?
     let title: String?
-    let isApproved, hasUpvoted, hasDownvoted, seeVotes: Bool?
-    let canVote, hasBestAnswer: Bool?
+//    let isApproved, hasUpvoted, hasDownvoted, seeVotes: Bool?
+//    let hasBestAnswer: HasBestAnswer
 //    let bestAnswerSetAt: JSONNull8?
     let number: Int?
     let createdAt: String?
-    let contentType, contentHTML: String?
-    let renderFailed: Bool?
+//    let contentType, contentHTML: String?
+//    let renderFailed: Bool?
     let mentionedByCount: Int?
 
     enum CodingKeys: String, CodingKey {
         case username, displayName
         case avatarURL = "avatarUrl"
-        case slug, joinTime, discussionCount, commentCount, canEdit, canEditCredentials, canEditGroups, canDelete, lastSeenAt, isEmailConfirmed, email,canSuspend,bio, canViewBio, canEditBio, canSpamblock
-        case blocksPD = "blocksPd"
-        case cannotBeDirectMessaged, points, canHaveVotingNotifications, ignored, canBeIgnored, bestAnswerCount, canViewWarnings, canManageWarnings, canDeleteWarnings, visibleWarningCount, title, isApproved, hasUpvoted, hasDownvoted, seeVotes, canVote, hasBestAnswer,  number, createdAt, contentType
-        case contentHTML = "contentHtml"
-        case renderFailed, mentionedByCount
+        case slug, joinTime, discussionCount, commentCount, lastSeenAt, isEmailConfirmed, email, bio
+        case title, number, createdAt
+        case mentionedByCount
     }
 }
 

@@ -25,6 +25,8 @@ struct fastPostDetailView: View {
     @State private var includesTags = [Included5]()
     @State var postsArrayTags: [Included5] = []
     @State var usersArrayTags: [Included5] = []
+    @State var polls: [Included5] = []
+    @State var pollOptions: [Included5] = []
     @State private var searchTerm = ""
     @State private var fetchedTags = [Datum6]()
     @State private var showedTags = [Datum6]()
@@ -94,8 +96,22 @@ struct fastPostDetailView: View {
                                 EmptyView()
                             }
                         }else{
-                                // MARK: - Posts With tags
+                            // MARK: - If current discussion has votes
                             Section{
+                                if !self.polls.isEmpty{
+                                    VStack{
+                                        ForEach(polls, id: \.id) { poll in
+                                            if let voteName = poll.attributes.question{
+                                                if let EndTime = poll.attributes.endDate{
+                                                    Text("当前投票： \(voteName)")
+//                                                    Text("截止时间： \(calculateTimeDifference(to: EndTime))")
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                // MARK: - Post list
                                 ForEach(filteredPostsArrayTags, id: \.id){item in
                                     VStack {
                                         HStack {
@@ -235,6 +251,7 @@ struct fastPostDetailView: View {
 
                                             Task {
                                                 await fetchDetail(postID: postID){success in
+                                                    print("fetchDetail...(in load more button)")
                                                 }
                                                 isLoading = false
                                             }
@@ -271,6 +288,7 @@ struct fastPostDetailView: View {
                                     if !isLoading {
                                         isLoading = true
                                         await fetchDetail(postID: postID){success in
+                                            print("fetchDetail... (on chage of seleted option)")
                                         }
                                         isLoading = false
                                     }
@@ -347,11 +365,12 @@ struct fastPostDetailView: View {
             newReply(postID: self.postID)
                 .presentationDetents([.height(250)])
         }
-        .onReceive(appsettings.$refreshReplyView) { _ in
+        .onChange(of: appsettings.refreshReplyView) { _ in
             Task {
                 clearData()
                 isLoading = true
                 await fetchDetail(postID: postID){success in
+                    print("fetchDetail...(fresh the page after posting)")
                 }
                 isLoading = false
             }
@@ -371,6 +390,7 @@ struct fastPostDetailView: View {
                 
                 isLoading = true
                 await fetchDetail(postID: postID){success in
+                    print("fetchDetail... (in refreshable)")
                 }
                 isLoading = false
             }
@@ -382,6 +402,7 @@ struct fastPostDetailView: View {
                 isLoading = true
                 clearData()
                 fetchDetail(postID: postID){success in
+                    print("fetchDetail...(in task)")
                 }
                 isLoading = false
             }
@@ -457,6 +478,7 @@ struct fastPostDetailView: View {
 
 
     private func processIncludedTagsArray(_ includedArray: [Included5]) {
+        print("process Comment List Array...")
         //默认发帖顺序排序
         if selectedSortOption == NSLocalizedString("default_sort_option", comment: ""){
             for included in includedArray {
@@ -467,6 +489,10 @@ struct fastPostDetailView: View {
                     }
                 case "users":
                     self.usersArrayTags.append(included)
+                case "polls":
+                    if !self.polls.contains(included){
+                        self.polls.append(included)
+                    }
                 default:
                     break
                 }
@@ -486,6 +512,10 @@ struct fastPostDetailView: View {
 
                 case "users":
                     self.usersArrayTags.append(included)
+                case "polls":
+                    if !self.polls.contains(included){
+                        self.polls.append(included)
+                    }
                 default:
                     break
                 }
