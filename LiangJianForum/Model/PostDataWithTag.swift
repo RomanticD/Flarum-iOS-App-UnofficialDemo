@@ -105,6 +105,9 @@ struct Included5: Codable,Hashable {
 
 // MARK: - IncludedAttributes
 struct IncludedAttributes5: Codable,Hashable {
+    let question, endDate, createdAT, answer: String?
+    let voteCount: Int?
+    let canVote: Bool?
     let username, displayName: String?
     let avatarURL: String?
     let slug: String?
@@ -131,7 +134,7 @@ struct IncludedAttributes5: Codable,Hashable {
     let canStartDiscussion, canAddToDiscussion: Bool?
 
     enum CodingKeys: String, CodingKey {
-        case username, displayName
+        case username, displayName, question, endDate, answer, createdAT, voteCount, canVote
         case avatarURL = "avatarUrl"
         case slug, joinTime, discussionCount, commentCount, canEdit, canEditCredentials, canEditGroups, canDelete, lastSeenAt, canSuspend, canEditNickname, isEmailConfirmed, email, number, createdAt, contentType, editedAt
         case contentHTML = "contentHtml"

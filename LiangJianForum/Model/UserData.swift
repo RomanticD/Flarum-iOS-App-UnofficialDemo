@@ -26,11 +26,12 @@ struct Attributes2: Codable {
     let discussionCount, commentCount: Int
     let lastSeenAt: String?
     let isAdmin: Bool?
+    let money: Double?
 
     enum CodingKeys: String, CodingKey {
         case username, displayName
         case avatarURL = "avatarUrl"
-        case slug, joinTime, discussionCount, commentCount, lastSeenAt, isAdmin
+        case slug, joinTime, discussionCount, commentCount, lastSeenAt, isAdmin, money
     }
 }
 
@@ -44,5 +45,7 @@ struct UserInclude: Codable {
 struct Attributes: Codable {
     let nameSingular, namePlural, color, icon: String?
     let isHidden: Int?
+    let name: String?
+    let description: String?
 }
 

@@ -179,7 +179,7 @@ struct NoticeView: View {
                 }
 
                 print("successfully decode user's comment data")
-                print("current page: \(currentPageOffset)")
+                print("current page offset: \(currentPageOffset)")
                 print("has next page: \(hasNextPage)")
                 print("has prev page: \(hasPrevPage)")
             }

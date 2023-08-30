@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CommentsView: View {
     var username: String
+    var displayname: String?
     
     @Environment(\.colorScheme) var colorScheme
     @Binding var userCommentData: [Datum8]
@@ -45,7 +46,7 @@ struct CommentsView: View {
                     }
                     isLoading = true
                     Task {
-                        await fetchUserPostsInfo()
+//                        await fetchUserPostsInfo()
                         isLoading = false
                     }
                 }) {
@@ -69,7 +70,7 @@ struct CommentsView: View {
                     currentPageOffset = 0
                     isLoading = false
                     Task {
-                        await fetchUserPostsInfo()
+//                        await fetchUserPostsInfo()
                         isLoading = false
                     }
                 }) {
@@ -86,7 +87,7 @@ struct CommentsView: View {
                     currentPageOffset += 20
                     isLoading = true
                     Task {
-                        await fetchUserPostsInfo()
+//                        await fetchUserPostsInfo()
                         isLoading = false
                     }
                 }) {
@@ -108,73 +109,113 @@ struct CommentsView: View {
         
         
         ScrollViewReader { proxy in
-            List{
-                ForEach(filteredCommentData, id: \.id)  {item in
-                    let DiscussionId = item.relationships.discussion.data.id
-                    let DiscussionTitle = findDiscussionTitle(id: item.relationships.discussion.data.id)
-                    var CommentCount = 0
-                    let sectionTitle = NSLocalizedString("🍾 In", comment: "") + " \"" + DiscussionTitle + "\""
+            if userCommentData.isEmpty{
+                Text("Not supported")
+                    .foregroundStyle(.secondary)
+                ProgressView()
+            }else{
+                List{
+                    ForEach(filteredCommentData, id: \.id)  {item in
+                        let DiscussionId = item.relationships.discussion.data.id
+                        let DiscussionTitle = findDiscussionTitle(id: item.relationships.discussion.data.id)
+                        var CommentCount = 0
+                        let sectionTitle = NSLocalizedString("🍾 In", comment: "") + " \"" + DiscussionTitle + "\""
 
-                    
-                    if item.attributes.contentType == "comment"{
-                        Section(sectionTitle){
-                            if let contentHtml = item.attributes.contentHTML{
-                                NavigationLink(value: item){
-                                    VStack{
-                                        HStack{
-                                            if  avatarUrl != ""{
-                                                asyncImage(url: URL(string: avatarUrl), frameSize: 60, lineWidth: 1, shadow: 3)
-                                                    .padding(.top, 10)
-                                            } else {
-                                                CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 60, lineWidth: 0.7, shadow: 2)
-                                                    .opacity(0.3)
-                                                    .padding(.top, 10)
+                        
+                        if item.attributes.contentType == "comment"{
+                            Section(sectionTitle){
+                                if let contentHtml = item.attributes.contentHTML{
+                                    NavigationLink(value: item){
+                                        VStack{
+                                            HStack{
+                                                if  avatarUrl != ""{
+                                                    asyncImage(url: URL(string: avatarUrl), frameSize: 50, lineWidth: 1, shadow: 3)
+                                                        .padding(.top, 10)
+                                                } else {
+                                                    CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 50, lineWidth: 0.7, shadow: 2)
+                                                        .opacity(0.3)
+                                                        .padding(.top, 10)
+                                                }
+                                                
+                                                if let displayname = self.displayname{
+                                                    Text(displayname)
+                                                        .font(.system(size: 12))
+                                                        .bold()
+                                                        .padding(.leading, 3)
+                                                        .foregroundColor(colorScheme == .dark ? .white : .black)
+                                                }else{
+                                                    Text(username)
+                                                        .font(.system(size: 12))
+                                                        .bold()
+                                                        .padding(.leading, 3)
+                                                        .foregroundColor(colorScheme == .dark ? .white : .black)
+                                                }
+                                                
+                                                Text(calculateTimeDifference(from: item.attributes.createdAt))
+                                                    .font(.system(size: 8))
+                                                    .foregroundColor(.gray)
+                                                
+                                                Spacer()
+                                            }
+                                            .task{
+                                                CommentCount = await fetchCommentCount(DiscussionId)
                                             }
                                             
-                                            Text(appsettings.username)
-                                                .font(.system(size: 12))
-                                                .bold()
-                                                .padding(.leading, 3)
-                                                .foregroundColor(colorScheme == .dark ? .white : .black)
+                                            HStack {
+                                                Text(LocalizedStringKey(contentHtml.htmlConvertedWithoutUrl))
+                                                    .tracking(0.5)
+                                                    .lineSpacing(7)
+                                                    .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
+                                                    .padding(.top)
+                                                    .padding(.leading, 3)
+                                                    .font(.system(size: 15))
+                                                
+                                                Spacer()
+                                            }
                                             
-                                            Text(calculateTimeDifference(from: item.attributes.createdAt))
-                                                .font(.system(size: 8))
-                                                .foregroundColor(.gray)
-                                            
-                                            Spacer()
+                                            if let imageUrls = extractImageURLs(from: contentHtml){
+                                                ForEach(imageUrls, id: \.self) { url in
+                                                    AsyncImage(url: URL(string: url)) { image in
+                                                        image
+                                                            .resizable()
+                                                            .aspectRatio(contentMode: .fit)
+                                                            .frame(width: 270)
+                                                            .cornerRadius(10)
+                                                            .shadow(radius: 3)
+                                                            .overlay(Rectangle()
+                                                                .stroke(.white, lineWidth: 1)
+                                                                .cornerRadius(10))
+                                                            .padding(.bottom)
+                                                    } placeholder: {
+                                                        ProgressView()
+                                                    }
+                                                    .onTapGesture {
+                                                        if let imgurl = URL(string: url) {
+                                                            UIApplication.shared.open(imgurl)
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
-                                        .padding(.bottom)
-                                        .task{
-                                            CommentCount = await fetchCommentCount(DiscussionId)
+                                        .navigationDestination(for: Datum8.self){item in
+                                            fastPostDetailView(postTitle: DiscussionTitle, postID: DiscussionId, commentCount: CommentCount).environmentObject(appsettings)
                                         }
-                                        
-                                        HStack {
-                                            Text(contentHtml.htmlConvertedWithoutUrl)
-                                                .tracking(0.5)
-                                                .padding(.bottom)
-                                                .font(.system(size: 18))
-                                                .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
-                                            
-                                            Spacer()
-                                        }
-                                    }
-                                    .navigationDestination(for: Datum8.self){item in
-                                        fastPostDetailView(postTitle: DiscussionTitle, postID: DiscussionId, commentCount: CommentCount).environmentObject(appsettings)
                                     }
                                 }
                             }
                         }
                     }
+                    .id("AllUserComments")
                 }
-                .id("AllUserComments")
-            }
-            .onChange(of: currentPageOffset){ _ in
-                withAnimation {
-                    proxy.scrollTo("AllUserComments", anchor: .top)
+                .onChange(of: currentPageOffset){ _ in
+                    withAnimation {
+                        proxy.scrollTo("AllUserComments", anchor: .top)
+                    }
                 }
+                .searchable(text: $searchTerm, prompt: "Search")
             }
-            .searchable(text: $searchTerm, prompt: "Search")
         }
+        .navigationTitle("TA的最新动态")
     }
         
     private func findDiscussionTitle(id: String) -> String{
@@ -228,7 +269,7 @@ struct CommentsView: View {
                     self.hasNextPage = true
                 }
 
-                if decodedResponse.links.prev != nil && currentPageOffset != 1{
+                if decodedResponse.links.prev != nil && currentPageOffset != 0{
                     self.hasPrevPage = true
                 }else{
                     self.hasPrevPage = false

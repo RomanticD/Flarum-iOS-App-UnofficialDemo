@@ -159,9 +159,8 @@ struct PostView: View {
                                                                     .font(.system(size: 10))
                                                             }
                                                             
-                                                            if let isFrontPage = item.attributes.frontpage{
-                                                                PostAttributes(isSticky: item.attributes.isSticky, isFrontPage: isFrontPage)
-                                                            }
+                                                            PostAttributes(isSticky: item.attributes.isSticky, isFrontPage: item.attributes.frontpage, isLocked: item.attributes.isLocked, hasBestAnswer: checkIfHasBestAnswer(dataIn: item.attributes.hasBestAnswer), hasPoll: item.attributes.hasPoll)
+
                                                             
                                                             FavoriteButton()
                                                             
@@ -268,7 +267,8 @@ struct PostView: View {
         .refreshable {
             await fetchDiscussion()
         }
-        .onReceive(appsettings.$refreshPostView) { _ in
+        .onChange(of: appsettings.refreshPostView) { _ in
+            currentPage = 1
             Task {
                 await fetchDiscussion()
             }
@@ -367,6 +367,19 @@ struct PostView: View {
         }
         
         task.resume()
+    }
+    
+    private func checkIfHasBestAnswer(dataIn: HasBestAnswer) -> Bool {
+        var hasBestAnswer = false
+        
+        switch dataIn {
+        case .integer:
+            hasBestAnswer = true
+        default:
+            hasBestAnswer = false
+        }
+        
+        return hasBestAnswer
     }
 }
 

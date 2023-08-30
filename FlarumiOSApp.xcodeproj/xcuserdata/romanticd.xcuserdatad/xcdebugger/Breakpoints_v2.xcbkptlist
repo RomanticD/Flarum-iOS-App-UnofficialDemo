@@ -558,148 +558,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E323B256-CCDC-43CB-BBEA-4159CCF7C562"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LiangJianForum/View/Profile/ProfileView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "188"
-            endingLineNumber = "188"
-            landmarkName = "fetchUserProfile()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "E323B256-CCDC-43CB-BBEA-4159CCF7C562 - 3a14c8fbbd8f0244"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for LiangJianForum.ProfileView.fetchUserProfile() async -&gt; ()"
-                  moduleName = "LiangJianForum"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Profile/ProfileView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "200"
-                  endingLineNumber = "200"
-                  offsetFromSymbolStart = "588">
-               </Location>
-               <Location
-                  uuid = "E323B256-CCDC-43CB-BBEA-4159CCF7C562 - 3a14c8fbbd8f0244"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for LiangJianForum.ProfileView.fetchUserProfile() async -&gt; ()"
-                  moduleName = "LiangJianForum"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Profile/ProfileView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "200"
-                  endingLineNumber = "200"
-                  offsetFromSymbolStart = "944">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "22CE89C5-B1BC-4AD1-A701-03079E13A373"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LiangJianForum/View/Profile/ProfileView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "194"
-            endingLineNumber = "194"
-            landmarkName = "fetchUserProfile()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "C64D8205-5668-4524-AE5B-98228FB3F080"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LiangJianForum/View/Profile/ProfileView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "197"
-            endingLineNumber = "197"
-            landmarkName = "fetchUserProfile()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "C64D8205-5668-4524-AE5B-98228FB3F080 - 3a14c8fbbd8f01c0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for LiangJianForum.ProfileView.fetchUserProfile() async -&gt; ()"
-                  moduleName = "LiangJianForum"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Profile/ProfileView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "204"
-                  endingLineNumber = "204"
-                  offsetFromSymbolStart = "2592">
-               </Location>
-               <Location
-                  uuid = "C64D8205-5668-4524-AE5B-98228FB3F080 - 3a14c8fbbd8f01c0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for LiangJianForum.ProfileView.fetchUserProfile() async -&gt; ()"
-                  moduleName = "LiangJianForum"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Profile/ProfileView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "204"
-                  endingLineNumber = "204"
-                  offsetFromSymbolStart = "2824">
-               </Location>
-               <Location
-                  uuid = "C64D8205-5668-4524-AE5B-98228FB3F080 - 3a14c8fbbd8f02bf"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for LiangJianForum.ProfileView.fetchUserProfile() async -&gt; ()"
-                  moduleName = "LiangJianForum"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Profile/ProfileView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "195"
-                  endingLineNumber = "195"
-                  offsetFromSymbolStart = "2144">
-               </Location>
-               <Location
-                  uuid = "C64D8205-5668-4524-AE5B-98228FB3F080 - 3a14c8fbbd8f02bf"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for LiangJianForum.ProfileView.fetchUserProfile() async -&gt; ()"
-                  moduleName = "LiangJianForum"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/romanticd/XcodeProject/LiangJianForum/LiangJianForum/View/Profile/ProfileView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "195"
-                  endingLineNumber = "195"
-                  offsetFromSymbolStart = "2328">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "B4787841-8D6D-4B34-B403-585184A1646C"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -707,8 +565,8 @@
             filePath = "LiangJianForum/Model/PostDataWithTag.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "177"
-            endingLineNumber = "177"
+            startingLineNumber = "180"
+            endingLineNumber = "180"
             landmarkName = "JSONNull5"
             landmarkType = "3">
          </BreakpointContent>

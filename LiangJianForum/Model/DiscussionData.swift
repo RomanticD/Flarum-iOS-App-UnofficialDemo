@@ -36,9 +36,12 @@ struct DatumAttributes: Codable, Hashable {
     let lastPostedAt: String?
     let lastPostNumber: Int
     let isSticky: Bool
+    let isLocked: Bool
+    let hasPoll: Bool?
+    let hasBestAnswer: HasBestAnswer
     let frontpage: Bool?
 //    let canReply, canRename, canDelete, canHide: Bool
-//    let isApproved, hasBestAnswer: Bool
+//    let isApproved: Bool
 //    let bestAnswerSetAt, subscription: JSONNull?
 //    let canTag, isSticky, canSticky, isStickiest: Bool
 //    let isTagSticky, canStickiest, canTagSticky, canReset: Bool
@@ -47,6 +50,34 @@ struct DatumAttributes: Codable, Hashable {
 //    let frontdate: String?
 //    let front, canSelectBestAnswer, isLocked, canLock: Bool
 //    let bookmarked: Bool
+}
+
+enum HasBestAnswer: Codable, Hashable {
+    case bool(Bool)
+    case integer(Int)
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let x = try? container.decode(Bool.self) {
+            self = .bool(x)
+            return
+        }
+        if let x = try? container.decode(Int.self) {
+            self = .integer(x)
+            return
+        }
+        throw DecodingError.typeMismatch(HasBestAnswer.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for HasBestAnswer"))
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .bool(let x):
+            try container.encode(x)
+        case .integer(let x):
+            try container.encode(x)
+        }
+    }
 }
 
 // MARK: - DatumRelationships

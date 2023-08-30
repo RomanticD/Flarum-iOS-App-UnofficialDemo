@@ -196,6 +196,7 @@ struct newPostView: View {
                 succeessfullyPosted = true
                 isPosting = false // 恢复按钮可用性
                 clearData()
+                appSettings.refreshPost()
             } else {
                 // 发送失败的处理逻辑
                 showMessageAndEnableButton(message: NSLocalizedString("post_tags_exceed_limit", comment: ""))

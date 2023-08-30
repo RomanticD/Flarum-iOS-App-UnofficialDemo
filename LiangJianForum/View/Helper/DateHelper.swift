@@ -10,7 +10,7 @@ import Foundation
 public func calculateTimeDifference(from dateString: String) -> String {
     let dateFormatter = ISO8601DateFormatter()
     guard let date = dateFormatter.date(from: dateString) else {
-        return NSLocalizedString("无效的日期格式", comment: "")
+        return NSLocalizedString("Invalid Date Format!", comment: "")
     }
     
     let currentTime = Date()
@@ -28,6 +28,29 @@ public func calculateTimeDifference(from dateString: String) -> String {
         return NSLocalizedString("just now", comment: "")
     }
 }
+
+public func calculateTimeDifference(to dateString: String) -> String {
+    let dateFormatter = ISO8601DateFormatter()
+    guard let date = dateFormatter.date(from: dateString) else {
+        return NSLocalizedString("Invalid Date Format!", comment: "")
+    }
+    
+    let currentTime = Date()
+    let calendar = Calendar.current
+    
+    let components = calendar.dateComponents([.day, .hour, .minute], from: currentTime, to: date)
+    
+    if let day = components.day, day > 0 {
+        return String.localizedStringWithFormat(NSLocalizedString("days later", comment: ""), day)
+    } else if let hour = components.hour, hour > 0 {
+        return String.localizedStringWithFormat(NSLocalizedString("hours later", comment: ""), hour)
+    } else if let minute = components.minute, minute > 0 {
+        return String.localizedStringWithFormat(NSLocalizedString("minutes later", comment: ""), minute)
+    } else {
+        return NSLocalizedString("very soon", comment: "")
+    }
+}
+
 
 
 public func removeFirstCharacter(from colorString: String) -> String {

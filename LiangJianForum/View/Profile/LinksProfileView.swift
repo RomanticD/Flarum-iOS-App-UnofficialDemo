@@ -17,6 +17,7 @@ struct LinksProfileView: View {
     @State private var lastSeenAt: String = ""
     @State private var discussionCount: Int = 0
     @State private var commentCount: Int = 0
+    @State private var money: Double = -1
     @State private var include: [UserInclude]?
     @State private var savePersonalProfile = false
     @State private var selectedRow: Int? = nil
@@ -31,6 +32,12 @@ struct LinksProfileView: View {
     @EnvironmentObject var appSettings: AppSettings
     @State private var showLoginPage = false
     @State private var buttonText = "保存"
+    @State private var searchTerm = ""
+    @State private var currentPageOffset = 0
+    @State private var userCommentData = [Datum8]()
+    @State private var userCommentInclude = [Included8]()
+    @State private var hasNextPage = false
+    @State private var hasPrevPage = false
 
     var body: some View {
         VStack{
@@ -76,7 +83,12 @@ struct LinksProfileView: View {
                     }
                     HStack{
                         Text("🎀 Last seen at:").foregroundStyle(.secondary)
-                        Text("\(lastSeenAt)").bold()
+                        if lastSeenAt.isEmpty{
+                            Text("Information has been hidden")
+                                .bold()
+                        }else{
+                            Text("\(lastSeenAt)").bold()
+                        }
                     }
                 } header: {
                     Text("Account")
@@ -87,9 +99,21 @@ struct LinksProfileView: View {
                         Text("🏖️ Discussion Count: ").foregroundStyle(.secondary)
                         Text("\(discussionCount)").bold()
                     }
+                    
                     HStack{
-                        Text("🧬 Comment Count: ").foregroundStyle(.secondary)
-                        Text("\(commentCount)").bold()
+                        NavigationLink(value: commentCount){
+                            Text("🧬 Comment Count: ").foregroundStyle(.secondary)
+                            Text("\(commentCount)").bold()
+                        }
+                    }
+                    .navigationDestination(for: Int.self) { number in
+                        CommentsView(username: username, displayname: displayName, userCommentData: $userCommentData, userCommentInclude: $userCommentInclude, avatarUrl: $avatarUrl, searchTerm: $searchTerm)}
+                    
+                    if self.money != -1 {
+                        HStack {
+                            Text("💰 money: ").foregroundStyle(.secondary)
+                            Text(String(format: "%.1f", self.money)).bold()
+                        }
                     }
                 }
                 
@@ -119,11 +143,39 @@ struct LinksProfileView: View {
                             .italic()
                     }
                 }
+                
+                Section("Earned Badges") {
+                    if let include = include, !include.isEmpty {
+                        let groups = include.filter { $0.type == "badges" }
+                        if !groups.isEmpty {
+                            ForEach(groups, id: \.id) { item in
+                                HStack{
+                                    if let badgeName = item.attributes.name {
+                                        Text("🎖️ \(badgeName): ").foregroundStyle(.secondary)
+                                    }
+
+                                    if let badgeDescription = item.attributes.description {
+                                        Text("\(badgeDescription)").bold()
+                                    }
+                                }
+                            }
+                        } else {
+                            Text("No Badges Earned Yet")
+                                .foregroundColor(.secondary)
+                                .italic()
+                        }
+                    } else {
+                        Text("No Badges Earned Yet")
+                            .foregroundColor(.secondary)
+                            .italic()
+                    }
+                }
             }
             .textSelection(.enabled)
         }
         .task{
-            await fetchUserProfile()
+            await fetchOtherUserProfile()
+            await fetchOtherUserPost()
         }
         .alert(isPresented: $showLogoutAlert) {
             Alert(
@@ -136,11 +188,14 @@ struct LinksProfileView: View {
             )
         }
         .refreshable {
-            await fetchUserProfile()
+            await fetchOtherUserProfile()
         }
         .onAppear {
             newIntroduction = introduction
             newNickName = nickName
+            Task{
+                await fetchOtherUserPost()
+            }
         }
         .background(colorScheme == .dark ? LinearGradient(gradient: Gradient(colors: [Color(hex: "780206"), Color(hex: "061161")]), startPoint: .leading, endPoint: .trailing) : LinearGradient(gradient: Gradient(colors: [Color(hex: "A1FFCE"), Color(hex: "FAFFD1")]), startPoint: .leading, endPoint: .trailing))
         
@@ -172,7 +227,7 @@ struct LinksProfileView: View {
         showLogoutAlert = true
     }
     
-    private func fetchUserProfile() async {
+    private func fetchOtherUserProfile() async {
         guard let url = URL(string: "\(appSettings.FlarumUrl)/api/users/\(self.userId)") else{
                 print("Invalid URL")
             return
@@ -199,6 +254,10 @@ struct LinksProfileView: View {
 //                self.lastSeenAt =  calculateTimeDifference(from: decodedResponse.data.attributes.lastSeenAt)
                 self.discussionCount = decodedResponse.data.attributes.discussionCount
                 self.commentCount = decodedResponse.data.attributes.commentCount
+                
+                if let flarumMoney = decodedResponse.data.attributes.money{
+                    self.money = flarumMoney
+                }
 
                 print("Successfully decoded user data")
                 print("Username: \(self.username)")
@@ -208,6 +267,7 @@ struct LinksProfileView: View {
                 print("Last Seen At: \(self.lastSeenAt)")
                 print("Discussion Count: \(self.discussionCount)")
                 print("Comment Count: \(self.commentCount)")
+                print("money: \(self.money)")
             }
         } catch {
             print("Invalid user Data!" ,error)
@@ -216,6 +276,44 @@ struct LinksProfileView: View {
 
     private func isLoginUseProfile() -> Bool{
         return self.userId == appSettings.userId
+    }
+    
+    private func fetchOtherUserPost() async {
+
+        guard let url = URL(string: "\(appSettings.FlarumUrl)/api/posts?filter%5Bauthor%5D=\(username)&sort=-createdAt&page%5Boffset%5D=\(currentPageOffset)") else{
+            print("Invalid URL")
+            return
+        }
+
+        do{
+           print("fetching from \(url)")
+            let (data, _) = try await URLSession.shared.data(from: url)
+
+            if let decodedResponse = try? JSONDecoder().decode(UserCommentData.self, from: data){
+                self.userCommentData = decodedResponse.data
+                self.userCommentInclude = decodedResponse.included
+
+                if decodedResponse.links.next != nil{
+                    self.hasNextPage = true
+                }
+
+                if decodedResponse.links.prev != nil && currentPageOffset != 1{
+                    self.hasPrevPage = true
+                }else{
+                    self.hasPrevPage = false
+                }
+
+                print("successfully decode \(username)'s comment data")
+                print("current page offset: \(currentPageOffset)")
+                print("has next page: \(hasNextPage)")
+                print("has prev page: \(hasPrevPage)")
+            }else{
+                print("fetching user \(username) 's comments data failed")
+            }
+
+        } catch {
+            print("Invalid user's comment Data!" ,error)
+        }
     }
 }
 
