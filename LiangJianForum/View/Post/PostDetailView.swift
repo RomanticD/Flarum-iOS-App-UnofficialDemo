@@ -92,9 +92,9 @@ struct PostDetailView: View {
                             }
                         }
                     }
-                    LikesAndCommentButton()
-                        .padding(.bottom, 5)
-                        .padding(.top, 5)
+//                    LikesAndMentionedButton()
+//                        .padding(.bottom, 5)
+//                        .padding(.top, 5)
                     
                     Divider()
                 }

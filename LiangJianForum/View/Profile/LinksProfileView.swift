@@ -112,7 +112,11 @@ struct LinksProfileView: View {
                     if self.money != -1 {
                         HStack {
                             Text("💰 money: ").foregroundStyle(.secondary)
-                            Text(String(format: "%.1f", self.money)).bold()
+                            if self.money.truncatingRemainder(dividingBy: 1) == 0 {
+                                Text(String(format: "%.0f", self.money)).bold()
+                            } else {
+                                Text(String(format: "%.1f", self.money)).bold()
+                            }
                         }
                     }
                 }

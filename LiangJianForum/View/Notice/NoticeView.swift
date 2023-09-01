@@ -40,53 +40,77 @@ struct NoticeView: View {
     
     var body: some View {
         NavigationStack{
-            if userCommentData.isEmpty || userCommentData.isEmpty{
-                HStack {
-                    Text("Loading...").foregroundStyle(.secondary)
-                    ProgressView()
+            ScrollViewReader{ proxy in
+                VStack{
+                    if userCommentData.isEmpty || userCommentData.isEmpty{
+                        HStack {
+                            Text("Loading...").foregroundStyle(.secondary)
+                            ProgressView()
+                        }
+                    }else{
+                        if selection == NSLocalizedString("comment_sector", comment: ""){
+                            CommentsView(
+                                username: appsettings.username,
+                                userCommentData: $userCommentData,
+                                userCommentInclude: $userCommentInclude,
+                                avatarUrl: $avatarUrl,
+                                searchTerm: $searchTerm
+                            )
+                        }else if selection == NSLocalizedString("like_sector", comment: ""){
+                            List{
+                                Section("🤩Like"){
+                                    Text("Developing...")
+                                }
+                            }
+                        }else if selection == NSLocalizedString("follow_sector", comment: ""){
+                            List{
+                                Section("🥳Follow"){
+                                    Text("Developing...")
+                                }
+                            }
+                        }else{
+                            ProgressView()
+                        }
+                    }
                 }
-            }else{
-                Picker(
-                    selection : $selection,
-                    label: Text("Picker"),
-                    content:{
-                        ForEach(filterOptions.indices){index in
-                            Text(filterOptions[index]).tag(filterOptions[index])
-                        }
-                    })
-                    .pickerStyle(SegmentedPickerStyle())
-                    .padding(.horizontal)
-                    .animation(.easeInOut(duration: 1), value: selection)
-
-                if selection == NSLocalizedString("comment_sector", comment: ""){
-                    CommentsView(
-                        username: appsettings.username,
-                        userCommentData: $userCommentData,
-                        userCommentInclude: $userCommentInclude,
-                        avatarUrl: $avatarUrl,
-                        searchTerm: $searchTerm
-                    )
-                    .navigationTitle("Notification Center")
-                }else if selection == NSLocalizedString("like_sector", comment: ""){
-                    List{
-                        Section("🤩Like"){
-                            Text("Developing...")
-                        }
-                    }.navigationTitle("Notification Center")
-                }else if selection == NSLocalizedString("follow_sector", comment: ""){
-                    List{
-                        Section("🥳Follow"){
-                            Text("Developing...")
-                        }
-                    }.navigationTitle("Notification Center")
-                }else{
-                    ProgressView()
+                .id("Top")
+                .task {
+                    await fetchUserProfile()
+                    await fetchUserPosts()
                 }
+                .navigationTitle("Notification Center")
+                .navigationBarItems(trailing:
+                    Menu {
+                        Section(NSLocalizedString("sorted_by_text", comment: "")){
+                            Button {
+                                //选择默认的逻辑
+                                proxy.scrollTo("Top", anchor: .top)
+                                selection = NSLocalizedString("comment_sector", comment: "")
+                            } label: {
+                                Label(NSLocalizedString("comment_sector", comment: ""), systemImage: "seal")
+                            }
+                        
+                            Button {
+                                //选择最新帖子的逻辑
+                                proxy.scrollTo("Top", anchor: .top)
+                                selection = NSLocalizedString("like_sector", comment: "")
+                            } label: {
+                                Label(NSLocalizedString("like_sector", comment: ""), systemImage: "timer")
+                            }
+                            
+                            Button {
+                                //选择最新回复的逻辑
+                                proxy.scrollTo("TopWithoutSlide", anchor: .top)
+                                selection = NSLocalizedString("follow_sector", comment: "")
+                            } label: {
+                                Label(NSLocalizedString("follow_sector", comment: ""), systemImage: "message.badge")
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "slider.horizontal.3")
+                    }
+                )
             }
-        }
-        .task {
-            await fetchUserProfile()
-            await fetchUserPosts()
         }
         
     }

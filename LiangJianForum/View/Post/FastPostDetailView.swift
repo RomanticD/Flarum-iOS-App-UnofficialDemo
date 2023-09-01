@@ -13,10 +13,11 @@ struct fastPostDetailView: View {
     let commentCount: Int
     
     var sortOption = [NSLocalizedString("default_sort_option", comment: ""), NSLocalizedString("latest_sort_option", comment: "")]
-    @State private var selectedSortOption = NSLocalizedString("default_sort_option", comment: "")
     
+    @State private var selectedSortOption = NSLocalizedString("default_sort_option", comment: "")
     @State private var currentPage = 1
     @State private var isLoading = false
+    @State private var isSubViewLoading = false
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var appsettings: AppSettings
     @State private var showingPostingArea = false
@@ -97,20 +98,33 @@ struct fastPostDetailView: View {
                             }
                         }else{
                             // MARK: - If current discussion has votes
-                            Section{
-                                if !self.polls.isEmpty{
+                            if !self.polls.isEmpty{
+                                Section("当前投票"){
                                     VStack{
                                         ForEach(polls, id: \.id) { poll in
-                                            if let voteName = poll.attributes.question{
-                                                if let EndTime = poll.attributes.endDate{
-                                                    Text("当前投票： \(voteName)")
-//                                                    Text("截止时间： \(calculateTimeDifference(to: EndTime))")
-                                                }
-                                            }
+                                            PollChartView(pollOptionsAndVoteCount: findPollOptionsAndVoteCount(poll: poll),
+                                                          AnswerWithId: findAnswerWithId(),
+                                                          voteQuestion: poll.attributes.question,
+                                                          endDate: poll.attributes.endDate,
+                                                          canVote: poll.attributes.canVote,
+                                                          pollId: poll.id,
+                                                          allowMultipleVotes: poll.attributes.allowMultipleVotes,
+                                                          maxVotes: poll.attributes.maxVotes,
+                                                          allowChangeVote: poll.attributes.canChangeVote
+                                            )
+                                        }
+                                    }
+                                    .contextMenu {
+                                        Button(action: {
+                                            
+                                        }) {
+                                            Label("完成查看", systemImage: "eyes")
                                         }
                                     }
                                 }
-                                
+                            }     
+                            
+                            Section("帖子回复"){
                                 // MARK: - Post list
                                 ForEach(filteredPostsArrayTags, id: \.id){item in
                                     VStack {
@@ -228,7 +242,11 @@ struct fastPostDetailView: View {
                                             .cornerRadius(5)
                                         }
                                         
-                                        LikesAndCommentButton()
+                                        LikesAndMentionedButton(postId: item.id,
+                                                                likesCount: item.attributes.likesCount,
+                                                                mentionedByCount: item.attributes.mentionedByCount,
+                                                                isUserLiked : ifContainsUserLike(postItem: item)
+                                        )
                                             .padding(.bottom, 5)
                                             .padding(.top, 5)
                                         Divider()
@@ -250,7 +268,7 @@ struct fastPostDetailView: View {
                                             }
 
                                             Task {
-                                                await fetchDetail(postID: postID){success in
+                                                fetchDetail(postID: postID){success in
                                                     print("fetchDetail...(in load more button)")
                                                 }
                                                 isLoading = false
@@ -287,7 +305,7 @@ struct fastPostDetailView: View {
                                     await fetchTagsData()
                                     if !isLoading {
                                         isLoading = true
-                                        await fetchDetail(postID: postID){success in
+                                        fetchDetail(postID: postID){success in
                                             print("fetchDetail... (on chage of seleted option)")
                                         }
                                         isLoading = false
@@ -369,7 +387,7 @@ struct fastPostDetailView: View {
             Task {
                 clearData()
                 isLoading = true
-                await fetchDetail(postID: postID){success in
+                fetchDetail(postID: postID){success in
                     print("fetchDetail...(fresh the page after posting)")
                 }
                 isLoading = false
@@ -389,7 +407,7 @@ struct fastPostDetailView: View {
                 }
                 
                 isLoading = true
-                await fetchDetail(postID: postID){success in
+                fetchDetail(postID: postID){success in
                     print("fetchDetail... (in refreshable)")
                 }
                 isLoading = false
@@ -407,6 +425,19 @@ struct fastPostDetailView: View {
                 isLoading = false
             }
         }
+    }
+    
+    private func ifContainsUserLike(postItem: Included5) -> Bool {
+        let userId = String(appsettings.userId)
+        
+        if let likesData = postItem.relationships?.likes?.data{
+            for likeItem in likesData {
+                if likeItem.id == userId {
+                    return true
+                }
+            }
+        }
+        return false
     }
  
     private func fetchDetail(postID: String, completion: @escaping (Bool) -> Void) {
@@ -474,9 +505,6 @@ struct fastPostDetailView: View {
         }.resume()
     }
 
-
-
-
     private func processIncludedTagsArray(_ includedArray: [Included5]) {
         print("process Comment List Array...")
         //默认发帖顺序排序
@@ -493,6 +521,8 @@ struct fastPostDetailView: View {
                     if !self.polls.contains(included){
                         self.polls.append(included)
                     }
+                case "poll_options":
+                    self.pollOptions.append(included)
                 default:
                     break
                 }
@@ -516,6 +546,8 @@ struct fastPostDetailView: View {
                     if !self.polls.contains(included){
                         self.polls.append(included)
                     }
+                case "poll_options":
+                    self.pollOptions.append(included)
                 default:
                     break
                 }
@@ -555,6 +587,8 @@ struct fastPostDetailView: View {
     }
     
     private func clearData() {
+        polls = []
+        pollOptions = []
         postsArrayTags = []
         usersArrayTags = []
         includesTags = []
@@ -576,6 +610,32 @@ struct fastPostDetailView: View {
         } catch {
             print("Invalid Tags Data!", error)
         }
+    }
+        
+    func findPollOptionsAndVoteCount(poll: Included5) -> [String: Int] {
+        var pollInfo: [String: Int] = [:]
+
+        for option in poll.relationships?.options?.data ?? [] {
+            if let matchingOptionInfo = pollOptions.first(where: { $0.id == option.id }) {
+                if let answer = matchingOptionInfo.attributes.answer {
+                    let voteCount = matchingOptionInfo.attributes.voteCount ?? 0
+                    pollInfo[answer] = voteCount
+                }
+            }
+        }
+        return pollInfo
+    }
+
+    func findAnswerWithId() -> [String: String] {
+        var answerWithId: [String: String] = [:]
+
+        for option in pollOptions {
+            if let answer = option.attributes.answer {
+                answerWithId[answer] = option.id
+            }
+        }
+        
+        return answerWithId
     }
     
     private func getBestAnswerID() -> Int{

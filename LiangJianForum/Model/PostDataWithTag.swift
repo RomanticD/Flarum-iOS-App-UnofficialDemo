@@ -106,13 +106,14 @@ struct Included5: Codable,Hashable {
 // MARK: - IncludedAttributes
 struct IncludedAttributes5: Codable,Hashable {
     let question, endDate, createdAT, answer: String?
-    let voteCount: Int?
-    let canVote: Bool?
+    let voteCount, maxVotes: Int?
+    let canVote, allowMultipleVotes, allowChangeVote, canChangeVote: Bool?
     let username, displayName: String?
     let avatarURL: String?
     let slug: String?
     let joinTime: String?
     let discussionCount, commentCount: Int?
+    let mentionedByCount, likesCount: Int?
     let canEdit, canEditCredentials, canEditGroups, canDelete: Bool?
     let lastSeenAt: String?
     let canSuspend, canEditNickname, isEmailConfirmed: Bool?
@@ -134,11 +135,11 @@ struct IncludedAttributes5: Codable,Hashable {
     let canStartDiscussion, canAddToDiscussion: Bool?
 
     enum CodingKeys: String, CodingKey {
-        case username, displayName, question, endDate, answer, createdAT, voteCount, canVote
+        case username, displayName, question, endDate, answer, createdAT, voteCount, canVote, allowMultipleVotes, maxVotes, allowChangeVote, canChangeVote
         case avatarURL = "avatarUrl"
         case slug, joinTime, discussionCount, commentCount, canEdit, canEditCredentials, canEditGroups, canDelete, lastSeenAt, canSuspend, canEditNickname, isEmailConfirmed, email, number, createdAt, contentType, editedAt
         case contentHTML = "contentHtml"
-        case renderFailed, canHide, canFlag, canLike, isApproved, canApprove, nameSingular, namePlural, color, icon, name, description
+        case renderFailed, canHide, canFlag, canLike, isApproved, canApprove, nameSingular, namePlural, color, icon, name, description, mentionedByCount, likesCount
         case backgroundURL = "backgroundUrl"
         case backgroundMode, position, defaultSort, isChild, lastPostedAt, canStartDiscussion, canAddToDiscussion
     }
@@ -150,6 +151,12 @@ struct IncludedRelationships5: Codable,Hashable {
     let groups: Posts5?
     let discussion, user: User5?
     let mentionedBy, likes: Posts5?
+    let options, myVotes : Votes?
+}
+
+// MARK: - Votes
+struct Votes: Codable, Hashable {
+    let data: [DAT5]
 }
 
 // MARK: - Encode/decode helpers

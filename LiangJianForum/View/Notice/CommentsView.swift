@@ -38,75 +38,13 @@ struct CommentsView: View {
     }
         
     var body: some View {
-        if hasNextPage || hasPrevPage {
-            HStack{
-                Button(action: {
-                    if currentPageOffset >= 20 {
-                        currentPageOffset -= 20
-                    }
-                    isLoading = true
-                    Task {
-//                        await fetchUserPostsInfo()
-                        isLoading = false
-                    }
-                }) {
-                    HStack{
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(hasPrevPage ? .blue : .secondary)
-                            .font(.system(size: 20))
-                            .padding(.top, 1)
-                        Text("Prev")
-                            .foregroundStyle(hasPrevPage ? .blue : .secondary)
-                            .font(.system(size: 14))
-                    }
-                }
-                .padding(.leading)
-                .disabled(!hasPrevPage)
-                
-                Spacer()
-                
-                Button(action: {
-                    isLoading = true
-                    currentPageOffset = 0
-                    isLoading = false
-                    Task {
-//                        await fetchUserPostsInfo()
-                        isLoading = false
-                    }
-                }) {
-                    HStack{
-                        Text("First Page")
-                            .foregroundStyle(hasPrevPage ? .blue : .secondary)
-                            .font(.system(size: 14))
-                    }
-                }
-                
-                Spacer()
-                
-                Button(action: {
-                    currentPageOffset += 20
-                    isLoading = true
-                    Task {
-//                        await fetchUserPostsInfo()
-                        isLoading = false
-                    }
-                }) {
-                    HStack{
-                        Text("Next")
-                            .foregroundStyle(hasNextPage ? .blue : .secondary)
-                            .font(.system(size: 14))
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(hasNextPage ? .blue : .secondary)
-                            .font(.system(size: 20))
-                            .padding(.top, 1)
-                    }
-                }
-                .padding(.trailing)
-                .disabled(!hasNextPage)
-            }
-            .padding(.top, 5)
-        }
-        
+        PaginationView(hasPrevPage: hasPrevPage,
+                       hasNextPage: hasNextPage,
+                       currentPage: $currentPageOffset,
+                       isLoading: $isLoading,
+                       fetchDiscussion: fetchUserPostsInfo,
+                       mode: .offset
+        )
         
         ScrollViewReader { proxy in
             if userCommentData.isEmpty{
@@ -198,7 +136,11 @@ struct CommentsView: View {
                                             }
                                         }
                                         .navigationDestination(for: Datum8.self){item in
-                                            fastPostDetailView(postTitle: DiscussionTitle, postID: DiscussionId, commentCount: CommentCount).environmentObject(appsettings)
+                                            fastPostDetailView(
+                                                postTitle: findDiscussionTitle(id: item.relationships.discussion.data.id),
+                                                postID: item.relationships.discussion.data.id,
+                                                commentCount: CommentCount
+                                            )
                                         }
                                     }
                                 }
@@ -206,6 +148,16 @@ struct CommentsView: View {
                         }
                     }
                     .id("AllUserComments")
+                }
+                .refreshable {
+                    Task{
+                        await fetchUserPostsInfo()
+                    }
+                }
+                .onAppear{
+                    Task{
+                        await fetchUserPostsInfo()
+                    }
                 }
                 .onChange(of: currentPageOffset){ _ in
                     withAnimation {
@@ -252,31 +204,34 @@ struct CommentsView: View {
     
     private func fetchUserPostsInfo() async {
 
-        guard let url = URL(string: "\(appsettings.FlarumUrl)/api/posts?filter%5Bauthor%5D=\(appsettings.username)&sort=-createdAt&page%5Boffset%5D=\(currentPageOffset)") else{
+        guard let url = URL(string: "\(appsettings.FlarumUrl)/api/posts?filter%5Bauthor%5D=\(username)&sort=-createdAt&page%5Boffset%5D=\(currentPageOffset)") else{
         print("Invalid URL")
         return
         }
 
         do{
            print("fetching from \(url)")
+            print("In CommentsView")
             let (data, _) = try await URLSession.shared.data(from: url)
 
             if let decodedResponse = try? JSONDecoder().decode(UserCommentData.self, from: data){
                 self.userCommentData = decodedResponse.data
                 self.userCommentInclude = decodedResponse.included
 
-                if decodedResponse.links.next != nil{
+                if decodedResponse.links.next == nil || decodedResponse.links.next == "" {
+                    self.hasNextPage = false
+                } else {
                     self.hasNextPage = true
                 }
-
-                if decodedResponse.links.prev != nil && currentPageOffset != 0{
+                
+                if decodedResponse.links.prev != nil && currentPageOffset != 0 {
                     self.hasPrevPage = true
-                }else{
+                } else {
                     self.hasPrevPage = false
                 }
 
                 print("successfully decode user's comment data")
-                print("current page: \(currentPageOffset)")
+                print("current page offset: \(currentPageOffset)")
                 print("has next page: \(hasNextPage)")
                 print("has prev page: \(hasPrevPage)")
             }
@@ -287,6 +242,3 @@ struct CommentsView: View {
     }
 }
 
-//#Preview {
-//    CommentsView()
-//}

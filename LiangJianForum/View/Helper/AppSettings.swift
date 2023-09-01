@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 class AppSettings: ObservableObject {
+    @Published var completedVotes: [Int: [String]] = [:]
     @Published var refreshPostView = false
     @Published var refreshReplyView = false
     @Published var refreshProfileView = false
