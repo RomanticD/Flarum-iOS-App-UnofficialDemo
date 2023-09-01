@@ -21,7 +21,7 @@ struct PostView: View {
     @State private var searchTerm = ""
     @State private var isHeaderSlideViewEnabled = false
     @State private var isSortingMenuVisible = false
-    @State private var selectedSortingOption = NSLocalizedString("default_sort", comment: "")
+    @State private var selectedSortingOption = NSLocalizedString("latest_sort_comment", comment: "")
     
     private func findDisplayName(_ userid: String, in array: [Included]) -> String? {
         if let item = array.first(where: { $0.id == userid }) {
@@ -71,7 +71,13 @@ struct PostView: View {
                     ScrollViewReader{ proxy in
                         ZStack(alignment: .bottomTrailing) {
                             VStack {
-                                PaginationView(hasPrevPage: hasPrevPage, hasNextPage: hasNextPage, currentPage: $currentPage, isLoading: $isLoading, fetchDiscussion: fetchDiscussion)
+                                PaginationView(hasPrevPage: hasPrevPage,
+                                               hasNextPage: hasNextPage,
+                                               currentPage: $currentPage,
+                                               isLoading: $isLoading,
+                                               fetchDiscussion: fetchDiscussion,
+                                               mode: .page
+                                )
                                 
                                 List {
                                     // MARK: - if Flarum has HeaderSlide Plugin installed with api endpoint \(appsettings.FlarumUrl)/api/header-slideshow/list
