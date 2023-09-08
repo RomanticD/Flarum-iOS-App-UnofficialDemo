@@ -46,7 +46,8 @@ struct PollChartView: View {
                         .foregroundStyle(by: .value("选项名", answer))
                     }
                 }
-                .frame(height: CGFloat(pollOptionsAndVoteCount.count * 50))
+                .chartLegend(.hidden)
+                .frame(height: CGFloat(pollOptionsAndVoteCount.count * 80))
                 .padding(.bottom)
                 .padding(.leading)
                 .padding(.trailing)
@@ -153,7 +154,11 @@ struct PollChartView: View {
                                     }
                                 )) {
                                     Text(answer)
+                                        .font(.system(size: 15))
                                         .bold()
+                                        .fixedSize(horizontal: false, vertical: true)
+                                        .tracking(0.5)
+                                        .lineSpacing(7)
                                 }
                                 .padding(.leading)
                                 .padding(.trailing)
@@ -181,6 +186,7 @@ struct PollChartView: View {
                         }
                     }
                 }
+                .padding(.top)
                 .onAppear {
                     // 检查当前用户是否已完成投票
                     if let completedVotes = appSettings.completedVotes[appSettings.userId], completedVotes.contains(pollId) {

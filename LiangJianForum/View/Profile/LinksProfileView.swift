@@ -39,27 +39,21 @@ struct LinksProfileView: View {
     @State private var hasNextPage = false
     @State private var hasPrevPage = false
 
+    private var isUserVIP: Bool {
+        return appSettings.vipUsernames.contains(username)
+    }
+    
     var body: some View {
         VStack{
-            if isLoginUseProfile(){
-                HStack {
-                    Spacer()
-                    
-                    Button(action: { logout() }) {
-                        Text("退出登录")
-                            .font(.system(size: 15))
-                            .foregroundColor(.blue)
-                            .bold()
-                            .padding(.trailing)
-                    }
-                }
-
-            }
-            
             HStack{
                 if avatarUrl != "" {
-                    asyncImage(url: URL(string: avatarUrl), frameSize: 120, lineWidth: 2, shadow: 6)
-                        .padding(.bottom)
+                    if isUserVIP{
+                        AvatarAsyncImage(url: URL(string: avatarUrl), frameSize: 130, lineWidth: 2.5, shadow: 6, strokeColor : Color(hex: "FFD700"))
+                            .padding(.bottom)
+                    }else{
+                        AvatarAsyncImage(url: URL(string: avatarUrl), frameSize: 130, lineWidth: 2, shadow: 6)
+                            .padding(.bottom)
+                    }
                 } else {
                     CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 120, lineWidth: 1, shadow: 3)
                         .opacity (0.3)
@@ -107,16 +101,23 @@ struct LinksProfileView: View {
                         }
                     }
                     .navigationDestination(for: Int.self) { number in
-                        CommentsView(username: username, displayname: displayName, userCommentData: $userCommentData, userCommentInclude: $userCommentInclude, avatarUrl: $avatarUrl, searchTerm: $searchTerm)}
+                        CommentsView(username: username, displayname: displayName, userCommentData: $userCommentData, userCommentInclude: $userCommentInclude, avatarUrl: avatarUrl, searchTerm: $searchTerm)
+                    }
+                    
                     
                     if self.money != -1 {
                         HStack {
-                            Text("💰 money: ").foregroundStyle(.secondary)
-                            if self.money.truncatingRemainder(dividingBy: 1) == 0 {
-                                Text(String(format: "%.0f", self.money)).bold()
-                            } else {
-                                Text(String(format: "%.1f", self.money)).bold()
+                            NavigationLink(value: money){
+                                Text("💰 money: ").foregroundStyle(.secondary)
+                                if self.money.truncatingRemainder(dividingBy: 1) == 0 {
+                                    Text(String(format: "%.0f", self.money)).bold()
+                                } else {
+                                    Text(String(format: "%.1f", self.money)).bold()
+                                }
                             }
+                        }
+                        .navigationDestination(for: Double.self) { number in
+                            MoneyConditionRecord(Usermoney: self.money, userId: String(userId))
                         }
                     }
                 }
@@ -177,20 +178,21 @@ struct LinksProfileView: View {
             }
             .textSelection(.enabled)
         }
+        .navigationTitle("\(self.displayName)的主页")
         .task{
             await fetchOtherUserProfile()
             await fetchOtherUserPost()
         }
-        .alert(isPresented: $showLogoutAlert) {
-            Alert(
-                title: Text("Sign out"),
-                message: Text("Quit?"),
-                primaryButton: .default(Text("Confirm"), action: {
-                    logoutConfirmed()
-                }),
-                secondaryButton: .cancel(Text("Cancel"))
-            )
-        }
+//        .alert(isPresented: $showLogoutAlert) {
+//            Alert(
+//                title: Text("Sign out"),
+//                message: Text("Quit?"),
+//                primaryButton: .default(Text("Confirm"), action: {
+//                    logoutConfirmed()
+//                }),
+//                secondaryButton: .cancel(Text("Cancel"))
+//            )
+//        }
         .refreshable {
             await fetchOtherUserProfile()
         }
@@ -205,31 +207,31 @@ struct LinksProfileView: View {
         
     }
 
-    func saveProfile() {
-            showAlert = true
-            savePersonalProfile = true
-            showSaveAlert = true
-            nickName = newNickName
-            introduction = newIntroduction
-            
-            buttonText = "保存成功!"
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                buttonText = "保存"
-                savePersonalProfile = false
-            }
-        }
+//    func saveProfile() {
+//            showAlert = true
+//            savePersonalProfile = true
+//            showSaveAlert = true
+//            nickName = newNickName
+//            introduction = newIntroduction
+//            
+//            buttonText = "保存成功!"
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//                buttonText = "保存"
+//                savePersonalProfile = false
+//            }
+//        }
 
-    func logoutConfirmed() {
-        appSettings.token = ""
-        showLoginPage.toggle()
-        appSettings.isLoggedIn = false
-    }
-    
-    
-    func logout() {
-        showAlert = true
-        showLogoutAlert = true
-    }
+//    func logoutConfirmed() {
+//        appSettings.token = ""
+//        showLoginPage.toggle()
+//        appSettings.isLoggedIn = false
+//    }
+//    
+//    
+//    func logout() {
+//        showAlert = true
+//        showLogoutAlert = true
+//    }
     
     private func fetchOtherUserProfile() async {
         guard let url = URL(string: "\(appSettings.FlarumUrl)/api/users/\(self.userId)") else{

@@ -54,7 +54,7 @@ struct LikesAndMentionedButton: View {
                             }, status: .like)
                         } else {
                             sendLikesRequest(completion: { success in
-                                if success{
+                                if success && likesNum > 0{
                                     likesNum -= 1
                                 } else{
                                     
@@ -68,7 +68,7 @@ struct LikesAndMentionedButton: View {
                         
                         if likesTapCount_liked % 2 == 1 {
                             sendLikesRequest(completion: { success in
-                                if success{
+                                if success && likesNum > 0{
                                     likesNum -= 1
                                 } else{
                                     
@@ -87,15 +87,15 @@ struct LikesAndMentionedButton: View {
                 }) {
                     Image(systemName: isLiked ? "heart.fill" : "heart")
                         .font(.system(size: 15))
-                        .foregroundColor(isLiked ? .red : .blue)
+                        .foregroundColor(.red)
                 }
                 .buttonStyle(.plain)
                 .padding(.trailing, 2)
                 
                 if likesNum != 0 {
                     Text("\(likesNum)")
-                        .font(.system(size: 15))
-                        .foregroundColor(.blue)
+                        .font(.system(size: 12))
+                        .foregroundColor(.red)
                 }
             }
             
@@ -106,15 +106,15 @@ struct LikesAndMentionedButton: View {
                 }) {
                     Image(systemName: isMentioned ? "arrowshape.turn.up.left.fill" : "arrowshape.turn.up.left")
                         .font(.system(size: 15))
-                        .foregroundColor(isMentioned ? .mint : .blue)
+                        .foregroundColor(.mint)
                 }
                 .buttonStyle(.plain)
                 .padding(.trailing, 2)
                 
                 if let mentionedBy = mentionedByCount, mentionedBy > 0 {
                     Text("\(mentionedBy)")
-                        .font(.system(size: 15))
-                        .foregroundColor(.blue)
+                        .font(.system(size: 12))
+                        .foregroundColor(.mint)
                 }
             }
         }

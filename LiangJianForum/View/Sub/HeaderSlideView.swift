@@ -17,7 +17,7 @@ struct HeaderSlideView: View {
             if !slidedata.isEmpty {
                 SliderView(slides: filterSlidesWithNonEmptyImages(slides: slidedata), transitionTime: $transitionTime)
             } else {
-                ProgressView()
+                ShimmerEffectBox().frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
         .task {
@@ -69,7 +69,7 @@ struct SliderView: View {
 
     var body: some View {
         ZStack {
-            Color.gray
+            Color(uiColor: UIColor.systemGray5)
 
             TabView(selection: $selection) {
                 ForEach(0..<slides.count) { i in
@@ -78,7 +78,7 @@ struct SliderView: View {
                             .resizable()
                             .scaledToFill()
                     } placeholder: {
-                        ProgressView()
+                        ShimmerEffectBox()
                     }
                     .ignoresSafeArea()
                     .onTapGesture {

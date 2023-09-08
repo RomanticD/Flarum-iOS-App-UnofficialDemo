@@ -121,7 +121,7 @@ struct newPostView: View {
                 }
                 .foregroundColor(.white)
                 .frame(width: 350, height: 50)
-                .background(Color.blue)
+                .background(Color(hex: "565dd9"))
                 .cornerRadius(10)
                 .opacity(0.8)
                 .padding(.top)
@@ -140,6 +140,7 @@ struct newPostView: View {
                     }))
             }
         }
+        .scrollDismissesKeyboard(.interactively)
         .task {
             await fetchTagsData()
         }
