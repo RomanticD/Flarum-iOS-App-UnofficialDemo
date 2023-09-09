@@ -16,7 +16,7 @@ struct Datum6: Codable, Hashable {
     let type: String
     let id: String
     let attributes: Attributes6
-//    let relationships: Relationships6?
+    let relationships: Relationships6?
 }
 
 // MARK: - Attributes
@@ -34,15 +34,15 @@ struct Attributes6: Codable, Hashable {
     }
 }
 
-//// MARK: - Relationships
-//struct Relationships6: Codable {
-//    let parent: Parent6
-//}
-//
-//// MARK: - Parent
-//struct Parent6: Codable {
-//    let data: DataClass6
-//}
+// MARK: - Relationships
+struct Relationships6: Codable, Hashable {
+    let parent: Parent6
+}
+
+// MARK: - Parent
+struct Parent6: Codable, Hashable {
+    let data: DataClass6
+}
 
 // MARK: - DataClass
 struct DataClass6: Codable, Hashable {

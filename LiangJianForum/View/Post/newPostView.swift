@@ -97,14 +97,46 @@ struct newPostView: View {
                     .padding(.leading)
                     
 
-                    ForEach(tags, id: \.id) { tag in
-                        HStack {
-                            TagButton(id: tag.id, tagColor: tag.attributes.color.isEmpty ? Color.gray : Color(hex: removeFirstCharacter(from: tag.attributes.color)), title: tag.attributes.name, selectedButtonIds: $selectedButtonIds).padding(.leading)
+                    ForEach(getParentTagsFromFetching(from: tags), id: \.id) { tag in
+                        if getChildTags(parentTag: tag, dataFetched: tags).isEmpty{//不是父标签
+                            HStack {
+                                TagButton(id: tag.id,
+                                          tagColor: tag.attributes.color.isEmpty ? Color.gray : Color(hex: removeFirstCharacter(from: tag.attributes.color)),
+                                          title: tag.attributes.name,
+                                          parentId: nil,
+                                          childTagsId: getChildTagsId(parentTag: tag, dataFetched: tags),
+                                          selectedButtonIds: $selectedButtonIds
+                                )
+                                .padding(.leading)
 
-                            Spacer()
+                                Spacer()
+                            }
+                        }else{
+                            ScrollView(.horizontal, showsIndicators: false){
+                                HStack{
+                                    TagButton(id: tag.id,
+                                              tagColor: tag.attributes.color.isEmpty ? Color.gray : Color(hex: removeFirstCharacter(from: tag.attributes.color)),
+                                              title: tag.attributes.name,
+                                              parentId: nil, childTagsId: getChildTagsId(parentTag: tag, dataFetched: tags),
+                                              selectedButtonIds: $selectedButtonIds
+                                    )
+                                    .padding(.leading)
+                                    
+                                    ForEach(getChildTags(parentTag: tag, dataFetched: tags), id: \.id) { childTag in
+                                        TagButton(id: childTag.id,
+                                                  tagColor: childTag.attributes.color.isEmpty ? Color.gray : Color(hex: removeFirstCharacter(from: childTag.attributes.color)),
+                                                  title: childTag.attributes.name,
+                                                  parentId: tag.id,
+                                                  childTagsId: getChildTagsId(parentTag: tag, dataFetched: tags),
+                                                  selectedButtonIds: $selectedButtonIds
+                                        )
+                                        .padding(.leading)
+                                    }
+                                }
+                                .padding(.vertical, 1)
+                            }
                         }
                     }
-                    
                     Spacer()
                 }
 
@@ -302,7 +334,3 @@ struct newPostView: View {
         }
     }
 }
-
-//#Preview {
-//    newPostView()
-//}

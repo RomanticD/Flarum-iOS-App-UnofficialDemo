@@ -78,8 +78,14 @@ struct PostDetailView: View {
                         Spacer()
                         ForEach(fetchedTags, id: \.id) { tag in
                             if tagsIdInPostDetail.contains(tag.id) {
-                                NavigationLink(value: tag){
-                                    TagElement(tag: tag, fontSize: 15)
+                                if getChildTags(parentTag: tag, dataFetched: fetchedTags).isEmpty{
+                                    NavigationLink(value: tag){
+                                        TagElement(tag: tag, fontSize: 15)
+                                    }
+                                }else{
+                                    NavigationLink(value: getChildTags(parentTag: tag, dataFetched: fetchedTags)){
+                                        TagElement(tag: tag, fontSize: 15)
+                                    }
                                 }
                             }
                         }
@@ -291,6 +297,23 @@ struct PostDetailView: View {
             }
 
             
+        }
+        .navigationDestination(for: [Datum6].self){tagsArray in
+            List{
+                ForEach(tagsArray, id: \.id){tag in
+                    NavigationLink(value: tag){
+                        HStack {
+                            TagElement(tag: tag, fontSize: 20)
+                                .padding(.top, 8)
+                                .padding(.bottom, 8)
+                            Spacer()
+                        }
+                    }
+                }
+            }
+            .navigationDestination(for: Datum6.self){tag in
+                TagDetail(selectedTag: tag)
+            }
         }
         .navigationDestination(for: Included5.self){item in
             if let userIdString = item.relationships?.user?.data.id, let userId = Int(userIdString) {

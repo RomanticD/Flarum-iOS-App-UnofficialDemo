@@ -565,16 +565,17 @@ struct PostView: View {
         return appsettings.vipUsernames.contains(username)
     }
     
-    private func checkIfHasBestAnswer(dataIn: HasBestAnswer) -> Bool {
+    private func checkIfHasBestAnswer(dataIn: HasBestAnswer?) -> Bool {
         var hasBestAnswer = false
         
-        switch dataIn {
-        case .integer:
-            hasBestAnswer = true
-        default:
-            hasBestAnswer = false
-        }
-        
+        if let bestAnswerData = dataIn{
+            switch bestAnswerData {
+            case .integer:
+                hasBestAnswer = true
+            default:
+                hasBestAnswer = false
+            }
+        }        
         return hasBestAnswer
     }
 }

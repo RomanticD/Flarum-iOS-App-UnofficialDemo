@@ -56,7 +56,7 @@
 		07E1FB252A3DDC1500F9049B /* newPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E1FB242A3DDC1500F9049B /* newPostView.swift */; };
 		07EF7C9E2A49B998008E41D4 /* TagField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EF7C9D2A49B998008E41D4 /* TagField.swift */; };
 		07EF7CA42A49BE16008E41D4 /* TagDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EF7CA32A49BE16008E41D4 /* TagDetail.swift */; };
-		07EF7CAC2A4AA004008E41D4 /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EF7CAB2A4AA004008E41D4 /* DateHelper.swift */; };
+		07EF7CAC2A4AA004008E41D4 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EF7CAB2A4AA004008E41D4 /* Helper.swift */; };
 		07EF7CB22A4AE343008E41D4 /* LikesAndMentionedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EF7CB12A4AE343008E41D4 /* LikesAndMentionedButton.swift */; };
 		07EF7CB42A4B225C008E41D4 /* TagElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EF7CB32A4B225C008E41D4 /* TagElement.swift */; };
 		42ED96A8F2F8C2C4783C8159 /* UserCommentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42ED924319C2DF3E476F3CD1 /* UserCommentData.swift */; };
@@ -115,7 +115,7 @@
 		07E1FB242A3DDC1500F9049B /* newPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newPostView.swift; sourceTree = "<group>"; };
 		07EF7C9D2A49B998008E41D4 /* TagField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagField.swift; sourceTree = "<group>"; };
 		07EF7CA32A49BE16008E41D4 /* TagDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagDetail.swift; sourceTree = "<group>"; };
-		07EF7CAB2A4AA004008E41D4 /* DateHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
+		07EF7CAB2A4AA004008E41D4 /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		07EF7CB12A4AE343008E41D4 /* LikesAndMentionedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesAndMentionedButton.swift; sourceTree = "<group>"; };
 		07EF7CB32A4B225C008E41D4 /* TagElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagElement.swift; sourceTree = "<group>"; };
 		42ED924319C2DF3E476F3CD1 /* UserCommentData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCommentData.swift; sourceTree = "<group>"; };
@@ -178,7 +178,7 @@
 		07697A642A516340009C744E /* Helper */ = {
 			isa = PBXGroup;
 			children = (
-				07EF7CAB2A4AA004008E41D4 /* DateHelper.swift */,
+				07EF7CAB2A4AA004008E41D4 /* Helper.swift */,
 				072636442A4BD82D0030DF8A /* AppSettings.swift */,
 			);
 			path = Helper;
@@ -418,7 +418,7 @@
 				07A868032A3D879E00311F65 /* FlarumiOSApp.swift in Sources */,
 				0783CE312A419008009A2F7D /* InfoDisplayWithTitleView.swift in Sources */,
 				0716E62A2AA445B700DAF3B7 /* CommentDisplayView.swift in Sources */,
-				07EF7CAC2A4AA004008E41D4 /* DateHelper.swift in Sources */,
+				07EF7CAC2A4AA004008E41D4 /* Helper.swift in Sources */,
 				07E1FB1F2A3DB32D00F9049B /* ContentView.swift in Sources */,
 				073C19312A4C7675001A2411 /* newReply.swift in Sources */,
 				07A37BCA2A979AE100915EB1 /* PaginationView.swift in Sources */,

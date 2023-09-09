@@ -36,16 +36,17 @@ struct Attributes2: Codable {
 }
 
 // MARK: - UserInclude
-struct UserInclude: Codable {
+struct UserInclude: Codable, Hashable {
     let type, id: String
     let attributes: Attributes
 }
 
 // MARK: - Attributes
-struct Attributes: Codable {
+struct Attributes: Codable, Hashable {
     let nameSingular, namePlural, color, icon: String?
     let isHidden: Int?
     let name: String?
     let description: String?
+    let backgroundColor: String?
 }
 

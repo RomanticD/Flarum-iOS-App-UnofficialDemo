@@ -153,17 +153,58 @@ struct LinksProfileView: View {
                     if let include = include, !include.isEmpty {
                         let groups = include.filter { $0.type == "badges" }
                         if !groups.isEmpty {
-                            ForEach(groups, id: \.id) { item in
+                            ScrollView(.horizontal, showsIndicators: false){
                                 HStack{
-                                    if let badgeName = item.attributes.name {
-                                        Text("🎖️ \(badgeName): ").foregroundStyle(.secondary)
-                                    }
-
-                                    if let badgeDescription = item.attributes.description {
-                                        Text("\(badgeDescription)").bold()
+                                    ForEach(groups, id: \.id) { item in
+                                        NavigationLink(value: item) {
+                                            Button(action: {
+                                            }) {
+                                                if let badgeName = item.attributes.name {
+                                                    Text("🎖️ \(badgeName)")
+                                                        .bold()
+                                                        .foregroundColor(Color.white)
+                                                        .font(.system(size: 12))
+                                                        .padding()
+                                                        .lineLimit(1)
+                                                        .background(Color(hex: removeFirstCharacter(from: item.attributes.backgroundColor ?? "#6168d0")))
+                                                        .frame(height: 36)
+                                                        .cornerRadius(18)
+                                                    
+                                                }
+                                            }
+                                            .navigationDestination(for: UserInclude.self) { item in
+                                                Text(item.attributes.description ?? "No Description")
+                                            }
+                                        }
+  
                                     }
                                 }
                             }
+                            
+//                            ForEach(groups, id: \.id) { item in
+//                                NavigationLink(value: item) {
+//                                    HStack{
+//                                        Spacer()
+//                                        
+//                                        if let badgeName = item.attributes.name {
+//                                            Text("🎖️ \(badgeName)")
+//                                                .bold()
+//                                                .foregroundColor(Color.white)
+//                                                .font(.system(size: 12))
+//                                                .padding()
+//                                                .lineLimit(1)
+//                                                .background(Color(hex: removeFirstCharacter(from: item.attributes.backgroundColor ?? "#6168d0")))
+//                                                .frame(height: 36)
+//                                                .cornerRadius(18)
+//                                        }
+//                                        
+//                                        Spacer()
+//                                    }
+//                                    .navigationDestination(for: UserInclude.self) { item in
+//                                        Text(item.attributes.description ?? "No Description")
+//                                    }
+//                                }
+//                            }
                         } else {
                             Text("No Badges Earned Yet")
                                 .foregroundColor(.secondary)
@@ -175,6 +216,8 @@ struct LinksProfileView: View {
                             .italic()
                     }
                 }
+                .listRowInsets(EdgeInsets())
+                .listRowSeparator(.hidden)
             }
             .textSelection(.enabled)
         }

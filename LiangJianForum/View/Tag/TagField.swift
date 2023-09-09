@@ -14,9 +14,9 @@ struct TagField: View {
     var filteredTags : [Datum6] {
         var filteredItems: [Datum6] = []
         
-        guard !searchTerm.isEmpty else { return tags }
+        guard !searchTerm.isEmpty else { return getParentTagsFromFetching(from: tags) }
         
-        for item in tags {
+        for item in getParentTagsFromFetching(from: tags) {
             if item.attributes.name.localizedCaseInsensitiveContains(searchTerm){
                 filteredItems.append(item)
             }
@@ -31,20 +31,48 @@ struct TagField: View {
             }else{
                 List {
                     ForEach(filteredTags, id: \.id) { tag in
-                        NavigationLink(value: tag){
-                            HStack {
-                                TagElement(tag: tag, fontSize: 20)
-                                    .padding(.top, 8)
-                                    .padding(.bottom, 8)
-                                Spacer()
+                        if getChildTags(parentTag: tag, dataFetched: tags).isEmpty{
+                            NavigationLink(value: tag){
+                                HStack {
+                                    TagElement(tag: tag, fontSize: 20)
+                                        .padding(.top, 8)
+                                        .padding(.bottom, 8)
+                                    Spacer()
+                                }
+                            }
+                        }else{
+                            NavigationLink(value: getChildTags(parentTag: tag, dataFetched: tags)){
+                                HStack {
+                                    TagElement(tag: tag, fontSize: 20)
+                                        .padding(.top, 8)
+                                        .padding(.bottom, 8)
+                                    Spacer()
+                                }
                             }
                         }
                     }
                 }
                 .searchable(text: $searchTerm, prompt: "Search")
                 .navigationTitle("All Tags")
-                .navigationDestination(for: Datum6.self){data in
-                    TagDetail(selectedTag: data)
+                .navigationDestination(for: Datum6.self){tag in
+                    TagDetail(selectedTag: tag)
+                }
+                .navigationDestination(for: [Datum6].self){tagsArray in
+                    List{
+                        ForEach(tagsArray, id: \.id){tag in
+                            NavigationLink(value: tag){
+                                HStack {
+                                    TagElement(tag: tag, fontSize: 20)
+                                        .padding(.top, 8)
+                                        .padding(.bottom, 8)
+                                    Spacer()
+                                }
+                            }
+                        }
+                    }
+                    .navigationDestination(for: Datum6.self){tag in
+                        TagDetail(selectedTag: tag)
+                    }
                 }
             }
         }
