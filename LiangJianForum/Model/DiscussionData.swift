@@ -38,7 +38,7 @@ struct DatumAttributes: Codable, Hashable {
     let isSticky: Bool
     let isLocked: Bool
     let hasPoll: Bool?
-    let hasBestAnswer: HasBestAnswer
+    let hasBestAnswer: HasBestAnswer?
     let frontpage: Bool?
 //    let canReply, canRename, canDelete, canHide: Bool
 //    let isApproved: Bool

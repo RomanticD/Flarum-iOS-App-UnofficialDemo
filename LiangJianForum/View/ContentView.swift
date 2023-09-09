@@ -32,10 +32,16 @@ struct ContentView: View {
                 
                 NoticeView()
                     .tabItem { Label("Message", systemImage: "bell.fill") }
+                    .tag(Tab.notice)
                 
                 ProfileView()
                     .tabItem { Label("Me", systemImage: "person.crop.rectangle.stack") }
                     .tag(Tab.profile)
+            }
+            .onAppear{
+                Task{
+                    await retrieveCurrentUserInformation()
+                }
             }
             .environmentObject(appsettings)
         } else {
@@ -43,9 +49,29 @@ struct ContentView: View {
                 .environmentObject(appsettings)
         }
     }
+    
+    private func retrieveCurrentUserInformation() async {
+        guard let url = URL(string: "\(appsettings.FlarumUrl)/api/users/\(appsettings.userId)") else{
+            print("Invalid URL")
+            return
+        }
+        print("Fetching User Info : id \(appsettings.userId) at: \(url)")
+
+        do{
+            let (data, _) = try await URLSession.shared.data(from: url)
+
+            if let decodedResponse = try? JSONDecoder().decode(UserData.self, from: data){
+                appsettings.username = decodedResponse.data.attributes.username
+                appsettings.displayName = decodedResponse.data.attributes.displayName
+
+                if let avatarUrl = decodedResponse.data.attributes.avatarURL{
+                    appsettings.avatarUrl = avatarUrl
+                }
+            }
+        } catch {
+            print("Invalid user Data!" ,error)
+        }
+    }
 }
 
-//#Preview {
-//    ContentView()
-//}
 

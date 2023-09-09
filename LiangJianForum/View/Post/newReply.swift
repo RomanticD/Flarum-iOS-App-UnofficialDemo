@@ -74,12 +74,13 @@ struct newReply: View {
                     .disabled(isReplying)
                     .foregroundColor(.white)
                     .frame(width: 350, height: 50)
-                    .background(Color.blue)
+                    .background(Color(hex: "565dd9"))
                     .cornerRadius(10)
                     .opacity(0.8)
                     .padding(.bottom)
                 }
             }
+            .scrollDismissesKeyboard(.interactively)
             .onAppear{
                 newReplyContent = replyContent
             }

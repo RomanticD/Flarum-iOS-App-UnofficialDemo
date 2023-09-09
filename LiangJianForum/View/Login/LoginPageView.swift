@@ -82,12 +82,11 @@ struct LoginPageView: View {
                     }) {
                         Text("Sign in")
                             .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .frame(width: 350, height: 50)
+                            .background(Color.blue)
+                            .cornerRadius(10)
                     }
-
-                    .foregroundColor(.white)
-                    .frame(width: 350, height: 50)
-                    .background(Color.blue)
-                    .cornerRadius(10)
                     .opacity(isAnimating ? 0.9 : 0)
                     .animation(.easeInOut(duration: 1.5), value: isAnimating)
                     .onDisappear {

@@ -12,17 +12,30 @@ struct CircleImage: View {
     var widthAndHeight: CGFloat
     var lineWidth: CGFloat
     var shadow: CGFloat
+    var strokeColor: Color?
     
     var body: some View {
-        image
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-            .frame(width: widthAndHeight, height: widthAndHeight)
-            .clipShape(Circle())
-            .overlay {
-                Circle().stroke(.white, lineWidth: lineWidth)
-            }
-            .shadow(radius: shadow)
+        if let color = strokeColor{
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: widthAndHeight, height: widthAndHeight)
+                .clipShape(Circle())
+                .overlay {
+                    Circle().stroke(color, lineWidth: lineWidth)
+                }
+                .shadow(radius: shadow)
+        }else{
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: widthAndHeight, height: widthAndHeight)
+                .clipShape(Circle())
+                .overlay {
+                    Circle().stroke(.white, lineWidth: lineWidth)
+                }
+                .shadow(radius: shadow)
+        }
     }
 }
 

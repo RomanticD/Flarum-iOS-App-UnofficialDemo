@@ -14,14 +14,19 @@ struct CommentsView: View {
     @Environment(\.colorScheme) var colorScheme
     @Binding var userCommentData: [Datum8]
     @Binding var userCommentInclude: [Included8]
-    @Binding var avatarUrl: String
+    var avatarUrl: String
     @Binding var searchTerm: String
     @EnvironmentObject var appsettings: AppSettings
     @State private var currentPageOffset = 0
     @State private var isLoading = false
     @State private var hasNextPage = false
     @State private var hasPrevPage = false
-        
+    @State private var copiedText: String?
+    
+    private var isUserVIP: Bool {
+        return appsettings.vipUsernames.contains(username)
+    }
+    
     var filteredCommentData : [Datum8] {
         var filteredItems: [Datum8] = []
         
@@ -42,7 +47,8 @@ struct CommentsView: View {
                        hasNextPage: hasNextPage,
                        currentPage: $currentPageOffset,
                        isLoading: $isLoading,
-                       fetchDiscussion: fetchUserPostsInfo,
+                       fetchDiscussion: nil,
+                       fetchUserInfo: fetchUserCommentsData(completion:),
                        mode: .offset
         )
         
@@ -66,9 +72,14 @@ struct CommentsView: View {
                                     NavigationLink(value: item){
                                         VStack{
                                             HStack{
-                                                if  avatarUrl != ""{
-                                                    asyncImage(url: URL(string: avatarUrl), frameSize: 50, lineWidth: 1, shadow: 3)
-                                                        .padding(.top, 10)
+                                                if avatarUrl != ""{
+                                                    if isUserVIP{
+                                                        AvatarAsyncImage(url: URL(string: avatarUrl), frameSize: 50, lineWidth: 1.2, shadow: 3, strokeColor : Color(hex: "FFD700"))
+                                                            .padding(.top, 10)
+                                                    }else{
+                                                        AvatarAsyncImage(url: URL(string: avatarUrl), frameSize: 50, lineWidth: 1, shadow: 3)
+                                                            .padding(.top, 10)
+                                                    }
                                                 } else {
                                                     CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 50, lineWidth: 0.7, shadow: 2)
                                                         .opacity(0.3)
@@ -99,44 +110,11 @@ struct CommentsView: View {
                                                 CommentCount = await fetchCommentCount(DiscussionId)
                                             }
                                             
-                                            HStack {
-                                                Text(LocalizedStringKey(contentHtml.htmlConvertedWithoutUrl))
-                                                    .tracking(0.5)
-                                                    .lineSpacing(7)
-                                                    .foregroundColor(colorScheme == .dark ? Color(hex: "EFEFEF") : .black)
-                                                    .padding(.top)
-                                                    .padding(.leading, 3)
-                                                    .font(.system(size: 15))
-                                                
-                                                Spacer()
-                                            }
-                                            
-                                            if let imageUrls = extractImageURLs(from: contentHtml){
-                                                ForEach(imageUrls, id: \.self) { url in
-                                                    AsyncImage(url: URL(string: url)) { image in
-                                                        image
-                                                            .resizable()
-                                                            .aspectRatio(contentMode: .fit)
-                                                            .frame(width: 270)
-                                                            .cornerRadius(10)
-                                                            .shadow(radius: 3)
-                                                            .overlay(Rectangle()
-                                                                .stroke(.white, lineWidth: 1)
-                                                                .cornerRadius(10))
-                                                            .padding(.bottom)
-                                                    } placeholder: {
-                                                        ProgressView()
-                                                    }
-                                                    .onTapGesture {
-                                                        if let imgurl = URL(string: url) {
-                                                            UIApplication.shared.open(imgurl)
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                            CommentDisplayView(copiedText: $copiedText, contentHTML: item.attributes.contentHTML)
+
                                         }
                                         .navigationDestination(for: Datum8.self){item in
-                                            fastPostDetailView(
+                                            PostDetailView(
                                                 postTitle: findDiscussionTitle(id: item.relationships.discussion.data.id),
                                                 postID: item.relationships.discussion.data.id,
                                                 commentCount: CommentCount
@@ -150,21 +128,37 @@ struct CommentsView: View {
                     .id("AllUserComments")
                 }
                 .refreshable {
-                    Task{
-                        await fetchUserPostsInfo()
+                    fetchUserCommentsData{success in
+                        if success{
+                            
+                        }else{
+                            
+                        }
                     }
+                    
+//                    Task{
+//                        await fetchUserPostsInfo()
+//                    }
                 }
                 .onAppear{
-                    Task{
-                        await fetchUserPostsInfo()
+                    fetchUserCommentsData{success in
+                        if success{
+                            
+                        }else{
+                            
+                        }
                     }
+                    
+//                    Task{
+//                        await fetchUserPostsInfo()
+//                    }
                 }
                 .onChange(of: currentPageOffset){ _ in
                     withAnimation {
                         proxy.scrollTo("AllUserComments", anchor: .top)
                     }
                 }
-                .searchable(text: $searchTerm, prompt: "Search")
+//                .searchable(text: $searchTerm, prompt: "Search")
             }
         }
         .navigationTitle("TA的最新动态")
@@ -201,44 +195,75 @@ struct CommentsView: View {
         
         return 0
     }
-    
-    private func fetchUserPostsInfo() async {
-
-        guard let url = URL(string: "\(appsettings.FlarumUrl)/api/posts?filter%5Bauthor%5D=\(username)&sort=-createdAt&page%5Boffset%5D=\(currentPageOffset)") else{
-        print("Invalid URL")
-        return
+   
+    private func fetchUserCommentsData(completion: @escaping (Bool) -> Void) {
+        guard let url = URL(string: "\(appsettings.FlarumUrl)/api/posts?filter%5Bauthor%5D=\(username)&sort=-createdAt&page%5Boffset%5D=\(currentPageOffset)") else {
+            print("Invalid URL")
+            completion(false)
+            return
         }
-
-        do{
-           print("fetching from \(url)")
-            print("In CommentsView")
-            let (data, _) = try await URLSession.shared.data(from: url)
-
-            if let decodedResponse = try? JSONDecoder().decode(UserCommentData.self, from: data){
-                self.userCommentData = decodedResponse.data
-                self.userCommentInclude = decodedResponse.included
-
-                if decodedResponse.links.next == nil || decodedResponse.links.next == "" {
-                    self.hasNextPage = false
-                } else {
-                    self.hasNextPage = true
-                }
-                
-                if decodedResponse.links.prev != nil && currentPageOffset != 0 {
-                    self.hasPrevPage = true
-                } else {
-                    self.hasPrevPage = false
-                }
-
-                print("successfully decode user's comment data")
-                print("current page offset: \(currentPageOffset)")
-                print("has next page: \(hasNextPage)")
-                print("has prev page: \(hasPrevPage)")
+        
+        // 创建URLRequest
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET" // 使用GET方法
+        
+        // 设置请求头
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        if appsettings.token != "" {
+            request.setValue("Token \(appsettings.token)", forHTTPHeaderField: "Authorization")
+        } else {
+            print("Invalid Token or Not Logged in Yet!")
+        }
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error: \(error)")
+                completion(false)
+                return
             }
+            
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200...299).contains(httpResponse.statusCode) else {
+                print("Invalid response")
+                completion(false)
+                return
+            }
+            
+            // 在请求成功时处理数据
+            if let data = data {
+                print("fetching from \(url)")
+                print("In CommentsView")
+                
+                if let decodedResponse = try? JSONDecoder().decode(UserCommentData.self, from: data) {
+                    self.userCommentData = decodedResponse.data
+                    self.userCommentInclude = decodedResponse.included
 
-            } catch {
-            print("Invalid user's comment Data!" ,error)
-        }
+                    if decodedResponse.links.next == nil || decodedResponse.links.next == "" {
+                        self.hasNextPage = false
+                    } else {
+                        self.hasNextPage = true
+                    }
+                    
+                    if decodedResponse.links.prev != nil && currentPageOffset != 0 {
+                        self.hasPrevPage = true
+                    } else {
+                        self.hasPrevPage = false
+                    }
+
+                    print("successfully decode user's comment data")
+                    print("current page offset: \(currentPageOffset)")
+                    print("has next page: \(hasNextPage)")
+                    print("has prev page: \(hasPrevPage)")
+                } else {
+                    print("Invalid user's comment Data!")
+                }
+            }
+            
+            // 请求成功后调用回调
+            completion(true)
+            
+        }.resume()
     }
 }
 

@@ -18,7 +18,14 @@ class AppSettings: ObservableObject {
     @Published var FlarumName = "量见"
     @Published var token = ""
     @Published var username = ""
+    @Published var displayName = ""
+    @Published var avatarUrl = ""
     @Published var userId = 0
+    @Published var vipUsernames: [String] = []
+    
+    init() {
+        vipUsernames.append(contentsOf: ["RomanticD"])
+    }
     
     func refreshPost() {
         refreshPostView.toggle()

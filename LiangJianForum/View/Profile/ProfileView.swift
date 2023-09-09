@@ -28,175 +28,236 @@ struct ProfileView: View {
     @State private var showChangeProfilePage = false
     @State private var buttonText = "保存"
 
+    private var isUserVIP: Bool {
+        return appSettings.vipUsernames.contains(username)
+    }
+    
     var body: some View {
-        VStack{
-            HStack {
-                Spacer()
-                
-                Button(action: { logout() }) {
-                    Text("Sign out")
-                        .font(.system(size: 15))
-                        .foregroundColor(.blue)
-                        .bold()
-                        .padding(.trailing)
-                }
-            }
-            
-            HStack{
-                if avatarUrl != "" {
-                    asyncImage(url: URL(string: avatarUrl), frameSize: 120, lineWidth: 2, shadow: 6)
-                        .padding(.bottom)
-                } else {
-                    CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 120, lineWidth: 1, shadow: 3)
-                        .opacity (0.3)
-                        .padding(.bottom)
-                }
-
-            }
-            List{
-                Section{
-                    HStack {
-                        Text("🎊 Username: ").foregroundStyle(.secondary)
-                        Text("\(username)").bold()
-                    }
-                    HStack {
-                        Text("🎎 DisplayName: ").foregroundStyle(.secondary)
-                        Text("\(displayName)").bold()
-                    }
-                    HStack {
-                        Text("🎉 Join Time:").foregroundStyle(.secondary)
-                        Text("\(joinTime)").bold()
-                    }
-                    HStack{
-                        Text("🎀 Last seen at:").foregroundStyle(.secondary)
-                        if lastSeenAt.isEmpty{
-                            Text("Information has been hidden")
-                                .bold()
+        ZStack (alignment: .topTrailing){
+            VStack{
+                HStack{
+                    if avatarUrl != "" {
+                        if isUserVIP{
+                            AvatarAsyncImage(url: URL(string: avatarUrl), frameSize: 130, lineWidth: 2.5, shadow: 6, strokeColor : Color(hex: "FFD700"))
+                                .padding(.bottom)
                         }else{
-                            Text("\(lastSeenAt)").bold()
+                            AvatarAsyncImage(url: URL(string: avatarUrl), frameSize: 130, lineWidth: 2, shadow: 6)
+                                .padding(.bottom)
                         }
+                    } else {
+                        CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 120, lineWidth: 1, shadow: 3)
+                            .opacity (0.3)
+                            .padding(.bottom)
                     }
-                } header: {
-                    Text("Account")
+
                 }
-                
-                Section("Flarum Contributions"){
-                    HStack {
-                        Text("🏖️ Discussion Count: ").foregroundStyle(.secondary)
-                        Text("\(discussionCount)").bold()
-                    }
-                    HStack{
-                        Text("🧬 Comment Count: ").foregroundStyle(.secondary)
-                        Text("\(commentCount)").bold()
-                    }
-                    if self.money != -1 {
+                List{
+                    Section{
                         HStack {
-                            Text("💰 money: ").foregroundStyle(.secondary)
-                            if self.money.truncatingRemainder(dividingBy: 1) == 0 {
-                                Text(String(format: "%.0f", self.money)).bold()
-                            } else {
-                                Text(String(format: "%.1f", self.money)).bold()
+                            Text("🎊 Username: ").foregroundStyle(.secondary)
+                            Text("\(username)").bold()
+                        }
+                        HStack {
+                            Text("🎎 DisplayName: ").foregroundStyle(.secondary)
+                            Text("\(displayName)").bold()
+                        }
+                        HStack {
+                            Text("🎉 Join Time:").foregroundStyle(.secondary)
+                            Text("\(joinTime)").bold()
+                        }
+                        HStack{
+                            Text("🎀 Last seen at:").foregroundStyle(.secondary)
+                            if lastSeenAt.isEmpty{
+                                Text("Information has been hidden")
+                                    .bold()
+                                    .foregroundStyle(.secondary)
+                            }else{
+                                Text("\(lastSeenAt)").bold()
+                            }
+                        }
+                    } header: {
+                        Text("Account")
+                    }
+                    
+                    Section("Flarum Contributions"){
+                        HStack {
+                            Text("🏖️ Discussion Count: ").foregroundStyle(.secondary)
+                            Text("\(discussionCount)").bold()
+                        }
+                        HStack{
+                            Text("🧬 Comment Count: ").foregroundStyle(.secondary)
+                            Text("\(commentCount)").bold()
+                        }
+                        if self.money != -1 {
+                            HStack {
+                                Text("💰 money: ").foregroundStyle(.secondary)
+                                if self.money.truncatingRemainder(dividingBy: 1) == 0 {
+                                    Text(String(format: "%.0f", self.money)).bold()
+                                } else {
+                                    Text(String(format: "%.1f", self.money)).bold()
+                                }
                             }
                         }
                     }
-                }
-                
-                Section("Authentication Information") {
-                    if let include = include, !include.isEmpty {
-                        let groups = include.filter { $0.type == "groups" }
-                        if !groups.isEmpty {
-                            ForEach(groups, id: \.id) { item in
-                                HStack{
-                                    if let singular = item.attributes.nameSingular {
-                                        Text("✅ \(singular): ").foregroundStyle(.secondary)
-                                    }
+                    
+                    Section("Authentication Information") {
+                        if let include = include, !include.isEmpty {
+                            let groups = include.filter { $0.type == "groups" }
+                            if !groups.isEmpty {
+                                ForEach(groups, id: \.id) { item in
+                                    HStack{
+                                        if let singular = item.attributes.nameSingular {
+                                            Text("✅ \(singular): ").foregroundStyle(.secondary)
+                                        }
 
-                                    if let plural = item.attributes.namePlural {
-                                        Text("\(plural)").bold()
+                                        if let plural = item.attributes.namePlural {
+                                            Text("\(plural)").bold()
+                                        }
                                     }
                                 }
+                            } else {
+                                Text("No authentication information available")
+                                    .foregroundColor(.secondary)
+                                    .italic()
                             }
                         } else {
                             Text("No authentication information available")
                                 .foregroundColor(.secondary)
                                 .italic()
                         }
-                    } else {
-                        Text("No authentication information available")
-                            .foregroundColor(.secondary)
-                            .italic()
                     }
-                }
 
-                Section("Earned Badges") {
-                    if let include = include, !include.isEmpty {
-                        let groups = include.filter { $0.type == "badges" }
-                        if !groups.isEmpty {
-                            ForEach(groups, id: \.id) { item in
-                                HStack{
-                                    if let badgeName = item.attributes.name {
-                                        Text("🎖️ \(badgeName): ").foregroundStyle(.secondary)
-                                    }
-
-                                    if let badgeDescription = item.attributes.description {
-                                        Text("\(badgeDescription)").bold()
+                    Section("Earned Badges") {
+                        if let include = include, !include.isEmpty {
+                            let groups = include.filter { $0.type == "badges" }
+                            if !groups.isEmpty {
+                                ScrollView(.horizontal, showsIndicators: false){
+                                    HStack{
+                                        ForEach(groups, id: \.id) { item in
+                                            NavigationLink(value: item) {
+                                                Button(action: {
+                                                }) {
+                                                    if let badgeName = item.attributes.name {
+                                                        Text("🎖️ \(badgeName)")
+                                                            .bold()
+                                                            .foregroundColor(Color.white)
+                                                            .font(.system(size: 12))
+                                                            .padding()
+                                                            .lineLimit(1)
+                                                            .background(Color(hex: removeFirstCharacter(from: item.attributes.backgroundColor ?? "#6168d0")))
+                                                            .frame(height: 36)
+                                                            .cornerRadius(18)
+                                                        
+                                                    }
+                                                }
+                                                .navigationDestination(for: UserInclude.self) { item in
+                                                    Text(item.attributes.description ?? "No Description")
+                                                }
+                                            }
+      
+                                        }
                                     }
                                 }
+                                
+    //                            ForEach(groups, id: \.id) { item in
+    //                                NavigationLink(value: item) {
+    //                                    HStack{
+    //                                        Spacer()
+    //
+    //                                        if let badgeName = item.attributes.name {
+    //                                            Text("🎖️ \(badgeName)")
+    //                                                .bold()
+    //                                                .foregroundColor(Color.white)
+    //                                                .font(.system(size: 12))
+    //                                                .padding()
+    //                                                .lineLimit(1)
+    //                                                .background(Color(hex: removeFirstCharacter(from: item.attributes.backgroundColor ?? "#6168d0")))
+    //                                                .frame(height: 36)
+    //                                                .cornerRadius(18)
+    //                                        }
+    //
+    //                                        Spacer()
+    //                                    }
+    //                                    .navigationDestination(for: UserInclude.self) { item in
+    //                                        Text(item.attributes.description ?? "No Description")
+    //                                    }
+    //                                }
+    //                            }
+                            } else {
+                                Text("No Badges Earned Yet")
+                                    .foregroundColor(.secondary)
+                                    .italic()
                             }
                         } else {
                             Text("No Badges Earned Yet")
                                 .foregroundColor(.secondary)
                                 .italic()
                         }
-                    } else {
-                        Text("No Badges Earned Yet")
-                            .foregroundColor(.secondary)
-                            .italic()
+                    }
+                    .listRowInsets(EdgeInsets())
+                    .listRowSeparator(.hidden)
+
+                    Section{
+                        HStack {
+                            Spacer()
+                            Button(action: {
+                                saveProfile()
+                            }) {
+                                Text("Change Profile")
+                                    .bold()
+                            }
+                            .disabled(true) //Need your Api keys to do so
+                            Spacer()
+                        }
                     }
                 }
+                .textSelection(.enabled)
+            }
+            .sheet(isPresented: $showChangeProfilePage) {
+                ChangeProfileDetail().environmentObject(appSettings)
+                    .presentationDetents([.height(200)])
+            }
+            .task{
+                await fetchUserProfile()
+            }
+            .alert(isPresented: $showLogoutAlert) {
+                Alert(
+                    title: Text("Sign out"),
+                    message: Text("Quit?"),
+                    primaryButton: .default(Text("Confirm"), action: {
+                        logoutConfirmed()
+                    }),
+                    secondaryButton: .cancel(Text("Cancel"))
+                )
+            }
+            .refreshable {
+                await fetchUserProfile()
+            }
+    //        .onAppear {
+    //            newIntroduction = introduction
+    //            newNickName = nickName
+    //        }
+            .background(colorScheme == .dark ? LinearGradient(gradient: Gradient(colors: [Color(hex: "780206"), Color(hex: "061161")]), startPoint: .leading, endPoint: .trailing) : LinearGradient(gradient: Gradient(colors: [Color(hex: "A1FFCE"), Color(hex: "FAFFD1")]), startPoint: .leading, endPoint: .trailing))
+            
+            HStack {
+                Spacer()
 
-                Section{
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            saveProfile()
-                        }) {
-                            Text("Change Profile")
-                                .bold()
+                Menu {
+                    Section(NSLocalizedString("profile_operations", comment: "")){
+                        Button {
+                            //选择退出逻辑
+                            logout()
+                        } label: {
+                            Label(NSLocalizedString("choose_to_quit", comment: ""), systemImage: "iphone.and.arrow.forward")
                         }
-                        .disabled(true) //Need your Api keys to do so
-                        Spacer()
                     }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                        .font(.title2)
+                        .padding(.trailing)
                 }
             }
-            .textSelection(.enabled)
         }
-        .sheet(isPresented: $showChangeProfilePage) {
-            ChangeProfileDetail().environmentObject(appSettings)
-                .presentationDetents([.height(200)])
-        }
-        .task{
-            await fetchUserProfile()
-        }
-        .alert(isPresented: $showLogoutAlert) {
-            Alert(
-                title: Text("Sign out"),
-                message: Text("Quit?"),
-                primaryButton: .default(Text("Confirm"), action: {
-                    logoutConfirmed()
-                }),
-                secondaryButton: .cancel(Text("Cancel"))
-            )
-        }
-        .refreshable {
-            await fetchUserProfile()
-        }
-//        .onAppear {
-//            newIntroduction = introduction
-//            newNickName = nickName
-//        }
-        .background(colorScheme == .dark ? LinearGradient(gradient: Gradient(colors: [Color(hex: "780206"), Color(hex: "061161")]), startPoint: .leading, endPoint: .trailing) : LinearGradient(gradient: Gradient(colors: [Color(hex: "A1FFCE"), Color(hex: "FAFFD1")]), startPoint: .leading, endPoint: .trailing))
-        
     }
 
     func saveProfile() {
@@ -251,7 +312,7 @@ struct ProfileView: View {
                 if let hasLastSeenTime = decodedResponse.data.attributes.lastSeenAt{
                     self.lastSeenAt = calculateTimeDifference(from: hasLastSeenTime)
                 }
-//                self.lastSeenAt =  calculateTimeDifference(from: decodedResponse.data.attributes.lastSeenAt)
+                
                 self.discussionCount = decodedResponse.data.attributes.discussionCount
                 self.commentCount = decodedResponse.data.attributes.commentCount
                 
@@ -276,9 +337,4 @@ struct ProfileView: View {
 
 }
 
-//struct ProfileView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ProfileView().environmentObject(AppSettings())
-//    }
-//}
 

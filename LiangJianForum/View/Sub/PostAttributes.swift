@@ -11,7 +11,7 @@ struct PostAttributes: View {
     var isSticky: Bool
     var isFrontPage: Bool?
     var isLocked: Bool
-    var hasBestAnswer: Bool
+    var hasBestAnswer: Bool?
     var hasPoll: Bool?
     
     var body: some View {
@@ -31,13 +31,15 @@ struct PostAttributes: View {
                         .opacity(0.8)
                 }
             }
-            
-            if hasBestAnswer{
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 15))
-                    .foregroundColor(.green)
-                    .opacity(0.8)
+            if let bestAnswer = hasBestAnswer{
+                if bestAnswer{
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 15))
+                        .foregroundColor(.green)
+                        .opacity(0.8)
+                }
             }
+            
         
             if isLocked{
                 Image(systemName: "lock.circle.fill")

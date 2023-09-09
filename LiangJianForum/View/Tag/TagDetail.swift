@@ -59,7 +59,7 @@ struct TagDetail: View {
     var body: some View {
         VStack {
             if discussionData.isEmpty {
-                ProgressView()
+                TagDetailViewContentLoader(selectedTag: selectedTag)
             } else {
                 if hasPrevPage || hasNextPage {
                     HStack{
@@ -140,9 +140,12 @@ struct TagDetail: View {
                                                 //MARK: 头像及标题
                                                 HStack{
                                                     if let user = findUser(with: item.relationships.user.data.id) {
-                                                        
-                                                        if let avatarURL = user.attributes.avatarUrl {
-                                                            asyncImage(url: URL(string: avatarURL), frameSize: 40, lineWidth: 1, shadow: 3)
+                                                        if let avatarURL = user.attributes.avatarUrl, let user_name = user.attributes.username {
+                                                            if isUserVip(username: user_name){
+                                                                AvatarAsyncImage(url: URL(string: avatarURL), frameSize: 40, lineWidth: 1.2, shadow: 3, strokeColor : Color(hex: "FFD700"))
+                                                            }else{
+                                                                AvatarAsyncImage(url: URL(string: avatarURL), frameSize: 40, lineWidth: 1, shadow: 3)
+                                                            }
                                                         } else {
                                                             CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 40, lineWidth: 1, shadow: 3)
                                                                 .opacity (0.3)
@@ -163,6 +166,7 @@ struct TagDetail: View {
                                                                 .bold()
                                                                 .fixedSize(horizontal: false, vertical: true)
                                                                 .padding(.leading)
+                                                                .lineLimit(2)
                                                             Spacer()
                                                         }
 
@@ -232,25 +236,31 @@ struct TagDetail: View {
                         }
                     }
                     .textSelection(.enabled)
-                    .searchable(text: $searchTerm, prompt: "Search")
-                    .toolbar {
-                        Button {
-                            showingPostingArea.toggle()
-                        } label: {
-                            Image(systemName: "plus.bubble.fill")
-                        }
-                    }
+//                    .searchable(text: $searchTerm, prompt: "Search")
                     .sheet(isPresented: $showingPostingArea) {
                         newPostView().environmentObject(appsettings)
-                            .presentationDetents([.height(480)])
+                            .presentationDetents([.medium, .large])
                     }
                     .toolbarBackground(.visible, for: .navigationBar)
                     .navigationTitle(self.selectedTag.attributes.name)
                     .toolbarBackground(selectedTag.attributes.color.isEmpty ? Color.gray.opacity(0.8) : Color(hex: removeFirstCharacter(from: selectedTag.attributes.color)).opacity(0.8), for: .automatic)
                     .navigationBarTitleDisplayMode(.inline)
                     .navigationDestination(for: Datum.self){item in
-                        fastPostDetailView(postTitle: item.attributes.title, postID: item.id, commentCount: item.attributes.commentCount).environmentObject(appsettings)
+                        PostDetailView(postTitle: item.attributes.title, postID: item.id, commentCount: item.attributes.commentCount).environmentObject(appsettings)
                     }
+                    .navigationBarItems(trailing:
+                        Menu {
+                            Section(NSLocalizedString("tabbar_operations", comment: "")){
+                                Button {
+                                    showingPostingArea.toggle()
+                                } label: {
+                                    Label(NSLocalizedString("start_new_discussion_message", comment: ""), systemImage: "plus.bubble.fill")
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "ellipsis.circle")
+                        }
+                    )
                 }
             }
         }
@@ -270,16 +280,17 @@ struct TagDetail: View {
 
     }
     
-    private func checkIfHasBestAnswer(dataIn: HasBestAnswer) -> Bool {
+    private func checkIfHasBestAnswer(dataIn: HasBestAnswer?) -> Bool {
         var hasBestAnswer = false
         
-        switch dataIn {
-        case .integer:
-            hasBestAnswer = true
-        default:
-            hasBestAnswer = false
+        if let bestAnswerData = dataIn{
+            switch bestAnswerData {
+            case .integer:
+                hasBestAnswer = true
+            default:
+                hasBestAnswer = false
+            }
         }
-        
         return hasBestAnswer
     }
     
@@ -290,6 +301,10 @@ struct TagDetail: View {
             }
         }
         return nil
+    }
+    
+    private func isUserVip(username: String) -> Bool{
+        return appsettings.vipUsernames.contains(username)
     }
     
     private func fetchTagsDetailPosts() async {
