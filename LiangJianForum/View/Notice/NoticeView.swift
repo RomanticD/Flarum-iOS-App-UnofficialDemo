@@ -55,13 +55,12 @@ struct NoticeView: View {
                                 avatarUrl: appsettings.avatarUrl,
                                 searchTerm: $searchTerm
                             )
-                            .navigationTitle("Notification Center")
                         }else if selection == NSLocalizedString("like_sector", comment: ""){
-                            List{
-                                Section("🤩Like"){
-                                    Text("Developing...")
-                                }
-                            }
+                            LikedCommentsView(
+                                              userId: String(appsettings.userId),
+                                              userCommentInclude: $userCommentInclude,
+                                              searchTerm: $searchTerm
+                            )
                         }else if selection == NSLocalizedString("money_sector", comment: ""){
                             MoneyConditionRecord(Usermoney: nil, userId: String(appsettings.userId))
                         }else{
@@ -96,6 +95,16 @@ struct NoticeView: View {
                             Button {
                                 //选择评论
                                 proxy.scrollTo("Top", anchor: .top)
+                                
+                                clearData()
+                                fetchUserCommentsData { success in
+                                    if success{
+                                        
+                                    }else{
+                                        
+                                    }
+                                }
+                                
                                 selection = NSLocalizedString("comment_sector", comment: "")
                             } label: {
                                 Label(NSLocalizedString("comment_sector", comment: ""), systemImage: "bubble.left")
@@ -104,14 +113,34 @@ struct NoticeView: View {
                             Button {
                                 //选择点赞
                                 proxy.scrollTo("Top", anchor: .top)
+                                
+                                clearData()
+                                fetchUserCommentsData { success in
+                                    if success{
+                                        
+                                    }else{
+                                        
+                                    }
+                                }
+                                
                                 selection = NSLocalizedString("like_sector", comment: "")
                             } label: {
                                 Label(NSLocalizedString("like_sector", comment: ""), systemImage: "heart")
                             }
                             
                             Button {
-                                //选择关注
+                                //选择查看资产
                                 proxy.scrollTo("TopWithoutSlide", anchor: .top)
+                                
+                                clearData()
+                                fetchUserCommentsData { success in
+                                    if success{
+                                        
+                                    }else{
+                                        
+                                    }
+                                }
+                                
                                 selection = NSLocalizedString("money_sector", comment: "")
                             } label: {
                                 Label(NSLocalizedString("money_sector", comment: ""), systemImage: "dollarsign.circle")
@@ -124,6 +153,11 @@ struct NoticeView: View {
             }
         }
         
+    }
+    
+    private func clearData(){
+        self.userCommentData = []
+        self.userCommentInclude = []
     }
     
     private func fetchUserCommentsData(completion: @escaping (Bool) -> Void) {

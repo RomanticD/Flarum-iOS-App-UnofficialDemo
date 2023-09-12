@@ -41,7 +41,6 @@ struct CommentsViewContentLoader: View {
                         }
                         .id("AllUserComments")
                     }
-                    .navigationTitle("Notification Center")
                 }
                 .id("Top")
                 .navigationTitle("Notification Center")

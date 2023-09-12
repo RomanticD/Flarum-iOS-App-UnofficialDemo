@@ -24,14 +24,17 @@ struct Attributes2: Codable {
     let slug: String
     let joinTime: String
     let discussionCount, commentCount: Int
-    let lastSeenAt: String?
+    let lastSeenAt, cover, bioHtml: String?
     let isAdmin: Bool?
     let money: Double?
+    let canCheckin, canCheckinContinuous: Bool?
+    let totalContinuousCheckIn: Int?
+    
 
     enum CodingKeys: String, CodingKey {
         case username, displayName
         case avatarURL = "avatarUrl"
-        case slug, joinTime, discussionCount, commentCount, lastSeenAt, isAdmin, money
+        case slug, joinTime, discussionCount, commentCount, lastSeenAt, cover, bioHtml, isAdmin, money, canCheckin, canCheckinContinuous, totalContinuousCheckIn
     }
 }
 

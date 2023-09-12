@@ -14,17 +14,26 @@ class AppSettings: ObservableObject {
     @Published var refreshReplyView = false
     @Published var refreshProfileView = false
     @Published var isLoggedIn = true
+    @Published var isAdmin = false
+    @Published var isVIP = false
     @Published var FlarumUrl = "https://bbs.cjlu.cc"
     @Published var FlarumName = "量见"
     @Published var token = ""
     @Published var username = ""
     @Published var displayName = ""
     @Published var avatarUrl = ""
+    @Published var identification = ""
+    @Published var password = ""
     @Published var userId = 0
+    @Published var userExp = 0
     @Published var vipUsernames: [String] = []
     
+    @Published var canCheckIn = false
+    @Published var canCheckinContinuous = false
+    @Published var totalContinuousCheckIn = 0
+    
     init() {
-        vipUsernames.append(contentsOf: ["RomanticD"])
+        vipUsernames.append(contentsOf: ["RomanticD", "FoskyM", "zxypp"])
     }
     
     func refreshPost() {

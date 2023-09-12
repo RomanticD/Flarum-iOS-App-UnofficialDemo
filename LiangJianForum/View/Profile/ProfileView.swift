@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UIKit
+import Shimmer
 
 struct ProfileView: View {
     @State private var username: String = ""
@@ -14,6 +15,8 @@ struct ProfileView: View {
     @State private var avatarUrl: String = ""
     @State private var joinTime: String = ""
     @State private var lastSeenAt: String = ""
+    @State private var bioHtml: String = ""
+    @State private var cover: String = ""
     @State private var discussionCount: Int = 0
     @State private var commentCount: Int = 0
     @State private var money: Double = -1
@@ -37,7 +40,7 @@ struct ProfileView: View {
             VStack{
                 HStack{
                     if avatarUrl != "" {
-                        if isUserVIP{
+                        if appSettings.isVIP{
                             AvatarAsyncImage(url: URL(string: avatarUrl), frameSize: 130, lineWidth: 2.5, shadow: 6, strokeColor : Color(hex: "FFD700"))
                                 .padding(.bottom)
                         }else{
@@ -51,7 +54,55 @@ struct ProfileView: View {
                     }
 
                 }
+                .background(
+                    AsyncImage(url: URL(string: cover)) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 400, height: 350)
+                            .opacity(0.8)
+                            .padding(.bottom)
+                    } placeholder: {
+                    }
+                )
+                
                 List{
+                    if !cover.isEmpty{
+                        Section("Bio"){
+                            if appSettings.isVIP{
+                                Text(bioHtml.htmlConvertedWithoutUrl)
+                                    .multilineTextAlignment(.center)
+                                    .tracking(0.5)
+                                    .bold()
+                                    .overlay {
+                                        LinearGradient(
+                                            colors: [.purple, .blue, .mint, .green],
+                                            startPoint: .leading,
+                                            endPoint: .trailing
+                                        )
+                                        .mask(
+                                            Text(bioHtml.htmlConvertedWithoutUrl)
+                                                .multilineTextAlignment(.center)
+                                                .tracking(0.5)
+                                                .bold()
+                                        )
+                                    }
+                            }else{
+                                Text(bioHtml.htmlConvertedWithoutUrl)
+                                    .multilineTextAlignment(.center)
+                                    .tracking(0.5)
+                                    .bold()
+                            }
+                        }
+                    }
+                    
+                    Section{
+                        LevelProgressView(isUserVip: appSettings.isVIP, currentExp: appSettings.userExp)
+                    } header: {
+                        Text("Flarum Level").padding(.leading)
+                    }
+                    .listRowInsets(EdgeInsets())
+                    
                     Section{
                         HStack {
                             Text("🎊 Username: ").foregroundStyle(.secondary)
@@ -59,7 +110,27 @@ struct ProfileView: View {
                         }
                         HStack {
                             Text("🎎 DisplayName: ").foregroundStyle(.secondary)
-                            Text("\(displayName)").bold()
+                            
+                            if appSettings.isVIP{
+                                Text("\(displayName)")
+                                    .multilineTextAlignment(.center)
+                                    .bold()
+                                    .overlay {
+                                        LinearGradient(
+                                            colors: [Color(hex: "7F7FD5"), Color(hex: "91EAE4")],
+                                            startPoint: .leading,
+                                            endPoint: .trailing
+                                        )
+                                        .mask(
+                                            Text("\(displayName)")
+                                                .multilineTextAlignment(.center)
+                                                .bold()
+                                        )
+                                    }
+                            }else {
+                                Text("\(displayName)")
+                                    .bold()
+                            }
                         }
                         HStack {
                             Text("🎉 Join Time:").foregroundStyle(.secondary)
@@ -185,11 +256,13 @@ struct ProfileView: View {
     //                            }
                             } else {
                                 Text("No Badges Earned Yet")
+                                    .padding(.leading)
                                     .foregroundColor(.secondary)
                                     .italic()
                             }
                         } else {
                             Text("No Badges Earned Yet")
+                                .padding(.leading)
                                 .foregroundColor(.secondary)
                                 .italic()
                         }
@@ -233,11 +306,15 @@ struct ProfileView: View {
             .refreshable {
                 await fetchUserProfile()
             }
-    //        .onAppear {
-    //            newIntroduction = introduction
-    //            newNickName = nickName
-    //        }
+            .onAppear {
+//                newIntroduction = introduction
+//                newNickName = nickName
+                Task{
+                    await fetchUserProfile()
+                }
+            }
             .background(colorScheme == .dark ? LinearGradient(gradient: Gradient(colors: [Color(hex: "780206"), Color(hex: "061161")]), startPoint: .leading, endPoint: .trailing) : LinearGradient(gradient: Gradient(colors: [Color(hex: "A1FFCE"), Color(hex: "FAFFD1")]), startPoint: .leading, endPoint: .trailing))
+
             
             HStack {
                 Spacer()
@@ -298,6 +375,19 @@ struct ProfileView: View {
             if let decodedResponse = try? JSONDecoder().decode(UserData.self, from: data){
                 appSettings.username = decodedResponse.data.attributes.username
                 
+                if let canCheckIn = decodedResponse.data.attributes.canCheckin{
+                    appSettings.canCheckIn = canCheckIn
+                }
+                
+                if let canCheckinContinuous = decodedResponse.data.attributes.canCheckinContinuous{
+                    appSettings.canCheckinContinuous = canCheckinContinuous
+                }
+                
+                if let totalContinuousCheckIn = decodedResponse.data.attributes.totalContinuousCheckIn{
+                    appSettings.totalContinuousCheckIn = totalContinuousCheckIn
+                }
+                
+                
                 if let includes = decodedResponse.included{
                     self.include = includes
                 }
@@ -319,22 +409,23 @@ struct ProfileView: View {
                 if let flarumMoney = decodedResponse.data.attributes.money{
                     self.money = flarumMoney
                 }
+                
+                if let cover = decodedResponse.data.attributes.cover{
+                    self.cover = cover
+                }
+                
+                if let bioHtml = decodedResponse.data.attributes.bioHtml{
+                    self.bioHtml = bioHtml
+                }
 
                 print("Successfully decoded user data")
                 print("Username: \(self.username)")
                 print("Display Name: \(self.displayName)")
-                print("Avatar URL: \(self.avatarUrl)")
-                print("Join Time: \(self.joinTime)")
-                print("Last Seen At: \(self.lastSeenAt)")
-                print("Discussion Count: \(self.discussionCount)")
-                print("Comment Count: \(self.commentCount)")
-                print("money: \(self.money)")
             }
         } catch {
             print("Invalid user Data!" ,error)
         }
     }
-
 }
 
 

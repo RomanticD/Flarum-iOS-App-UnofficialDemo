@@ -15,6 +15,10 @@
 		07232C0D2AA9E395004709D2 /* MoneyConditionRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07232C0C2AA9E395004709D2 /* MoneyConditionRecord.swift */; };
 		07232C0F2AA9F674004709D2 /* MoneyConditionRecordContentLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07232C0E2AA9F674004709D2 /* MoneyConditionRecordContentLoader.swift */; };
 		072636452A4BD82D0030DF8A /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072636442A4BD82D0030DF8A /* AppSettings.swift */; };
+		072DA5212AAC8438000B2F1F /* LikedCommentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072DA5202AAC8438000B2F1F /* LikedCommentsView.swift */; };
+		072DA5232AAD5033000B2F1F /* CheckinButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072DA5222AAD5033000B2F1F /* CheckinButton.swift */; };
+		072DA5252AAF1350000B2F1F /* LevelProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072DA5242AAF1350000B2F1F /* LevelProgressView.swift */; };
+		072DA5282AAF87C8000B2F1F /* Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = 072DA5272AAF87C8000B2F1F /* Shimmer */; };
 		072E24662A3F02DC00E58EE9 /* CircleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072E24652A3F02DC00E58EE9 /* CircleImage.swift */; };
 		073C192F2A4C058F001A2411 /* TextFieldWithIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C192E2A4C058F001A2411 /* TextFieldWithIcon.swift */; };
 		073C19312A4C7675001A2411 /* newReply.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C19302A4C7675001A2411 /* newReply.swift */; };
@@ -72,6 +76,10 @@
 		07232C0C2AA9E395004709D2 /* MoneyConditionRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyConditionRecord.swift; sourceTree = "<group>"; };
 		07232C0E2AA9F674004709D2 /* MoneyConditionRecordContentLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyConditionRecordContentLoader.swift; sourceTree = "<group>"; };
 		072636442A4BD82D0030DF8A /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		072DA5202AAC8438000B2F1F /* LikedCommentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedCommentsView.swift; sourceTree = "<group>"; };
+		072DA5222AAD5033000B2F1F /* CheckinButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckinButton.swift; sourceTree = "<group>"; };
+		072DA5242AAF1350000B2F1F /* LevelProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelProgressView.swift; sourceTree = "<group>"; };
+		072DA5292AB01AA2000B2F1F /* FlarumiOSApp-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "FlarumiOSApp-Info.plist"; sourceTree = "<group>"; };
 		072E24652A3F02DC00E58EE9 /* CircleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImage.swift; sourceTree = "<group>"; };
 		073C192E2A4C058F001A2411 /* TextFieldWithIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithIcon.swift; sourceTree = "<group>"; };
 		073C19302A4C7675001A2411 /* newReply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newReply.swift; sourceTree = "<group>"; };
@@ -127,6 +135,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				072DA5282AAF87C8000B2F1F /* Shimmer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,6 +162,7 @@
 				07232C0C2AA9E395004709D2 /* MoneyConditionRecord.swift */,
 				074EF28E2A50500600D486A3 /* NoticeView.swift */,
 				077475392A643FC700581DCE /* CommentsView.swift */,
+				072DA5202AAC8438000B2F1F /* LikedCommentsView.swift */,
 			);
 			path = Notice;
 			sourceTree = "<group>";
@@ -212,6 +222,7 @@
 		07A867F62A3D879E00311F65 = {
 			isa = PBXGroup;
 			children = (
+				072DA5292AB01AA2000B2F1F /* FlarumiOSApp-Info.plist */,
 				07A868012A3D879E00311F65 /* LiangJianForum */,
 				07A868002A3D879E00311F65 /* Products */,
 			);
@@ -319,6 +330,8 @@
 				07AD7C312A9DC1970008ADD6 /* PostAttributes.swift */,
 				07AD7C392AA048C90008ADD6 /* PollChartView.swift */,
 				0716E6292AA445B700DAF3B7 /* CommentDisplayView.swift */,
+				072DA5222AAD5033000B2F1F /* CheckinButton.swift */,
+				072DA5242AAF1350000B2F1F /* LevelProgressView.swift */,
 			);
 			path = Sub;
 			sourceTree = "<group>";
@@ -339,6 +352,9 @@
 			dependencies = (
 			);
 			name = FlarumiOSApp;
+			packageProductDependencies = (
+				072DA5272AAF87C8000B2F1F /* Shimmer */,
+			);
 			productName = LiangJianForum;
 			productReference = 07A867FF2A3D879E00311F65 /* FlarumiOSApp.app */;
 			productType = "com.apple.product-type.application";
@@ -368,6 +384,9 @@
 				"zh-Hans",
 			);
 			mainGroup = 07A867F62A3D879E00311F65;
+			packageReferences = (
+				072DA5262AAF87C8000B2F1F /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
+			);
 			productRefGroup = 07A868002A3D879E00311F65 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -427,11 +446,14 @@
 				07A37BD22A9866DB00915EB1 /* HeaderSlideView.swift in Sources */,
 				07C57DD22A606A4300DCADB6 /* TagButton.swift in Sources */,
 				07EF7C9E2A49B998008E41D4 /* TagField.swift in Sources */,
+				072DA5232AAD5033000B2F1F /* CheckinButton.swift in Sources */,
 				07232C082AA8738A004709D2 /* TagDetailViewContentLoader.swift in Sources */,
 				07EF7CA42A49BE16008E41D4 /* TagDetail.swift in Sources */,
 				074EF28F2A50500600D486A3 /* NoticeView.swift in Sources */,
 				07E1FB212A3DB34000F9049B /* RegistrationView.swift in Sources */,
+				072DA5212AAC8438000B2F1F /* LikedCommentsView.swift in Sources */,
 				07697A662A53EF8E009C744E /* UserData.swift in Sources */,
+				072DA5252AAF1350000B2F1F /* LevelProgressView.swift in Sources */,
 				07EF7CB22A4AE343008E41D4 /* LikesAndMentionedButton.swift in Sources */,
 				072636452A4BD82D0030DF8A /* AppSettings.swift in Sources */,
 				073C19352A4D47E1001A2411 /* PostView.swift in Sources */,
@@ -604,7 +626,8 @@
 				DEVELOPMENT_TEAM = 5S7CV6Y7WH;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = FlarumiOSApp;
+				INFOPLIST_FILE = "FlarumiOSApp-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "量见";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -642,7 +665,8 @@
 				DEVELOPMENT_TEAM = 5S7CV6Y7WH;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = FlarumiOSApp;
+				INFOPLIST_FILE = "FlarumiOSApp-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "量见";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -689,6 +713,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		072DA5262AAF87C8000B2F1F /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/markiv/SwiftUI-Shimmer";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		072DA5272AAF87C8000B2F1F /* Shimmer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 072DA5262AAF87C8000B2F1F /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */;
+			productName = Shimmer;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 07A867F72A3D879E00311F65 /* Project object */;
 }

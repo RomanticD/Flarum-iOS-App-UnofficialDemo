@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shimmer
 
 struct PostDetailView: View {
     let postTitle: String
@@ -17,15 +18,16 @@ struct PostDetailView: View {
     @State private var selectedSortOption = NSLocalizedString("default_sort_option", comment: "")
     @State private var currentPage = 1
     @State private var isLoading = false
+    @State private var enableDelete = false
     @State private var isSubViewLoading = false
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var appsettings: AppSettings
     @State private var showingPostingArea = false
     @State private var isLiked = false
     @State private var isReplied = false
-    @State private var includesTags = [Included5]()
-    @State var postsArrayTags: [Included5] = []
-    @State var usersArrayTags: [Included5] = []
+    @State private var include = [Included5]()
+    @State var postsArray: [Included5] = []
+    @State var usersArray: [Included5] = []
     @State var polls: [Included5] = []
     @State var pollOptions: [Included5] = []
     @State private var searchTerm = ""
@@ -33,16 +35,16 @@ struct PostDetailView: View {
     @State private var showedTags = [Datum6]()
     @State var tagsIdInPostDetail: [String] = []
     @State private var copiedText: String?
-    @State private var postsWithTagData : DataClass5?
+    @State private var postsData : DataClass5?
 
-    var filteredPostsArrayTags: [Included5] {
+    var filteredPosts: [Included5] {
         var filteredItems: [Included5] = []
         var filteredByContent: [Included5] = []
         var filteredByDisplayName: [Included5] = []
         
-        guard !searchTerm.isEmpty else { return postsArrayTags }
+        guard !searchTerm.isEmpty else { return postsArray }
         
-        for item in postsArrayTags {
+        for item in postsArray {
             if let content = item.attributes.contentHTML {
                 if content.htmlConvertedWithoutUrl.localizedCaseInsensitiveContains(searchTerm) {
                     filteredByContent.append(item)
@@ -50,10 +52,9 @@ struct PostDetailView: View {
             }
             
             if let userid = item.relationships?.user?.data.id {
-                if let displayName = findDisplayName(userid, in: usersArrayTags) {
-                    if displayName.localizedCaseInsensitiveContains(searchTerm) {
-                        filteredByDisplayName.append(item)
-                    }
+                let userInfo = getUserInfo(userid, in: usersArray)
+                if let displayName = userInfo.displayName, displayName.localizedCaseInsensitiveContains(searchTerm) {
+                    filteredByDisplayName.append(item)
                 }
             }
         }
@@ -70,7 +71,7 @@ struct PostDetailView: View {
     
     var body: some View {
         VStack {
-            if includesTags.isEmpty {
+            if include.isEmpty {
                 PostDetailViewContentLoader(postTitle: postTitle, postID: postID, commentCount: commentCount)
             } else {
                 if !tagsIdInPostDetail.isEmpty {
@@ -95,7 +96,7 @@ struct PostDetailView: View {
                 
                 ZStack(alignment: .bottomTrailing) {
                     List{
-                        if (postsArrayTags.isEmpty){
+                        if (postsArray.isEmpty){
                             Section{
                                 EmptyView()
                             }
@@ -125,69 +126,102 @@ struct PostDetailView: View {
                                         }
                                     }
                                 }
-                            }     
+                                .listRowInsets(EdgeInsets())
+                            }
                             
                             Section("帖子回复"){
                                 // MARK: - Post list
-                                ForEach(filteredPostsArrayTags, id: \.id){item in
+                                ForEach(filteredPosts, id: \.id){item in
                                     VStack {
                                         HStack {
                                             VStack {
                                                 NavigationLink(value: item){
-                                                    HStack {
-                                                        if let userid = item.relationships?.user?.data.id{
-                                                            if let avatarURL = findImgUrl(userid, in: usersArrayTags), let username = findUsername(userid, in: usersArrayTags){
-                                                                if isUserVip(username: username){
-                                                                    AvatarAsyncImage(url: URL(string: avatarURL), frameSize: 50, lineWidth: 1.2, shadow: 3, strokeColor : Color(hex: "FFD700"))
+                                                    ZStack (alignment: .bottomLeading){
+                                                        HStack {
+                                                            if let userid = item.relationships?.user?.data.id{
+                                                               let userInfo = getUserInfo(userid, in: usersArray)
+                                                                
+                                                                let avatarURL = userInfo.avatarURL ?? ""
+                                                                let username = userInfo.username ?? "Invalid Username"
+                                                                
+                                                                //用户头像
+                                                                if isUserVip(identifier: username) && avatarURL != "" {
+                                                                    AvatarAsyncImage(url: URL(string: avatarURL), frameSize: 50, lineWidth: 1.2, shadow: 3, strokeColor: Color(hex: "FFD700"))
                                                                         .padding(.top, 10)
                                                                         .padding(.leading, 6)
-                                                                }else{
+                                                                        .offset(x: 0, y: -10)
+                                                                } else if avatarURL != "" {
                                                                     AvatarAsyncImage(url: URL(string: avatarURL), frameSize: 50, lineWidth: 1, shadow: 3)
                                                                         .padding(.top, 10)
                                                                         .padding(.leading, 6)
+                                                                        .offset(x: 0, y: -10)
+                                                                } else {
+                                                                    CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 50, lineWidth: 0.7, shadow: 2)
+                                                                        .opacity(0.3)
+                                                                        .padding(.top, 10)
+                                                                        .padding(.leading, 6)
+                                                                        .offset(x: 0, y: -10)
                                                                 }
-                                                            }else{
-                                                                CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 50, lineWidth: 0.7, shadow: 2)
-                                                                    .opacity(0.3)
-                                                                    .padding(.top, 10)
-                                                                    .padding(.leading, 6)
                                                             }
-                                                        }
-                                                        
-                                                        if let userid = item.relationships?.user?.data.id{
-                                                            if let displayName = findDisplayName(userid, in: usersArrayTags){
-                                                                Text(displayName)
+                                                            
+                                                            //用户昵称
+                                                            if let userid = item.relationships?.user?.data.id {
+                                                                let userInfo = getUserInfo(userid, in: usersArray)
+                                                                
+                                                                
+                                                                Text(userInfo.displayName ?? (userInfo.username ?? "Invalid Username"))
+                                                                    .shimmering(active: isUserVip(identifier: userInfo.username ?? "Invalid Username"))
                                                                     .font(.system(size: 12))
                                                                     .bold()
                                                                     .foregroundColor(colorScheme == .dark ? .white : .black)
-                                                                
                                                                     .padding(.leading, 3)
+                                                            
+                                                                
                                                             }
-                                                        }else{
-                                                            ProgressView()
+
+                                                            if let createTime = item.attributes.createdAt{
+                                                                Text(" \(calculateTimeDifference(from: createTime))")
+                                                                    .font(.system(size: 8))
+                                                                    .foregroundColor(.gray)
+                                                            }
+                                                            
+                                                            if let editedTime = item.attributes.editedAt{
+                                                                Text("Edited")
+                                                                    .font(.system(size: 8))
+                                                                    .foregroundColor(.gray)
+                                                                    .italic()
+                                                            }
+                                                            
+                                                            Spacer()
+                                                            
+                                                            if item.id == String(getBestAnswerID()) {
+                                                                Image(systemName: "checkmark.circle")
+                                                                    .font(.system(size: 15))
+                                                                    .fontWeight(.bold)
+                                                                    .foregroundColor(.green)
+                                                            }
                                                         }
                                                         
-                                                        if let createTime = item.attributes.createdAt{
-                                                            Text(" \(calculateTimeDifference(from: createTime))")
-                                                                .font(.system(size: 8))
-                                                                .foregroundColor(.gray)
-                                                        }
-                                                        
-                                                        if let editedTime = item.attributes.editedAt{
-                                                            Text("Edited")
-                                                                .font(.system(size: 8))
-                                                                .foregroundColor(.gray)
-                                                                .italic()
-                                                        }
-                                                        
-                                                        Spacer()
-                                                        
-                                                        if item.id == String(getBestAnswerID()) {
-                                                            Text("Best Answer")
+                                                        if let userid = item.relationships?.user?.data.id {
+                                                           let userInfo = getUserInfo(userid, in: usersArray)
+                                                           
+                                                            let userLevel = getLevel(user: userInfo.user)
+                                                            
+                                                            Text(String(format: "Lv.%3d", userLevel))
+                                                                .shimmering(active: isUserVip(identifier: userInfo.username ?? ""), animation: Shimmer.defaultAnimation, gradient: Gradient(colors: [
+                                                                    Color(hex: "ffffff").opacity(0.8),
+                                                                    Color(hex: "182848"),
+                                                                    Color(hex: "ffffff").opacity(0.8)
+                                                                ]), bandSize: 0.5)
+                                                                .bold()
+                                                                .foregroundColor(Color.white)
                                                                 .font(.system(size: 10))
-                                                                .fontWeight(.bold)
-                                                                .foregroundColor(.green)
-                                                                .padding(.trailing)
+                                                                .padding()
+                                                                .background(Color(hex: "6168d0").opacity(0.8))
+                                                                .frame(height: 16)
+                                                                .cornerRadius(8)
+                                                                .offset(x: 1.2, y: -4)
+                                                            
                                                         }
                                                     }
                                                 }
@@ -209,6 +243,7 @@ struct PostDetailView: View {
                                     .background(item.id == String(getBestAnswerID()) ? Color.green.opacity(0.2) : Color.clear)
                                     .listRowSeparator(.hidden)
                                 }
+                                .onDelete(perform: appsettings.isAdmin ? deleteComment : nil)
                                 
                                 if !loadMoreButtonDisabled(){
                                     HStack {
@@ -315,11 +350,14 @@ struct PostDetailView: View {
                 TagDetail(selectedTag: tag)
             }
         }
-        .navigationDestination(for: Included5.self){item in
+        .navigationDestination(for: Included5.self) { item in
             if let userIdString = item.relationships?.user?.data.id, let userId = Int(userIdString) {
-                LinksProfileView(userId: userId)
+                let userInfo = getUserInfo(userIdString, in: self.usersArray)
+                let isVIP = isUserVip(identifier: userIdString)
+                LinksProfileView(userId: userId, isVIP: isVIP, Exp: getExp(user: userInfo.user))
             }
         }
+
         .navigationDestination(for: Datum6.self){data in
             TagDetail(selectedTag: data)
         }
@@ -396,6 +434,9 @@ struct PostDetailView: View {
             }
         }
     }
+    private func deleteComment(at offsets: IndexSet){
+        postsArray.remove(atOffsets: offsets)
+    }
     
     private func ifContainsUserLike(postItem: Included5) -> Bool {
         let userId = String(appsettings.userId)
@@ -449,13 +490,11 @@ struct PostDetailView: View {
             if let data = data {
                 print("current page: \(currentPage)")
                 print("fetching postID: \(postID)")
-                
-                print("Decoding to PostData.self Failed, Post has tags!")
-                
+
                 if let decodedResponse = try? JSONDecoder().decode(PostDataWithTag.self, from: data) {
                     print("Successfully decoding use PostDataWithTag.self")
-                    includesTags = decodedResponse.included
-                    postsWithTagData = decodedResponse.data
+                    include = decodedResponse.included
+                    postsData = decodedResponse.data
                     
                     if let tagData = decodedResponse.data.relationships.tags?.data {
                         for tag in tagData {
@@ -463,7 +502,7 @@ struct PostDetailView: View {
                             print("current post has tag with id: \(tag.id)")
                         }
                     }
-                    processIncludedTagsArray(includesTags)
+                    processIncludedTagsArray(include)
                 } else {
                     print("Decoding to PostData Failed!")
                 }
@@ -483,10 +522,10 @@ struct PostDetailView: View {
                 switch included.type {
                 case "posts":
                     if let contentType = included.attributes.contentType, contentType == "comment" {
-                        self.postsArrayTags.append(included)
+                        self.postsArray.append(included)
                     }
                 case "users":
-                    self.usersArrayTags.append(included)
+                    self.usersArray.append(included)
                 case "polls":
                     if !self.polls.contains(included){
                         self.polls.append(included)
@@ -507,11 +546,11 @@ struct PostDetailView: View {
                     if let contentType = included.attributes.contentType, contentType == "comment" {
                         var tempArray: [Included5] = []
                         tempArray.append(included)
-                        self.postsArrayTags.append(contentsOf: tempArray.reversed())
+                        self.postsArray.append(contentsOf: tempArray.reversed())
                     }
 
                 case "users":
-                    self.usersArrayTags.append(included)
+                    self.usersArray.append(included)
                 case "polls":
                     if !self.polls.contains(included){
                         self.polls.append(included)
@@ -524,28 +563,26 @@ struct PostDetailView: View {
             }
         }
     }
+    
+    private func getUserInfo(_ userid: String, in array: [Included5]) -> (avatarURL: String?, user: Included5?, displayName: String?, username: String?) {
+        if let item = array.first(where: { $0.id == userid }) {
+            return (item.attributes.avatarURL, item, item.attributes.displayName, item.attributes.username)
+        }
+        return (nil, nil, nil, nil)
+    }
+    
+    private func isUserVip(identifier: String) -> Bool {
+        //judge by username
+        if appsettings.vipUsernames.contains(identifier) {
+            return true
+        } else {
+            //judge by userId
+            let userInfo = getUserInfo(identifier, in: self.usersArray)
+            let username = userInfo.username ?? "Invalid Username"
+            return appsettings.vipUsernames.contains(username)
+        }
+    }
 
-    private func findDisplayName(_ userid: String, in array: [Included5]) -> String? {
-        if let item = array.first(where: { $0.id == userid }) {
-            return item.attributes.displayName
-        }
-        return nil
-    }
-    
-    private func findUsername(_ userid: String, in array: [Included5]) -> String? {
-        if let item = array.first(where: { $0.id == userid }) {
-            return item.attributes.username
-        }
-        return nil
-    }
-    
-    private func findImgUrl(_ userid: String, in array: [Included5]) -> String? {
-        if let item = array.first(where: { $0.id == userid }) {
-            return item.attributes.avatarURL
-        }
-        return nil
-    }
-    
     private func loadMoreButtonDisabled() -> Bool {
         if selectedSortOption == NSLocalizedString("default_sort_option", comment: "") {
             return self.commentCount <= 20 || currentPage * 20 >= self.commentCount || isLoading || currentPage == 0
@@ -557,9 +594,9 @@ struct PostDetailView: View {
     private func clearData() {
         polls = []
         pollOptions = []
-        postsArrayTags = []
-        usersArrayTags = []
-        includesTags = []
+        postsArray = []
+        usersArray = []
+        include = []
     }
     
     private func fetchTagsData() async {
@@ -607,16 +644,12 @@ struct PostDetailView: View {
     }
     
     private func getBestAnswerID() -> Int{
-        if let ID = postsWithTagData?.attributes.hasBestAnswer{
+        if let ID = postsData?.attributes.hasBestAnswer{
             if ID != 0{
                 return ID
             }
         }
         return -1
-    }
-    
-    private func isUserVip(username: String) -> Bool{
-        return appsettings.vipUsernames.contains(username)
     }
 }
 

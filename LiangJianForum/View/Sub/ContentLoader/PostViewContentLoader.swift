@@ -105,43 +105,59 @@ struct PostViewContentLoader: View {
                     .searchable(text: .constant(""), prompt: "Search")
                     .navigationTitle(selectedSortingOption)
                     .navigationBarTitleDisplayMode(.inline)
-                    .navigationBarItems(trailing:
-                        Menu {
-                            Section(NSLocalizedString("sorted_by_text", comment: "")){
-                                Button {
-                                } label: {
-                                    Label(NSLocalizedString("default_sort", comment: ""), systemImage: "seal")
-                                }.disabled(true)
-                            
-                                Button {
-                                } label: {
-                                    Label(NSLocalizedString("latest_sort_discussion", comment: ""), systemImage: "timer")
-                                }.disabled(true)
+                    .toolbar {
+                        ToolbarItemGroup(placement: .topBarTrailing) {
+                            Menu {
+                                Section(NSLocalizedString("sorted_by_text", comment: "")){
+                                    Button {
+                                    } label: {
+                                        Label(NSLocalizedString("default_sort", comment: ""), systemImage: "seal")
+                                    }
                                 
-                                Button {
-                                } label: {
-                                    Label(NSLocalizedString("latest_sort_comment", comment: ""), systemImage: "message.badge")
-                                }.disabled(true)
-                                
-                                Button {
-                                } label: {
-                                    Label(NSLocalizedString("hot_discussions", comment: ""), systemImage: "flame.fill")
-                                }.disabled(true)
-                                
-                                Button {
-                                } label: {
-                                    Label(NSLocalizedString("old_discussions", comment: ""), systemImage: "hourglass.bottomhalf.filled")
-                                }.disabled(true)
-                                
-                                Button {
-                                } label: {
-                                    Label(NSLocalizedString("frontPage_discussions", comment: ""), systemImage: "house.circle")
-                                }.disabled(true)
+                                    Button {
+                                    } label: {
+                                        Label(NSLocalizedString("latest_sort_discussion", comment: ""), systemImage: "clock.badge")
+                                    }
+                                    
+                                    Button {
+                                    } label: {
+                                        Label(NSLocalizedString("latest_sort_comment", comment: ""), systemImage: "message.badge")
+                                    }
+                                    
+                                    Button {
+
+                                    } label: {
+                                        Label(NSLocalizedString("hot_discussions", comment: ""), systemImage: "flame.fill")
+                                    }
+                                    
+                                    Button {
+                                    } label: {
+                                        Label(NSLocalizedString("old_discussions", comment: ""), systemImage: "hourglass.bottomhalf.filled")
+                                    }
+                                    
+                                    Button {
+                                    } label: {
+                                        Label(NSLocalizedString("frontPage_discussions", comment: ""), systemImage: "house.circle")
+                                    }
+                                }
+                            } label: {
+                                Image(systemName: "ellipsis.circle")
                             }
-                        } label: {
-                            Image(systemName: "ellipsis.circle")
                         }
-                    )
+                        ToolbarItemGroup(placement: .topBarLeading) {
+                            Menu {
+                                Section(NSLocalizedString("tabbar_operations", comment: "")){
+                                    Button {
+                                    } label: {
+                                        Label(NSLocalizedString("check_in", comment: ""), systemImage: "flag.circle")
+                                    }
+                                    .disabled(true)
+                                }
+                            } label: {
+                                Image(systemName: "list.bullet")
+                            }
+                        }
+                    }
                 }
                 
                 Button {
