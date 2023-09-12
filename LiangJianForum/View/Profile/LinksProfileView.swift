@@ -6,10 +6,15 @@
 //
 
 import SwiftUI
+import Shimmer
 
 struct LinksProfileView: View {
     let userId: Int
+    let isVIP : Bool
+    let Exp : Int
     
+    @State private var bioHtml: String = ""
+    @State private var cover: String = ""
     @State private var username: String = ""
     @State private var displayName: String = ""
     @State private var avatarUrl: String = ""
@@ -39,15 +44,11 @@ struct LinksProfileView: View {
     @State private var hasNextPage = false
     @State private var hasPrevPage = false
 
-    private var isUserVIP: Bool {
-        return appSettings.vipUsernames.contains(username)
-    }
-    
     var body: some View {
         VStack{
             HStack{
                 if avatarUrl != "" {
-                    if isUserVIP{
+                    if isVIP{
                         AvatarAsyncImage(url: URL(string: avatarUrl), frameSize: 130, lineWidth: 2.5, shadow: 6, strokeColor : Color(hex: "FFD700"))
                             .padding(.bottom)
                     }else{
@@ -61,7 +62,55 @@ struct LinksProfileView: View {
                 }
 
             }
+            .background(
+                AsyncImage(url: URL(string: cover)) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 400, height: 350)
+                        .opacity(0.8)
+                        .padding(.bottom)
+                } placeholder: {
+                }
+            )
+            
             List{
+                if !cover.isEmpty{
+                    Section("Bio"){
+                        if isVIP{
+                            Text(bioHtml.htmlConvertedWithoutUrl)
+                                .multilineTextAlignment(.center)
+                                .tracking(0.5)
+                                .bold()
+                                .overlay {
+                                    LinearGradient(
+                                        colors: [.purple, .blue, .mint, .green],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                    .mask(
+                                        Text(bioHtml.htmlConvertedWithoutUrl)
+                                            .multilineTextAlignment(.center)
+                                            .tracking(0.5)
+                                            .bold()
+                                    )
+                                }
+                        }else{
+                            Text(bioHtml.htmlConvertedWithoutUrl)
+                                .multilineTextAlignment(.center)
+                                .tracking(0.5)
+                                .bold()
+                        }
+                    }
+                }
+                
+                Section{
+                    LevelProgressView(isUserVip: isVIP, currentExp: self.Exp)
+                } header: {
+                    Text("Flarum Level").padding(.leading)
+                }
+                .listRowInsets(EdgeInsets())
+                
                 Section{
                     HStack {
                         Text("🎊 Username: ").foregroundStyle(.secondary)
@@ -69,7 +118,26 @@ struct LinksProfileView: View {
                     }
                     HStack {
                         Text("🎎 DisplayName: ").foregroundStyle(.secondary)
-                        Text("\(displayName)").bold()
+                        if isVIP{
+                            Text("\(displayName)")
+                                .multilineTextAlignment(.center)
+                                .bold()
+                                .overlay {
+                                    LinearGradient(
+                                        colors: [Color(hex: "7F7FD5"), Color(hex: "91EAE4")],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                    .mask(
+                                        Text("\(displayName)")
+                                            .multilineTextAlignment(.center)
+                                            .bold()
+                                    )
+                                }
+                        }else{
+                            Text("\(displayName)")
+                                .foregroundColor(colorScheme == .dark ? .white : .black)
+                        }
                     }
                     HStack {
                         Text("🎉 Join Time:").foregroundStyle(.secondary)
@@ -80,6 +148,7 @@ struct LinksProfileView: View {
                         if lastSeenAt.isEmpty{
                             Text("Information has been hidden")
                                 .bold()
+                                .foregroundStyle(.secondary)
                         }else{
                             Text("\(lastSeenAt)").bold()
                         }
@@ -207,11 +276,13 @@ struct LinksProfileView: View {
 //                            }
                         } else {
                             Text("No Badges Earned Yet")
+                                .padding(.leading)
                                 .foregroundColor(.secondary)
                                 .italic()
                         }
                     } else {
                         Text("No Badges Earned Yet")
+                            .padding(.leading)
                             .foregroundColor(.secondary)
                             .italic()
                     }
@@ -243,11 +314,11 @@ struct LinksProfileView: View {
             newIntroduction = introduction
             newNickName = nickName
             Task{
+                await fetchOtherUserProfile()
                 await fetchOtherUserPost()
             }
         }
         .background(colorScheme == .dark ? LinearGradient(gradient: Gradient(colors: [Color(hex: "780206"), Color(hex: "061161")]), startPoint: .leading, endPoint: .trailing) : LinearGradient(gradient: Gradient(colors: [Color(hex: "A1FFCE"), Color(hex: "FAFFD1")]), startPoint: .leading, endPoint: .trailing))
-        
     }
 
 //    func saveProfile() {
@@ -306,6 +377,14 @@ struct LinksProfileView: View {
                 
                 if let flarumMoney = decodedResponse.data.attributes.money{
                     self.money = flarumMoney
+                }
+                
+                if let cover = decodedResponse.data.attributes.cover{
+                    self.cover = cover
+                }
+                
+                if let bioHtml = decodedResponse.data.attributes.bioHtml{
+                    self.bioHtml = bioHtml
                 }
 
                 print("Successfully decoded user data")

@@ -107,3 +107,55 @@ func getChildTagsId(parentTag : Datum6, dataFetched : [Datum6]) -> [String]? {
     }
     return childTagsIds
 }
+
+func getLevel(user: Included5?) -> Int{
+    var commentCount = 0
+    var discussionCount = 0
+    
+    if let fetchedCommentCount = user?.attributes.commentCount{
+        commentCount = fetchedCommentCount
+    }
+    
+    if let fetchedDiscussionCount = user?.attributes.discussionCount{
+         discussionCount = fetchedDiscussionCount
+    }
+    
+    let expComments = (commentCount - discussionCount) * 21
+    let expDiscussions = discussionCount * 33
+    
+    let expTotal = expComments + expDiscussions
+    let expLevel = expTotal / 135
+    let expPercent = (100 / 135) * (expTotal - (expLevel * 135))
+    
+    return Int(expLevel)
+}
+
+func getExp(user: Included5?) -> Int{
+    var commentCount = 0
+    var discussionCount = 0
+    
+    if let fetchedCommentCount = user?.attributes.commentCount{
+        commentCount = fetchedCommentCount
+    }
+    
+    if let fetchedDiscussionCount = user?.attributes.discussionCount{
+         discussionCount = fetchedDiscussionCount
+    }
+    
+    let expComments = (commentCount - discussionCount) * 21
+    let expDiscussions = discussionCount * 33
+    
+    let expTotal = expComments + expDiscussions
+    let expLevel = expTotal / 135
+    
+    return expTotal
+}
+
+func getUserLevelExp(commentCount: Int, discussionCount: Int) -> Int {
+    let expComments = (commentCount - discussionCount) * 21
+    let expDiscussions = discussionCount * 33
+    let expTotal = expComments + expDiscussions
+    
+    return expTotal
+}
+

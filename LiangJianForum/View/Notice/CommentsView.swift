@@ -54,9 +54,7 @@ struct CommentsView: View {
         
         ScrollViewReader { proxy in
             if userCommentData.isEmpty{
-                Text("Not supported")
-                    .foregroundStyle(.secondary)
-                ProgressView()
+                CommentsViewContentLoader()
             }else{
                 List{
                     ForEach(filteredCommentData, id: \.id)  {item in
@@ -88,6 +86,7 @@ struct CommentsView: View {
                                                 
                                                 if let displayname = self.displayname{
                                                     Text(displayname)
+                                                        .shimmering(active: isUserVIP)
                                                         .font(.system(size: 12))
                                                         .bold()
                                                         .padding(.leading, 3)
@@ -103,6 +102,13 @@ struct CommentsView: View {
                                                 Text(calculateTimeDifference(from: item.attributes.createdAt))
                                                     .font(.system(size: 8))
                                                     .foregroundColor(.gray)
+                                                
+                                                if let editedTime = item.attributes.editedAt{
+                                                    Text("Edited")
+                                                        .font(.system(size: 8))
+                                                        .foregroundColor(.gray)
+                                                        .italic()
+                                                }
                                                 
                                                 Spacer()
                                             }
@@ -128,9 +134,10 @@ struct CommentsView: View {
                     .id("AllUserComments")
                 }
                 .refreshable {
+                    isLoading = true
                     fetchUserCommentsData{success in
                         if success{
-                            
+                            isLoading = false
                         }else{
                             
                         }
@@ -141,9 +148,10 @@ struct CommentsView: View {
 //                    }
                 }
                 .onAppear{
+                    isLoading = true
                     fetchUserCommentsData{success in
                         if success{
-                            
+                            isLoading = false
                         }else{
                             
                         }
@@ -161,7 +169,7 @@ struct CommentsView: View {
 //                .searchable(text: $searchTerm, prompt: "Search")
             }
         }
-        .navigationTitle("TA的最新动态")
+        .navigationTitle("最新动态")
     }
         
     private func findDiscussionTitle(id: String) -> String{

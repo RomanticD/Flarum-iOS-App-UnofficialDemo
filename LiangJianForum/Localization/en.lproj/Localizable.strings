@@ -66,7 +66,7 @@
 "comment_sector" = "Comment";
 "like_sector" = "Like";
 "money_sector" = "Asset History Record";
-"Information has been hidden" = "Information has been hidden";
+"Information has been hidden" = "Hidden";
 "Earned Badges" = "Earned Badges";
 "No Badges Earned Yet" = "No Badges Earned Yet";
 "🍾 In" = "🍾 In";
@@ -92,3 +92,8 @@
 "hot_discussions" = "Hot Discussions";
 "old_discussions" = "Old Discussions";
 "frontPage_discussions" = "Frontpage Discussions";
+"check_in" = "Check in";
+"check_in_succeeded_title" = "Successfully checked in";
+"continuous_days" = "Number of consecutive check-in days";
+"Flarum Level" = "Level";
+"Bio" = "Personal Bio";

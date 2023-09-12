@@ -99,6 +99,7 @@ struct MoneyConditionRecord: View {
                 }
             }
         }
+        .navigationTitle("我的资产")
         .onAppear{
             Task{
                 await fetchUserProfile()

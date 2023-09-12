@@ -92,3 +92,8 @@
 "hot_discussions" = "热门帖子";
 "old_discussions" = "陈年旧帖";
 "frontPage_discussions" = "精华帖子";
+"check_in" = "签到";
+"check_in_succeeded_title" = "签到成功";
+"continuous_days" = "连续签到天数";
+"Flarum Level" = "论坛等级";
+"Bio" = "个性签名";

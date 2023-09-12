@@ -24,12 +24,15 @@ struct LoginPageView: View {
     @State private var showAlert = false
     @EnvironmentObject var appSettings: AppSettings
     @Environment(\.colorScheme) var colorScheme
+    
+    @State private var selectedFlarumUrl = "https://bbs.cjlu.cc"
+
    
     var body: some View {
         NavigationView {
             ZStack {
                 if colorScheme == .dark{
-                    Color(hex: "0e1c26")
+                    Color(hex: "134780")
                         .ignoresSafeArea()
                 }else{
                     Color.blue
@@ -40,11 +43,12 @@ struct LoginPageView: View {
                 Circle()
                     .scaleEffect(isAnimating ? 1.7 : 0.3)
                         .animation(.easeInOut(duration: 0.6), value: isAnimating)
-                    .foregroundColor(.white.opacity(0.15))
+                        .foregroundColor(colorScheme == .dark ? Color(hex: "0f3966") : Color(hex: "258eff"))
+                
                 Circle()
                     .scaleEffect(isAnimating ? 1.35 : 0)
                         .animation(.easeInOut(duration: 1), value: isAnimating)
-                        .foregroundColor(colorScheme == .dark ? Color(hex: "294861") : .white)
+                        .foregroundColor(colorScheme == .dark ? Color(hex: "0b2b4d") : Color(hex: "d3e8ff"))
 
                 VStack {
                     Text(appSettings.FlarumName)
@@ -74,7 +78,9 @@ struct LoginPageView: View {
                     Button(action: {
                         authenticateUser { success in
                             if success {
-                                // 登录成功后的操作
+                                Task{
+                                    await fetchUserProfile()
+                                }
                             } else {
                                 showAlert.toggle()
                             }
@@ -141,6 +147,13 @@ struct LoginPageView: View {
                         }
                     }
                     
+                    Picker("Flarum Server", selection: $selectedFlarumUrl) {
+                            Text("主站").tag("https://bbs.cjlu.cc")
+                            Text("测试站").tag("https://test.cjlu.cc")
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                        .frame(width: 200)
+                    
                     
                     
 //                    VStack {
@@ -150,17 +163,22 @@ struct LoginPageView: View {
 //                    .frame(width: 350)
 //                    .padding(.top)
                 }
+                .onChange(of: selectedFlarumUrl) { newValue in
+                    appSettings.FlarumUrl = newValue
+                }
                 .navigationTitle("Sign in")
                 .alert(isPresented: $showAlert) {
                     Alert(
                         title: Text("Failed to sign in"),
                         message: Text("Please check your username/password or check the Internet connetction"),
                         dismissButton: .default(Text("OK")) {
-                            clearInputField()
+//                            clearInputField()
                         }
                     )
                 }
-            }.navigationBarHidden(true)
+            }
+            
+            .navigationBarHidden(true)
         }
     }
 
@@ -185,10 +203,13 @@ struct LoginPageView: View {
                 appSettings.isLoggedIn = true
                 appSettings.token = token
                 appSettings.userId = userId
+                appSettings.identification = username
+                appSettings.password = password
+                
                 if rememberMe{
                     rememberMeState = true
                 }else{
-                    clearInputField()
+//                    clearInputField()
                     rememberMeState = false
                 }
                 
@@ -263,6 +284,57 @@ struct LoginPageView: View {
                 completion(false)
             }
         }.resume()
+    }
+    
+    private func fetchUserProfile() async {
+        guard let url = URL(string: "\(appSettings.FlarumUrl)/api/users/\(appSettings.userId)") else{
+                print("Invalid URL")
+            return
+        }
+        print("Fetching User Info at: \(url)")
+        
+        do{
+            let (data, _) = try await URLSession.shared.data(from: url)
+            
+            if let decodedResponse = try? JSONDecoder().decode(UserData.self, from: data){
+                let username = decodedResponse.data.attributes.username
+                appSettings.username = username
+                if appSettings.vipUsernames.contains(username){
+                    appSettings.isVIP = true
+                }
+                
+                if let canCheckIn = decodedResponse.data.attributes.canCheckin{
+                    appSettings.canCheckIn = canCheckIn
+                }
+                
+                if let canCheckinContinuous = decodedResponse.data.attributes.canCheckinContinuous{
+                    appSettings.canCheckinContinuous = canCheckinContinuous
+                }
+                
+                if let totalContinuousCheckIn = decodedResponse.data.attributes.totalContinuousCheckIn{
+                    appSettings.totalContinuousCheckIn = totalContinuousCheckIn
+                }
+                
+                if let include = decodedResponse.included {
+                    if include.contains(where: { $0.id == "1" }) {
+                        appSettings.isAdmin = true
+                    }
+                }
+                
+                appSettings.userExp = getUserLevelExp(commentCount: decodedResponse.data.attributes.commentCount, discussionCount: decodedResponse.data.attributes.discussionCount)
+
+
+                print("Successfully decoded user data when sign in success!")
+                print("username : \(appSettings.username)")
+                print("userId : \(appSettings.userId)")
+                print("canCheckIn : \(appSettings.canCheckIn)")
+                print("canCheckinContinuous : \(appSettings.canCheckinContinuous)")
+                print("totalContinuousCheckIn : \(appSettings.totalContinuousCheckIn)")
+                print("isAdmin : \(appSettings.isAdmin)")
+            }
+        } catch {
+            print("Invalid user Data!" ,error)
+        }
     }
 
 }
