@@ -19,7 +19,8 @@ If you want to adapt the app to your own Flarum installation, follow these steps
 
 ```
 @Published var FlarumUrl = "https://discuss.flarum.org"
-@Published var FlarumName = "Flarum"
+@Published var FlarumName = "Your_Flarum_Name"
+@Published var FlarumToken = "XXXXXXXXXXXXXXXXXX" //Your Flarum API key, registration view required
 ```
 
 - Save the file to customize the app for your Flarum installation.
@@ -43,7 +44,7 @@ If you want to adapt the app to your own Flarum installation, follow these steps
 - Convenient and fast browsing, posting, and replying to discussions on Flarum using an iPhone
 
 
-  - Login using username and password
+  - Login using username and password & Registration
   - Extention support for **Level Rank, BestAnswer, Poll, Money, Check In, User Badge** and more
   - check discussions and comments with more sort options
   - Support for tags, allowing users to browse discussions by tags
