@@ -40,6 +40,8 @@ struct DatumAttributes: Codable, Hashable {
     let hasPoll: Bool?
     let hasBestAnswer: HasBestAnswer?
     let frontpage: Bool?
+    let isHidden : IsHidden?
+    let subscription: String?
 //    let canReply, canRename, canDelete, canHide: Bool
 //    let isApproved: Bool
 //    let bestAnswerSetAt, subscription: JSONNull?

@@ -73,12 +73,31 @@ struct SliderView: View {
 
             TabView(selection: $selection) {
                 ForEach(0..<slides.count) { i in
-                    AsyncImage(url: URL(string: slides[i].image)) { image in
-                        image
-                            .resizable()
-                            .scaledToFill()
-                    } placeholder: {
-                        ShimmerEffectBox()
+//                    AsyncImage(url: URL(string: slides[i].image)) { image in
+//                        image
+//                            .resizable()
+//                            .scaledToFill()
+//                    } placeholder: {
+//                        ShimmerEffectBox()
+//                    }
+                    
+                    CachedImage(url: slides[i].image,
+                                animation: .spring(),
+                                transition: .scale.combined(with: .opacity)) { phase in
+                        
+                        switch phase {
+                        case .empty:
+                            ShimmerEffectBox()
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFill()
+                            
+                        case .failure(let error):
+                            EmptyView()
+                        @unknown default:
+                            EmptyView()
+                        }
                     }
                     .ignoresSafeArea()
                     .onTapGesture {

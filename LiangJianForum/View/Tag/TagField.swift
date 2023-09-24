@@ -25,53 +25,55 @@ struct TagField: View {
     }
     
     var body: some View {
-        NavigationStack {
-            if tags.isEmpty{
-                TagFieldContentLoader()
-            }else{
-                List {
-                    ForEach(filteredTags, id: \.id) { tag in
-                        if getChildTags(parentTag: tag, dataFetched: tags).isEmpty{
-                            NavigationLink(value: tag){
-                                HStack {
-                                    TagElement(tag: tag, fontSize: 20)
-                                        .padding(.top, 8)
-                                        .padding(.bottom, 8)
-                                    Spacer()
+        VStack{
+            NavigationStack {
+                if tags.isEmpty{
+                    TagFieldContentLoader()
+                }else{
+                    List {
+                        ForEach(filteredTags, id: \.id) { tag in
+                            if getChildTags(parentTag: tag, dataFetched: tags).isEmpty{
+                                NavigationLink(value: tag){
+                                    HStack {
+                                        TagElement(tag: tag, fontSize: 20)
+                                            .padding(.top, 8)
+                                            .padding(.bottom, 8)
+                                        Spacer()
+                                    }
                                 }
-                            }
-                        }else{
-                            NavigationLink(value: getChildTags(parentTag: tag, dataFetched: tags)){
-                                HStack {
-                                    TagElement(tag: tag, fontSize: 20)
-                                        .padding(.top, 8)
-                                        .padding(.bottom, 8)
-                                    Spacer()
-                                }
-                            }
-                        }
-                    }
-                }
-                .searchable(text: $searchTerm, prompt: "Search")
-                .navigationTitle("All Tags")
-                .navigationDestination(for: Datum6.self){tag in
-                    TagDetail(selectedTag: tag)
-                }
-                .navigationDestination(for: [Datum6].self){tagsArray in
-                    List{
-                        ForEach(tagsArray, id: \.id){tag in
-                            NavigationLink(value: tag){
-                                HStack {
-                                    TagElement(tag: tag, fontSize: 20)
-                                        .padding(.top, 8)
-                                        .padding(.bottom, 8)
-                                    Spacer()
+                            }else{
+                                NavigationLink(value: getChildTags(parentTag: tag, dataFetched: tags)){
+                                    HStack {
+                                        TagElement(tag: tag, fontSize: 20)
+                                            .padding(.top, 8)
+                                            .padding(.bottom, 8)
+                                        Spacer()
+                                    }
                                 }
                             }
                         }
                     }
+                    .searchable(text: $searchTerm, prompt: "Search")
+                    .navigationTitle("All Tags")
                     .navigationDestination(for: Datum6.self){tag in
                         TagDetail(selectedTag: tag)
+                    }
+                    .navigationDestination(for: [Datum6].self){tagsArray in
+                        List{
+                            ForEach(tagsArray, id: \.id){tag in
+                                NavigationLink(value: tag){
+                                    HStack {
+                                        TagElement(tag: tag, fontSize: 20)
+                                            .padding(.top, 8)
+                                            .padding(.bottom, 8)
+                                        Spacer()
+                                    }
+                                }
+                            }
+                        }
+                        .navigationDestination(for: Datum6.self){tag in
+                            TagDetail(selectedTag: tag)
+                        }
                     }
                 }
             }

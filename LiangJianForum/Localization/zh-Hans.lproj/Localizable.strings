@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   FlarumiOSApp
 
@@ -60,7 +60,7 @@
 "🎉 Join Time:" = "🎉 加入时间：";
 "🎎 DisplayName: " = "🎎 显示昵称：";
 "🎊 Username: " = "🎊 用户名称：";
-"🏖️ Discussion Count: " = "🏖️ 讨论数量：";
+"🏖️ Discussion Count: " = "🏖️ 发表主题：";
 "🧬 Comment Count: " = "🧬 评论数量：";
 "💰 money: " = "💰 量见币数: ";
 "Information has been hidden" = "信息已隐藏";
@@ -78,6 +78,7 @@
 "latest_sort_discussion" = "最新帖子";
 "latest_sort_comment" = "最新回复";
 "default_sort" = "主页默认";
+"subsription_sort" = "我的关注";
 "sorted_by_text" = "排序方式";
 "days later" = "%d 天后";
 "hours later" = "%d 小时后";
@@ -97,3 +98,8 @@
 "continuous_days" = "连续签到天数";
 "Flarum Level" = "论坛等级";
 "Bio" = "个性签名";
+"money_ranking_list" = "量见币排行榜";
+"group_list" = "用户群组";
+"statistics_page" = "统计页面";
+"follow_success_message" = "关注成功!";
+"unfollow_success_message" = "取消关注成功!";

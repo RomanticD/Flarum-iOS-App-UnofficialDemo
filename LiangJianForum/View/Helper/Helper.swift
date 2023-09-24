@@ -125,7 +125,6 @@ func getLevel(user: Included5?) -> Int{
     
     let expTotal = expComments + expDiscussions
     let expLevel = expTotal / 135
-    let expPercent = (100 / 135) * (expTotal - (expLevel * 135))
     
     return Int(expLevel)
 }
@@ -158,4 +157,9 @@ func getUserLevelExp(commentCount: Int, discussionCount: Int) -> Int {
     
     return expTotal
 }
+
+func translate<T: CaseIterable>(_ string: String, forEnum: T.Type) -> T? {
+    return forEnum.allCases.first(where: {string == "\($0)"})
+}
+
 

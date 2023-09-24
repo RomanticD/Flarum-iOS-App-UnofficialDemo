@@ -7,7 +7,6 @@
 
 import SwiftUI
 import UIKit
-import Shimmer
 
 struct ProfileView: View {
     @State private var username: String = ""
@@ -36,178 +35,199 @@ struct ProfileView: View {
     }
     
     var body: some View {
-        ZStack (alignment: .topTrailing){
-            VStack{
-                HStack{
-                    if avatarUrl != "" {
-                        if appSettings.isVIP{
-                            AvatarAsyncImage(url: URL(string: avatarUrl), frameSize: 130, lineWidth: 2.5, shadow: 6, strokeColor : Color(hex: "FFD700"))
-                                .padding(.bottom)
-                        }else{
-                            AvatarAsyncImage(url: URL(string: avatarUrl), frameSize: 130, lineWidth: 2, shadow: 6)
+        NavigationStack{
+            ZStack (alignment: .topTrailing){
+                VStack{
+                    HStack{
+                        if avatarUrl != "" {
+                            if appSettings.isVIP{
+                                AvatarAsyncImage(url: URL(string: avatarUrl), frameSize: 130, lineWidth: 2.5, shadow: 6, strokeColor : Color(hex: "FFD700"))
+                                    .padding(.bottom)
+                            }else{
+                                AvatarAsyncImage(url: URL(string: avatarUrl), frameSize: 130, lineWidth: 2, shadow: 6)
+                                    .padding(.bottom)
+                            }
+                        } else {
+                            CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 120, lineWidth: 1, shadow: 3)
+                                .opacity (0.3)
                                 .padding(.bottom)
                         }
-                    } else {
-                        CircleImage(image: Image(systemName: "person.circle.fill"), widthAndHeight: 120, lineWidth: 1, shadow: 3)
-                            .opacity (0.3)
-                            .padding(.bottom)
-                    }
 
-                }
-                .background(
-                    AsyncImage(url: URL(string: cover)) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 400, height: 350)
-                            .opacity(0.8)
-                            .padding(.bottom)
-                    } placeholder: {
                     }
-                )
-                
-                List{
-                    if !cover.isEmpty{
-                        Section("Bio"){
-                            if appSettings.isVIP{
-                                Text(bioHtml.htmlConvertedWithoutUrl)
-                                    .multilineTextAlignment(.center)
-                                    .tracking(0.5)
-                                    .bold()
-                                    .overlay {
-                                        LinearGradient(
-                                            colors: [.purple, .blue, .mint, .green],
-                                            startPoint: .leading,
-                                            endPoint: .trailing
-                                        )
-                                        .mask(
-                                            Text(bioHtml.htmlConvertedWithoutUrl)
-                                                .multilineTextAlignment(.center)
-                                                .tracking(0.5)
-                                                .bold()
-                                        )
-                                    }
-                            }else{
-                                Text(bioHtml.htmlConvertedWithoutUrl)
-                                    .multilineTextAlignment(.center)
-                                    .tracking(0.5)
-                                    .bold()
-                            }
-                        }
-                    }
-                    
-                    Section{
-                        LevelProgressView(isUserVip: appSettings.isVIP, currentExp: appSettings.userExp)
-                    } header: {
-                        Text("Flarum Level").padding(.leading)
-                    }
-                    .listRowInsets(EdgeInsets())
-                    
-                    Section{
-                        HStack {
-                            Text("🎊 Username: ").foregroundStyle(.secondary)
-                            Text("\(username)").bold()
-                        }
-                        HStack {
-                            Text("🎎 DisplayName: ").foregroundStyle(.secondary)
+                    .background(
+//                        AsyncImage(url: URL(string: cover)) { image in
+//                            image
+//                                .resizable()
+//                                .aspectRatio(contentMode: .fill)
+//                                .frame(width: 400, height: 350)
+//                                .opacity(0.9)
+//                                .padding(.bottom)
+//                        } placeholder: {
+//                        }
+                        
+                        CachedImage(url: appSettings.cover,
+                                    animation: .spring(),
+                                    transition: .slide.combined(with: .opacity)) { phase in
                             
-                            if appSettings.isVIP{
-                                Text("\(displayName)")
-                                    .multilineTextAlignment(.center)
-                                    .bold()
-                                    .overlay {
-                                        LinearGradient(
-                                            colors: [Color(hex: "7F7FD5"), Color(hex: "91EAE4")],
-                                            startPoint: .leading,
-                                            endPoint: .trailing
-                                        )
-                                        .mask(
-                                            Text("\(displayName)")
-                                                .multilineTextAlignment(.center)
-                                                .bold()
-                                        )
-                                    }
-                            }else {
-                                Text("\(displayName)")
-                                    .bold()
+                            switch phase {
+                            case .empty:
+                                EmptyView()
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 400, height: 350)
+                                    .opacity(0.9)
+                                    .padding(.bottom)
+                                
+                            case .failure(let error):
+                                EmptyView()
+                            @unknown default:
+                                EmptyView()
                             }
                         }
-                        HStack {
-                            Text("🎉 Join Time:").foregroundStyle(.secondary)
-                            Text("\(joinTime)").bold()
-                        }
-                        HStack{
-                            Text("🎀 Last seen at:").foregroundStyle(.secondary)
-                            if lastSeenAt.isEmpty{
-                                Text("Information has been hidden")
-                                    .bold()
-                                    .foregroundStyle(.secondary)
-                            }else{
-                                Text("\(lastSeenAt)").bold()
-                            }
-                        }
-                    } header: {
-                        Text("Account")
-                    }
+                    )
                     
-                    Section("Flarum Contributions"){
-                        HStack {
-                            Text("🏖️ Discussion Count: ").foregroundStyle(.secondary)
-                            Text("\(discussionCount)").bold()
-                        }
-                        HStack{
-                            Text("🧬 Comment Count: ").foregroundStyle(.secondary)
-                            Text("\(commentCount)").bold()
-                        }
-                        if self.money != -1 {
-                            HStack {
-                                Text("💰 money: ").foregroundStyle(.secondary)
-                                if self.money.truncatingRemainder(dividingBy: 1) == 0 {
-                                    Text(String(format: "%.0f", self.money)).bold()
-                                } else {
-                                    Text(String(format: "%.1f", self.money)).bold()
+                    List{
+                        if !cover.isEmpty{
+                            Section("Bio"){
+                                if appSettings.isVIP{
+                                    Text(bioHtml.htmlConvertedWithoutUrl)
+                                        .multilineTextAlignment(.center)
+                                        .tracking(0.5)
+                                        .bold()
+                                        .overlay {
+                                            LinearGradient(
+                                                colors: [.purple, .blue, .mint, .green],
+                                                startPoint: .leading,
+                                                endPoint: .trailing
+                                            )
+                                            .mask(
+                                                Text(bioHtml.htmlConvertedWithoutUrl)
+                                                    .multilineTextAlignment(.center)
+                                                    .tracking(0.5)
+                                                    .bold()
+                                            )
+                                        }
+                                }else{
+                                    Text(bioHtml.htmlConvertedWithoutUrl)
+                                        .multilineTextAlignment(.center)
+                                        .tracking(0.5)
+                                        .bold()
                                 }
                             }
                         }
-                    }
-                    
-                    Section("Authentication Information") {
-                        if let include = include, !include.isEmpty {
-                            let groups = include.filter { $0.type == "groups" }
-                            if !groups.isEmpty {
-                                ForEach(groups, id: \.id) { item in
-                                    HStack{
-                                        if let singular = item.attributes.nameSingular {
-                                            Text("✅ \(singular): ").foregroundStyle(.secondary)
+                        
+                        Section{
+                            LevelProgressView(isUserVip: appSettings.isVIP, currentExp: appSettings.userExp)
+                        } header: {
+                            Text("Flarum Level").padding(.leading)
+                        }
+                        .listRowInsets(EdgeInsets())
+                        
+                        Section{
+                            HStack {
+                                Text("🎊 Username: ").foregroundStyle(.secondary)
+                                Text("\(appSettings.username)").bold()
+                            }
+                            HStack {
+                                Text("🎎 DisplayName: ").foregroundStyle(.secondary)
+                                
+                                if appSettings.isVIP{
+                                    Text("\(appSettings.displayName)")
+                                        .multilineTextAlignment(.center)
+                                        .bold()
+                                        .overlay {
+                                            LinearGradient(
+                                                colors: [Color(hex: "7F7FD5"), Color(hex: "91EAE4")],
+                                                startPoint: .leading,
+                                                endPoint: .trailing
+                                            )
+                                            .mask(
+                                                Text("\(appSettings.displayName)")
+                                                    .multilineTextAlignment(.center)
+                                                    .bold()
+                                            )
                                         }
+                                }else {
+                                    Text("\(appSettings.displayName)")
+                                        .bold()
+                                }
+                            }
+                            HStack {
+                                Text("🎉 Join Time:").foregroundStyle(.secondary)
+                                Text("\(appSettings.joinTime)").bold()
+                            }
+                            HStack{
+                                Text("🎀 Last seen at:").foregroundStyle(.secondary)
+                                if lastSeenAt.isEmpty{
+                                    Text("Information has been hidden")
+                                        .bold()
+                                        .foregroundStyle(.secondary)
+                                }else{
+                                    Text("\(appSettings.lastSeenAt)").bold()
+                                }
+                            }
+                        } header: {
+                            Text("Account")
+                        }
+                        
+                        Section("Flarum Contributions"){
+                            HStack {
+                                Text("🏖️ Discussion Count: ").foregroundStyle(.secondary)
+                                Text("\(appSettings.discussionCount)").bold()
+                            }
+                            HStack{
+                                Text("🧬 Comment Count: ").foregroundStyle(.secondary)
+                                Text("\(appSettings.commentCount)").bold()
+                            }
+                            if self.money != -1 {
+                                HStack {
+                                    Text("💰 money: ").foregroundStyle(.secondary)
+                                    if self.money.truncatingRemainder(dividingBy: 1) == 0 {
+                                        Text(String(format: "%.0f", self.money)).bold()
+                                    } else {
+                                        Text(String(format: "%.1f", self.money)).bold()
+                                    }
+                                }
+                            }
+                        }
+                        
+                        Section("Authentication Information") {
+                            if let include = include, !include.isEmpty {
+                                let groups = include.filter { $0.type == "groups" }
+                                if !groups.isEmpty {
+                                    ForEach(groups, id: \.id) { item in
+                                        HStack{
+                                            if let singular = item.attributes.nameSingular {
+                                                Text("✅ \(singular): ").foregroundStyle(.secondary)
+                                            }
 
-                                        if let plural = item.attributes.namePlural {
-                                            Text("\(plural)").bold()
+                                            if let plural = item.attributes.namePlural {
+                                                Text("\(plural)").bold()
+                                            }
                                         }
                                     }
+                                } else {
+                                    Text("No authentication information available")
+                                        .foregroundColor(.secondary)
+                                        .italic()
                                 }
                             } else {
                                 Text("No authentication information available")
                                     .foregroundColor(.secondary)
                                     .italic()
                             }
-                        } else {
-                            Text("No authentication information available")
-                                .foregroundColor(.secondary)
-                                .italic()
                         }
-                    }
 
-                    Section("Earned Badges") {
-                        if let include = include, !include.isEmpty {
-                            let groups = include.filter { $0.type == "badges" }
-                            if !groups.isEmpty {
-                                ScrollView(.horizontal, showsIndicators: false){
-                                    HStack{
-                                        ForEach(groups, id: \.id) { item in
-                                            NavigationLink(value: item) {
-                                                Button(action: {
-                                                }) {
+                        Section("Earned Badges") {
+                            if let include = include, !include.isEmpty {
+                                let groups = include.filter { $0.type == "badges" }
+                                if !groups.isEmpty {
+                                    ScrollView(.horizontal, showsIndicators: false){
+                                        HStack{
+                                            ForEach(groups, id: \.id) { item in
+                                                NavigationLink(value: item) {
                                                     if let badgeName = item.attributes.name {
                                                         Text("🎖️ \(badgeName)")
                                                             .bold()
@@ -221,117 +241,84 @@ struct ProfileView: View {
                                                         
                                                     }
                                                 }
-                                                .navigationDestination(for: UserInclude.self) { item in
-                                                    Text(item.attributes.description ?? "No Description")
-                                                }
                                             }
-      
+                                        }
+                                        .navigationDestination(for: UserInclude.self) { badge in
+                                            BadgeDetail(badge: badge)
                                         }
                                     }
+                                } else {
+                                    Text("No Badges Earned Yet")
+                                        .padding(.leading)
+                                        .foregroundColor(.secondary)
+                                        .italic()
                                 }
-                                
-    //                            ForEach(groups, id: \.id) { item in
-    //                                NavigationLink(value: item) {
-    //                                    HStack{
-    //                                        Spacer()
-    //
-    //                                        if let badgeName = item.attributes.name {
-    //                                            Text("🎖️ \(badgeName)")
-    //                                                .bold()
-    //                                                .foregroundColor(Color.white)
-    //                                                .font(.system(size: 12))
-    //                                                .padding()
-    //                                                .lineLimit(1)
-    //                                                .background(Color(hex: removeFirstCharacter(from: item.attributes.backgroundColor ?? "#6168d0")))
-    //                                                .frame(height: 36)
-    //                                                .cornerRadius(18)
-    //                                        }
-    //
-    //                                        Spacer()
-    //                                    }
-    //                                    .navigationDestination(for: UserInclude.self) { item in
-    //                                        Text(item.attributes.description ?? "No Description")
-    //                                    }
-    //                                }
-    //                            }
                             } else {
                                 Text("No Badges Earned Yet")
                                     .padding(.leading)
                                     .foregroundColor(.secondary)
                                     .italic()
                             }
-                        } else {
-                            Text("No Badges Earned Yet")
-                                .padding(.leading)
-                                .foregroundColor(.secondary)
-                                .italic()
                         }
-                    }
-                    .listRowInsets(EdgeInsets())
-                    .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets())
+                        .listRowSeparator(.hidden)
 
-                    Section{
-                        HStack {
-                            Spacer()
-                            Button(action: {
-                                saveProfile()
-                            }) {
-                                Text("Change Profile")
-                                    .bold()
+                        Section{
+                            HStack {
+                                Spacer()
+                                Button(action: {
+                                    saveProfile()
+                                }) {
+                                    Text("Change Profile")
+                                        .bold()
+                                }
+                                .disabled(true) //Need your Api keys to do so
+                                Spacer()
                             }
-                            .disabled(true) //Need your Api keys to do so
-                            Spacer()
                         }
                     }
+                    .textSelection(.enabled)
                 }
-                .textSelection(.enabled)
-            }
-            .sheet(isPresented: $showChangeProfilePage) {
-                ChangeProfileDetail().environmentObject(appSettings)
-                    .presentationDetents([.height(200)])
-            }
-            .task{
-                await fetchUserProfile()
-            }
-            .alert(isPresented: $showLogoutAlert) {
-                Alert(
-                    title: Text("Sign out"),
-                    message: Text("Quit?"),
-                    primaryButton: .default(Text("Confirm"), action: {
-                        logoutConfirmed()
-                    }),
-                    secondaryButton: .cancel(Text("Cancel"))
-                )
-            }
-            .refreshable {
-                await fetchUserProfile()
-            }
-            .onAppear {
-//                newIntroduction = introduction
-//                newNickName = nickName
-                Task{
+                .sheet(isPresented: $showChangeProfilePage) {
+                    ChangeProfileDetail().environmentObject(appSettings)
+                        .presentationDetents([.height(200)])
+                }
+                .alert(isPresented: $showLogoutAlert) {
+                    Alert(
+                        title: Text("Sign out"),
+                        message: Text("Quit?"),
+                        primaryButton: .default(Text("Confirm"), action: {
+                            logoutConfirmed()
+                        }),
+                        secondaryButton: .cancel(Text("Cancel"))
+                    )
+                }
+                .refreshable {
                     await fetchUserProfile()
                 }
-            }
-            .background(colorScheme == .dark ? LinearGradient(gradient: Gradient(colors: [Color(hex: "780206"), Color(hex: "061161")]), startPoint: .leading, endPoint: .trailing) : LinearGradient(gradient: Gradient(colors: [Color(hex: "A1FFCE"), Color(hex: "FAFFD1")]), startPoint: .leading, endPoint: .trailing))
-
-            
-            HStack {
-                Spacer()
-
-                Menu {
-                    Section(NSLocalizedString("profile_operations", comment: "")){
-                        Button {
-                            //选择退出逻辑
-                            logout()
-                        } label: {
-                            Label(NSLocalizedString("choose_to_quit", comment: ""), systemImage: "iphone.and.arrow.forward")
-                        }
+                .onAppear {
+                    Task{
+                        await fetchUserProfile()
                     }
-                } label: {
-                    Image(systemName: "ellipsis.circle")
-                        .font(.title2)
-                        .padding(.trailing)
+                }
+                .background(colorScheme == .dark ? LinearGradient(gradient: Gradient(colors: [Color(hex: "780206"), Color(hex: "061161")]), startPoint: .leading, endPoint: .trailing) : LinearGradient(gradient: Gradient(colors: [Color(hex: "A1FFCE"), Color(hex: "FAFFD1")]), startPoint: .leading, endPoint: .trailing))
+            }
+            .toolbar {
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                    Menu {
+                        Section(NSLocalizedString("profile_operations", comment: "")){
+                            Button {
+                                //选择退出逻辑
+                                logout()
+                            } label: {
+                                Label(NSLocalizedString("choose_to_quit", comment: ""), systemImage: "iphone.and.arrow.forward")
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "gear.circle")
+//                            .padding()
+                            .background(Color(uiColor: UIColor.secondarySystemGroupedBackground), in: Circle())
+                    }
                 }
             }
         }
@@ -351,6 +338,7 @@ struct ProfileView: View {
     }
 
     func logoutConfirmed() {
+        appSettings.stopTimer()
         appSettings.token = ""
         showLoginPage.toggle()
         appSettings.isLoggedIn = false

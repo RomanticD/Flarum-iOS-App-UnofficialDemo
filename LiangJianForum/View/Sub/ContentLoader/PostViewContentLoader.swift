@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct PostViewContentLoader: View {
+    @EnvironmentObject var appsettings: AppSettings
     @Environment(\.colorScheme) var colorScheme
-    var selectedSortingOption : String
+    @Binding var selectedSortingOption : String
+    @Binding var discussionData : [Datum]
     @State private var isHeaderSlideViewEnabled = true
-    
+    @Binding var isCheckInSucceeded : Bool
     var shadowColor: Color {
         return colorScheme == .dark ? Color.white : Color.black
     }
@@ -20,8 +22,8 @@ struct PostViewContentLoader: View {
         NavigationStack{
             ZStack(alignment: .bottomTrailing) {
                 VStack {
-                    PaginationView(hasPrevPage: true,
-                                   hasNextPage: true,
+                    PaginationView(hasPrevPage: false,
+                                   hasNextPage: false,
                                    currentPage: .constant(1),
                                    isLoading: .constant(true),
                                    fetchDiscussion: nil,
@@ -44,6 +46,17 @@ struct PostViewContentLoader: View {
                         }
                                                               
                         Section{
+                            if discussionData.isEmpty && selectedSortingOption == NSLocalizedString("subsription_sort", comment: "") {
+                                HStack {
+                                    Spacer()
+                                    
+                                    Text("暂无收藏")
+                                        .foregroundStyle(.secondary)
+                                    
+                                    Spacer()
+                                }
+                            }
+                            
                             ForEach(0..<6) { item in
                                 HStack {
                                     VStack {
@@ -87,7 +100,7 @@ struct PostViewContentLoader: View {
                                                 .frame(width: 30, height: 10)
                                                 .padding(.leading, 2)
                                             
-                                            FavoriteButton()
+                                            FavoriteButton(isSubscription: false, discussionId: "0")
                                             
                                         }
                                         .padding(.top, 15)
@@ -108,34 +121,111 @@ struct PostViewContentLoader: View {
                     .toolbar {
                         ToolbarItemGroup(placement: .topBarTrailing) {
                             Menu {
+                                Section(NSLocalizedString("tabbar_operations", comment: "")){
+                                    Button {
+                                        if selectedSortingOption != NSLocalizedString("subsription_sort", comment: ""){
+                                            discussionData = []
+                                        }
+                                        //选择收藏帖子的逻辑
+//                                        if isHeaderSlideViewEnabled{
+//                                            proxy.scrollTo("Top", anchor: .top)
+//                                        }else{
+//                                            proxy.scrollTo("TopWithoutSlide", anchor: .top)
+//                                        }
+                                        selectedSortingOption = NSLocalizedString("subsription_sort", comment: "")
+                                    } label: {
+                                        Label(NSLocalizedString("subsription_sort", comment: ""), systemImage: "star.fill")
+                                            .foregroundStyle(Color.yellow)
+                                    }
+                                }
+                                
                                 Section(NSLocalizedString("sorted_by_text", comment: "")){
                                     Button {
+                                        if selectedSortingOption != NSLocalizedString("default_sort", comment: ""){
+                                            discussionData = []
+                                        }
+                                        //选择默认的逻辑
+//                                        if isHeaderSlideViewEnabled{
+//                                            proxy.scrollTo("Top", anchor: .top)
+//                                        }else{
+//                                            proxy.scrollTo("TopWithoutSlide", anchor: .top)
+//                                        }
+                                        selectedSortingOption = NSLocalizedString("default_sort", comment: "")
                                     } label: {
                                         Label(NSLocalizedString("default_sort", comment: ""), systemImage: "seal")
                                     }
                                 
                                     Button {
+                                        //选择最新帖子的逻辑
+                                        if selectedSortingOption != NSLocalizedString("latest_sort_discussion", comment: ""){
+                                            discussionData = []
+                                        }
+//                                        if isHeaderSlideViewEnabled{
+//                                            proxy.scrollTo("Top", anchor: .top)
+//                                        }else{
+//                                            proxy.scrollTo("TopWithoutSlide", anchor: .top)
+//                                        }
+                                        selectedSortingOption = NSLocalizedString("latest_sort_discussion", comment: "")
                                     } label: {
-                                        Label(NSLocalizedString("latest_sort_discussion", comment: ""), systemImage: "clock.badge")
+                                        Label(NSLocalizedString("latest_sort_discussion", comment: ""), systemImage: "bubble.middle.bottom")
                                     }
                                     
                                     Button {
+                                        //选择最新回复的逻辑
+                                        if selectedSortingOption != NSLocalizedString("latest_sort_comment", comment: ""){
+                                            discussionData = []
+                                        }
+//                                        if isHeaderSlideViewEnabled{
+//                                            proxy.scrollTo("Top", anchor: .top)
+//                                        }else{
+//                                            proxy.scrollTo("TopWithoutSlide", anchor: .top)
+//                                        }
+                                        selectedSortingOption = NSLocalizedString("latest_sort_comment", comment: "")
                                     } label: {
-                                        Label(NSLocalizedString("latest_sort_comment", comment: ""), systemImage: "message.badge")
+                                        Label(NSLocalizedString("latest_sort_comment", comment: ""), systemImage: "clock.badge")
                                     }
                                     
                                     Button {
-
+                                        //选择热门帖子的逻辑
+                                        if selectedSortingOption != NSLocalizedString("hot_discussions", comment: ""){
+                                            discussionData = []
+                                        }
+//                                        if isHeaderSlideViewEnabled{
+//                                            proxy.scrollTo("Top", anchor: .top)
+//                                        }else{
+//                                            proxy.scrollTo("TopWithoutSlide", anchor: .top)
+//                                        }
+                                        selectedSortingOption = NSLocalizedString("hot_discussions", comment: "")
                                     } label: {
                                         Label(NSLocalizedString("hot_discussions", comment: ""), systemImage: "flame.fill")
                                     }
                                     
                                     Button {
+                                        //选择陈年旧帖的逻辑
+                                        if selectedSortingOption != NSLocalizedString("old_discussions", comment: ""){
+                                            discussionData = []
+                                        }
+//                                        if isHeaderSlideViewEnabled{
+//                                            proxy.scrollTo("Top", anchor: .top)
+//                                        }else{
+//                                            proxy.scrollTo("TopWithoutSlide", anchor: .top)
+//                                        }
+                                        selectedSortingOption = NSLocalizedString("old_discussions", comment: "")
                                     } label: {
                                         Label(NSLocalizedString("old_discussions", comment: ""), systemImage: "hourglass.bottomhalf.filled")
                                     }
                                     
                                     Button {
+                                        //选择精华帖子的逻辑
+                                        if selectedSortingOption != NSLocalizedString("frontPage_discussions", comment: ""){
+                                            discussionData = []
+                                        }
+//                                        if isHeaderSlideViewEnabled{
+//                                            proxy.scrollTo("Top", anchor: .top)
+//                                        }else{
+//                                            proxy.scrollTo("TopWithoutSlide", anchor: .top)
+//                                        }
+                                        selectedSortingOption = NSLocalizedString("frontPage_discussions", comment: "")
                                     } label: {
                                         Label(NSLocalizedString("frontPage_discussions", comment: ""), systemImage: "house.circle")
                                     }
@@ -147,11 +237,7 @@ struct PostViewContentLoader: View {
                         ToolbarItemGroup(placement: .topBarLeading) {
                             Menu {
                                 Section(NSLocalizedString("tabbar_operations", comment: "")){
-                                    Button {
-                                    } label: {
-                                        Label(NSLocalizedString("check_in", comment: ""), systemImage: "flag.circle")
-                                    }
-                                    .disabled(true)
+                                    CheckinButton(isCheckInSucceeded: $isCheckInSucceeded)
                                 }
                             } label: {
                                 Image(systemName: "list.bullet")
@@ -162,10 +248,10 @@ struct PostViewContentLoader: View {
                 
                 Button {
                 } label: {
-                    Image(systemName: "plus.bubble.fill")
+                    Image(systemName: "plus")
                         .font(.title.weight(.semibold))
                         .padding()
-                        .background(Color(hex: "565dd9").gradient)
+                        .background(Color("FlarumTheme").gradient)
                         .foregroundColor(.white)
                         .clipShape(Circle())
                         .shadow(color: shadowColor, radius: 4, x: 0, y: 4)

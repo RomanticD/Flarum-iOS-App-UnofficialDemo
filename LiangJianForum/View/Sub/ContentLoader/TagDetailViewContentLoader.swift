@@ -67,7 +67,7 @@ struct TagDetailViewContentLoader: View {
                                             .frame(width: 30, height: 10)
                                             .padding(.leading, 2)
                                         
-                                        FavoriteButton()
+                                        FavoriteButton(isSubscription: false, discussionId: "0")
                                         
                                     }
                                     .padding(.top, 15)

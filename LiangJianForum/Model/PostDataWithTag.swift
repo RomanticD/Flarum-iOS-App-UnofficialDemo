@@ -29,7 +29,7 @@ struct DataAttributes5: Codable, Hashable {
     let lastReadAt: String?
     let lastReadPostNumber: Int?
     let isApproved, canTag: Bool?
-    let subscription: JSONNull5?
+    let subscription: String?
     let isSticky, canSticky, isLocked, canLock: Bool?
     let hasBestAnswer: Int?
 
@@ -64,7 +64,7 @@ struct DataAttributes5: Codable, Hashable {
         lastReadPostNumber = try container.decodeIfPresent(Int.self, forKey: .lastReadPostNumber)
         isApproved = try container.decodeIfPresent(Bool.self, forKey: .isApproved)
         canTag = try container.decodeIfPresent(Bool.self, forKey: .canTag)
-        subscription = try container.decodeIfPresent(JSONNull5.self, forKey: .subscription)
+        subscription = try container.decodeIfPresent(String.self, forKey: .subscription)
         isSticky = try container.decodeIfPresent(Bool.self, forKey: .isSticky)
         canSticky = try container.decodeIfPresent(Bool.self, forKey: .canSticky)
         isLocked = try container.decodeIfPresent(Bool.self, forKey: .isLocked)
@@ -133,6 +133,7 @@ struct IncludedAttributes5: Codable,Hashable {
     let lastPostedAt: String?
     let editedAt: String?
     let canStartDiscussion, canAddToDiscussion: Bool?
+    let isHidden: IsHidden?
 
     enum CodingKeys: String, CodingKey {
         case username, displayName, question, endDate, answer, createdAT, voteCount, canVote, allowMultipleVotes, maxVotes, allowChangeVote, canChangeVote
@@ -141,7 +142,35 @@ struct IncludedAttributes5: Codable,Hashable {
         case contentHTML = "contentHtml"
         case renderFailed, canHide, canFlag, canLike, isApproved, canApprove, nameSingular, namePlural, color, icon, name, description, mentionedByCount, likesCount
         case backgroundURL = "backgroundUrl"
-        case backgroundMode, position, defaultSort, isChild, lastPostedAt, canStartDiscussion, canAddToDiscussion
+        case backgroundMode, position, defaultSort, isChild, lastPostedAt, canStartDiscussion, canAddToDiscussion, isHidden
+    }
+}
+
+enum IsHidden: Codable, Hashable {
+    case bool(Bool)
+    case integer(Int)
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let x = try? container.decode(Bool.self) {
+            self = .bool(x)
+            return
+        }
+        if let x = try? container.decode(Int.self) {
+            self = .integer(x)
+            return
+        }
+        throw DecodingError.typeMismatch(IsHidden.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for IsHidden"))
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .bool(let x):
+            try container.encode(x)
+        case .integer(let x):
+            try container.encode(x)
+        }
     }
 }
 

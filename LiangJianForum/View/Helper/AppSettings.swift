@@ -17,23 +17,29 @@ class AppSettings: ObservableObject {
     @Published var isAdmin = false
     @Published var isVIP = false
     @Published var FlarumUrl = "https://bbs.cjlu.cc"
-    @Published var FlarumName = "量见"
+    @Published var FlarumName = "Your Flarum name"
+    @Published var FlarumToken = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"//Your flarum API key, used in regisgration
     @Published var token = ""
     @Published var username = ""
     @Published var displayName = ""
     @Published var avatarUrl = ""
     @Published var identification = ""
     @Published var password = ""
+    @Published var joinTime = ""
+    @Published var lastSeenAt = ""
+    @Published var cover = ""
+    @Published var discussionCount = 0
+    @Published var commentCount = 0
     @Published var userId = 0
     @Published var userExp = 0
     @Published var vipUsernames: [String] = []
-    
     @Published var canCheckIn = false
     @Published var canCheckinContinuous = false
     @Published var totalContinuousCheckIn = 0
+    private var timer: Timer?
     
     init() {
-        vipUsernames.append(contentsOf: ["RomanticD", "FoskyM", "zxypp"])
+        vipUsernames.append(contentsOf: ["Your username"])
     }
     
     func refreshPost() {
@@ -46,6 +52,27 @@ class AppSettings: ObservableObject {
     func refreshProfile() {
         refreshProfileView.toggle()
     }
+    
+    func startTimer() {
+        print("Timer Start")
+        //cookie will expire
+        timer = Timer.scheduledTimer(withTimeInterval: 55 * 60, repeats: false) { [weak self] _ in
+            print("Time out")
+            self?.isLoggedIn = false
+        }
+    }
+
+    func resetTimer() {
+        // Reset the timer
+        timer?.invalidate()
+        startTimer()
+    }
+    
+    func stopTimer() {
+        // Stop the timer
+        timer?.invalidate()
+    }
+
 }
 
 extension String{
@@ -109,5 +136,53 @@ extension Color {
     }
 }
 
+func formatIconString(_ input: String?) -> String? {
+    guard let input = input else {
+        return nil
+    }
+    
+    var formattedString = ""
+    var capitalizeNext = true
+    
+    for char in input {
+        if char == "-" {
+            capitalizeNext = true
+        } else {
+            if capitalizeNext {
+                formattedString.append(char.uppercased())
+                capitalizeNext = false
+            } else {
+                formattedString.append(char)
+            }
+        }
+    }
+
+    if let firstChar = formattedString.first {
+        formattedString = String(firstChar.lowercased()) + formattedString.suffix(from: formattedString.index(after: formattedString.startIndex))
+    }
+    
+    return formattedString
+}
+
+
+func getIconNameFromFetching(from inputString: String?) -> String? {
+    if let input = inputString{
+        do {
+            let regex = try NSRegularExpression(pattern: "fas fa-(\\w+[-\\w]*)")
+            let matches = regex.matches(in: input, range: NSRange(input.startIndex..., in: input))
+            
+            if let match = matches.first, match.numberOfRanges >= 2 {
+                let range = match.range(at: 1)
+                if let swiftRange = Range(range, in: input) {
+                    return String(input[swiftRange])
+                }
+            }
+        } catch {
+            print("regex error：\(error)")
+        }
+    }
+
+    return nil
+}
 
 
