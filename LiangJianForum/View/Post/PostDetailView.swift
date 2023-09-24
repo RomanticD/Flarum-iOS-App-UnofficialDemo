@@ -18,7 +18,6 @@ struct PostDetailView: View {
     @State private var selectedSortOption = NSLocalizedString("default_sort_option", comment: "")
     @State private var currentPage = 1
     @State private var isLoading = false
-    @State private var enableDelete = false
     @State private var isSubViewLoading = false
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var appsettings: AppSettings
@@ -132,6 +131,8 @@ struct PostDetailView: View {
                             Section("帖子回复"){
                                 // MARK: - Post list
                                 ForEach(filteredPosts, id: \.id){item in
+                                    let isHidden = isPostHidden(post: item)
+                                    
                                     VStack {
                                         HStack {
                                             VStack {
@@ -235,15 +236,15 @@ struct PostDetailView: View {
                                                                 mentionedByCount: item.attributes.mentionedByCount,
                                                                 isUserLiked : ifContainsUserLike(postItem: item)
                                         )
-                                            .padding(.bottom, 5)
-                                            .padding(.top, 5)
+                                        .padding(.bottom, 5)
+                                        .padding(.top, 5)
                                         
                                         Divider()
                                     }
-                                    .background(item.id == String(getBestAnswerID()) ? Color.green.opacity(0.2) : Color.clear)
+                                    .opacity(isHidden ? 0.3 : 1)
+                                    .listRowBackground(item.id == String(getBestAnswerID()) ? Color(hex: "00FFFF").opacity(0.2) : Color(uiColor: UIColor.secondarySystemGroupedBackground))
                                     .listRowSeparator(.hidden)
                                 }
-                                .onDelete(perform: appsettings.isAdmin ? deleteComment : nil)
                                 
                                 if !loadMoreButtonDisabled(){
                                     HStack {
@@ -274,7 +275,7 @@ struct PostDetailView: View {
                                         }
                                         .foregroundColor(.white)
                                         .frame(width: 350, height: 50)
-                                        .background(Color(hex: "565dd9"))
+                                        .background(Color("FlarumTheme"))
                                         .cornerRadius(10)
                                         .disabled(loadMoreButtonDisabled())
                                         .listRowSeparator(.hidden)
@@ -316,10 +317,10 @@ struct PostDetailView: View {
                     Button {
                         showingPostingArea.toggle()
                     } label: {
-                        Image(systemName: "plus.message.fill")
+                        Image(systemName: "plus")
                             .font(.title.weight(.semibold))
                             .padding()
-                            .background(Color(hex: "565dd9").gradient)
+                            .background(Color("FlarumTheme").gradient)
                             .foregroundColor(.white)
                             .clipShape(Circle())
                             .shadow(color: shadowColor, radius: 4, x: 0, y: 4)
@@ -392,9 +393,9 @@ struct PostDetailView: View {
                 .presentationDetents([.height(250)])
         }
         .onChange(of: appsettings.refreshReplyView) { _ in
+            clearData()
+            isLoading = true
             Task {
-                clearData()
-                isLoading = true
                 fetchDetail(postID: postID){success in
                     print("fetchDetail...(fresh the page after posting)")
                 }
@@ -434,8 +435,19 @@ struct PostDetailView: View {
             }
         }
     }
-    private func deleteComment(at offsets: IndexSet){
-        postsArray.remove(atOffsets: offsets)
+    
+    private func isPostHidden(post : Included5) -> Bool{
+        var isHidden = false
+        if let hidden = post.attributes.isHidden{
+            switch hidden{
+            case .bool(let bool):
+                isHidden = bool
+            case .integer(_):
+                isHidden = false
+            }
+            return isHidden
+        }
+        return false
     }
     
     private func ifContainsUserLike(postItem: Included5) -> Bool {

@@ -31,7 +31,7 @@ struct CommentDisplayView: View {
                                 .bold()
                                 .tracking(0.5)
                                 .lineSpacing(7)
-                                .foregroundColor(Color(hex: "565dd9"))
+                                .foregroundColor(Color("FlarumTheme"))
                                 .padding(.top)
                                 .font(.system(size: 15))
                                 .padding(.leading, 3)
@@ -114,17 +114,28 @@ struct CommentDisplayView: View {
         if let includeImgReply = contentHTML{
             if let imageUrls = extractImageURLs(from: includeImgReply){
                 ForEach(imageUrls, id: \.self) { url in
-                    AsyncImage(url: URL(string: url)) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 300)
-                            .cornerRadius(10)
-                            .shadow(radius: 3)
-                            .padding(.bottom)
-                    } placeholder: {
-                        ShimmerEffectBox()
-                            .frame(width: 300)
+                    CachedImage(url: url,
+                                animation: .spring(),
+                                transition: AnyTransition.opacity.animation(.easeInOut)) { phase in
+                        
+                        switch phase {
+                        case .empty:
+                            ShimmerEffectBox()
+                                .frame(width: 300)
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 300)
+                                .cornerRadius(10)
+                                .shadow(radius: 3)
+                                .padding(.bottom)
+                            
+                        case .failure(let error):
+                            EmptyView()
+                        @unknown default:
+                            EmptyView()
+                        }
                     }
                     .onTapGesture {
                         if let imgurl = URL(string: url) {

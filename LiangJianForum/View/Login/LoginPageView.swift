@@ -39,7 +39,6 @@ struct LoginPageView: View {
                         .ignoresSafeArea()
                 }
                 
-                
                 Circle()
                     .scaleEffect(isAnimating ? 1.7 : 0.3)
                         .animation(.easeInOut(duration: 0.6), value: isAnimating)
@@ -61,7 +60,6 @@ struct LoginPageView: View {
                             withAnimation {
                                 isAnimating = true
                             }
-
                         }
                   
                     TextFieldWithIcon(iconName: "person.fill", inputText: $username, label: NSLocalizedString("username", comment: ""), isAnimating: $isAnimating, wrongInputRedBorder: $wrongUsername)
@@ -93,11 +91,15 @@ struct LoginPageView: View {
                             .background(Color.blue)
                             .cornerRadius(10)
                     }
+//                    .navigationDestination(isPresented: $showingMainPageView, destination: {
+//                        ContentView().environmentObject(appSettings).navigationBarBackButtonHidden(true)
+//                    })
                     .opacity(isAnimating ? 0.9 : 0)
                     .animation(.easeInOut(duration: 1.5), value: isAnimating)
                     .onDisappear {
                         storedUsername = username
                         storedPassword = password
+                        rememberMeState = rememberMe
                     }
                     
                     NavigationLink(destination: ContentView().environmentObject(appSettings).navigationBarBackButtonHidden(true), isActive: $showingMainPageView) {
@@ -115,19 +117,29 @@ struct LoginPageView: View {
                     }
 
                     ZStack{
-                        Button(action: {showingRegistrationView = true}) {
-                                Text("Sign up")
-                                .fontWeight(.bold)
-                            }
-                        .font(.system(size: 15))
-                        .foregroundColor(.blue)
-                        .frame(width: 330, height: 50)
-                        .cornerRadius(10)
-                        .opacity(isAnimating ? 0.8 : 0)
-                        .animation(.easeInOut(duration: 1.5), value: isAnimating)
+//                        Button(action: {showingRegistrationView = true}) {
+//                                Text("Sign up")
+//                                .fontWeight(.bold)
+//                            }
+//                        .font(.system(size: 15))
+//                        .foregroundColor(.blue)
+//                        .frame(width: 330, height: 50)
+//                        .cornerRadius(10)
+//                        .opacity(isAnimating ? 0.8 : 0)
+//                        .animation(.easeInOut(duration: 1.5), value: isAnimating)
                       
-                        NavigationLink(destination: RegistrationView().environmentObject(appSettings).navigationBarBackButtonHidden(false), isActive: .constant(false)) {
-                        }// Need Your api Key to access the Sign up page
+//                        NavigationLink(destination: RegistrationView().environmentObject(appSettings).navigationBarBackButtonHidden(false), isActive: $showingRegistrationView) {
+//                        }
+                        
+                        NavigationLink {
+                            RegistrationView().environmentObject(appSettings).navigationBarBackButtonHidden(false)
+                        } label: {
+                            Text("Sign up")
+                            .fontWeight(.bold)
+                            .font(.system(size: 15))
+                            .opacity(isAnimating ? 0.8 : 0)
+                            .animation(.easeInOut(duration: 1.5), value: isAnimating)
+                        }
                         
                         HStack {
                             Spacer()
@@ -146,15 +158,6 @@ struct LoginPageView: View {
                             }
                         }
                     }
-                    
-                    Picker("Flarum Server", selection: $selectedFlarumUrl) {
-                            Text("主站").tag("https://bbs.cjlu.cc")
-                            Text("测试站").tag("https://test.cjlu.cc")
-                        }
-                        .pickerStyle(SegmentedPickerStyle())
-                        .frame(width: 200)
-                    
-                    
                     
 //                    VStack {
 //                        Text("**服务条款** ｜ **[隐私政策](https://www.apple.com/legal/privacy/szh/)**").font(.system(size: 10))
@@ -193,10 +196,12 @@ struct LoginPageView: View {
     
     private func authenticateUser(completion: @escaping (Bool) -> Void) {
         showingProgressView = true
-        sendPostRequest { success in
+        sendLoginRequest { success in
             showingProgressView = false
             
             if success, token != "", userId != 0 {
+                appSettings.resetTimer()
+                
                 wrongUsername = 0
                 wrongPassword = 0
                 showingMainPageView = true
@@ -209,7 +214,7 @@ struct LoginPageView: View {
                 if rememberMe{
                     rememberMeState = true
                 }else{
-//                    clearInputField()
+                    clearInputField()
                     rememberMeState = false
                 }
                 
@@ -218,6 +223,7 @@ struct LoginPageView: View {
                 
                 completion(true) // Authentication success
             } else {
+                
                 wrongUsername = 2
                 wrongPassword = 2
                 
@@ -226,7 +232,7 @@ struct LoginPageView: View {
         }
     }
 
-    private func sendPostRequest(completion: @escaping (Bool) -> Void) {
+    private func sendLoginRequest(completion: @escaping (Bool) -> Void) {
         guard let url = URL(string: "\(appSettings.FlarumUrl)/api/token") else {
             print("Invalid URL!")
             completion(false)
@@ -248,11 +254,8 @@ struct LoginPageView: View {
         request.httpMethod = "POST"
         request.httpBody = httpBody
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let startTime = Date().timeIntervalSince1970
-        
+
         URLSession.shared.dataTask(with: request) { data, response, error in
-            let elapsedTime = Date().timeIntervalSince1970 - startTime
             
             if let error = error {
                 print("Error: \(error)")
@@ -299,6 +302,16 @@ struct LoginPageView: View {
             if let decodedResponse = try? JSONDecoder().decode(UserData.self, from: data){
                 let username = decodedResponse.data.attributes.username
                 appSettings.username = username
+                
+                appSettings.displayName = decodedResponse.data.attributes.displayName
+                appSettings.joinTime = calculateTimeDifference(from: decodedResponse.data.attributes.joinTime)
+                appSettings.discussionCount = decodedResponse.data.attributes.discussionCount
+                appSettings.commentCount = decodedResponse.data.attributes.commentCount
+                
+                if let cover = decodedResponse.data.attributes.cover{
+                    appSettings.cover = cover
+                }
+                
                 if appSettings.vipUsernames.contains(username){
                     appSettings.isVIP = true
                 }
@@ -316,7 +329,7 @@ struct LoginPageView: View {
                 }
                 
                 if let include = decodedResponse.included {
-                    if include.contains(where: { $0.id == "1" }) {
+                    if include.contains(where: { $0.id == "1" && $0.type == "groups"}) {
                         appSettings.isAdmin = true
                     }
                 }
@@ -343,11 +356,3 @@ struct TokenResponse: Codable {
     let token: String
     let userId: Int
 }
-
-
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        LoginPageView().environmentObject(AppSettings())
-//    }
-//}
-

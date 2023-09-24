@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   FlarumiOSApp
 
@@ -54,6 +54,7 @@
 "Reply successfully posted" = "Reply successfully posted";
 "default_sort_option" = "Default";
 "latest_sort_option" = "Latest";
+"subsription_sort" = "Subscription";
 "Failed to sign in" = "Failed to sign in";
 "Please check your username/password or check the Internet connetction" = "Please check your username/password or check the Internet connection";
 "🎀 Last seen at:" = "🎀 Last seen at:";
@@ -97,3 +98,8 @@
 "continuous_days" = "Number of consecutive check-in days";
 "Flarum Level" = "Level";
 "Bio" = "Personal Bio";
+"money_ranking_list" = "Money Ranking List";
+"group_list" = "Group List";
+"statistics_page" = "Statistics";
+"follow_success_message" = "Successful Follow";
+"unfollow_success_message" = "Successful Unfollow";

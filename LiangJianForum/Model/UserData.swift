@@ -12,13 +12,13 @@ struct UserData: Codable {
 }
 
 // MARK: - DataClass
-struct DataClass2: Codable {
+struct DataClass2: Codable, Hashable {
     let type, id: String
     let attributes: Attributes2
 }
 
 // MARK: - Attributes
-struct Attributes2: Codable {
+struct Attributes2: Codable, Hashable {
     let username, displayName: String
     let avatarURL: String?
     let slug: String
@@ -50,6 +50,7 @@ struct Attributes: Codable, Hashable {
     let isHidden: Int?
     let name: String?
     let description: String?
-    let backgroundColor: String?
+    let backgroundColor, createdAt: String?
+    let earnedAmount :Int?
 }
 

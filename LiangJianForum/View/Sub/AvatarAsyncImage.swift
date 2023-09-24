@@ -27,36 +27,74 @@ struct AvatarAsyncImage: View {
         Group {
             if let url = url {
                 if let color = strokeColor{
-                    AsyncImage(url: url) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: frameSize, height: frameSize)
-                            .clipShape(Circle())
-                            .overlay {
-                                Circle().stroke(color, lineWidth: lineWidth)
-                            }
-                            .shadow(radius: shadow)
-                    } placeholder: {
-                        ShimmerEffectBox()
-                            .frame(width: frameSize, height: frameSize)
-                            .cornerRadius(frameSize / 2)
+//                    AsyncImage(url: url) { image in
+//                        image
+//                            .resizable()
+//                            .aspectRatio(contentMode: .fill)
+//                            .frame(width: frameSize, height: frameSize)
+//                            .clipShape(Circle())
+//                            .overlay {
+//                                Circle().stroke(color, lineWidth: lineWidth)
+//                            }
+//                            .shadow(radius: shadow)
+//                    } placeholder: {
+//                        ShimmerEffectBox()
+//                            .frame(width: frameSize, height: frameSize)
+//                            .cornerRadius(frameSize / 2)
+//                    }
+                    
+                    CachedImage(url: url.absoluteString,
+                                animation: .spring(),
+                                transition: .scale.combined(with: .opacity)) { phase in
+                        
+                        switch phase {
+                        case .empty:
+                            ShimmerEffectBox()
+                                .frame(width: frameSize, height: frameSize)
+                                .cornerRadius(frameSize / 2)
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: frameSize, height: frameSize)
+                                .clipShape(Circle())
+                                .overlay {
+                                    Circle().stroke(color, lineWidth: lineWidth)
+                                }
+                                .shadow(radius: shadow)
+                            
+                        case .failure(let error):
+                            EmptyView()
+                        @unknown default:
+                            EmptyView()
+                        }
                     }
                 }else{
-                    AsyncImage(url: url) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: frameSize, height: frameSize)
-                            .clipShape(Circle())
-                            .overlay {
-                                Circle().stroke(.white, lineWidth: lineWidth)
-                            }
-                            .shadow(radius: shadow)
-                    } placeholder: {
-                        ShimmerEffectBox()
-                            .frame(width: frameSize, height: frameSize)
-                            .cornerRadius(frameSize / 2)
+                    CachedImage(url: url.absoluteString,
+                                animation: .spring(),
+                                transition: .scale.combined(with: .opacity)) { phase in
+                        
+                        switch phase {
+                        case .empty:
+                            ShimmerEffectBox()
+                                .frame(width: frameSize, height: frameSize)
+                                .cornerRadius(frameSize / 2)
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: frameSize, height: frameSize)
+                                .clipShape(Circle())
+                                .overlay {
+                                    Circle().stroke(.white, lineWidth: lineWidth)
+                                }
+                                .shadow(radius: shadow)
+                            
+                        case .failure(let error):
+                            EmptyView()
+                        @unknown default:
+                            EmptyView()
+                        }
                     }
                 }
             } else {

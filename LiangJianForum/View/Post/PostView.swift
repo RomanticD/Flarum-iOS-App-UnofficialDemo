@@ -22,17 +22,7 @@ struct PostView: View {
     @State private var isHeaderSlideViewEnabled = false
     @State private var isSortingMenuVisible = false
     @State private var isCheckInSucceeded = false
-    @State private var dragAmount : CGPoint?
     @State private var selectedSortingOption = NSLocalizedString("latest_sort_comment", comment: "")
-    
-    private func findDisplayName(_ userid: String, in array: [Included]) -> String? {
-        if let item = array.first(where: { $0.id == userid }) {
-            if let displayName = item.attributes.displayName{
-                return displayName
-            }
-        }
-        return nil
-    }
     
     var shadowColor: Color {
         return colorScheme == .dark ? Color.white : Color.black
@@ -48,8 +38,8 @@ struct PostView: View {
     var body: some View {
         GeometryReader{ geometry in
           VStack {
-              if discussionData.isEmpty || isLoading{
-                  PostViewContentLoader(selectedSortingOption: selectedSortingOption)
+              if (discussionData.isEmpty || isLoading) && selectedSortingOption != "Search"/* && selectedSortingOption != NSLocalizedString("subsription_sort", comment: "")*/ {
+                  PostViewContentLoader(selectedSortingOption: $selectedSortingOption, discussionData: $discussionData, isCheckInSucceeded: $isCheckInSucceeded)
               } else {
                   NavigationStack{
                       ScrollViewReader{ proxy in
@@ -59,8 +49,8 @@ struct PostView: View {
                                                  hasNextPage: hasNextPage,
                                                  currentPage: $currentPage,
                                                  isLoading: $isLoading,
-                                                 fetchDiscussion: fetchDiscussion,
-                                                 fetchUserInfo: nil,
+                                                 fetchDiscussion: nil,
+                                                 fetchUserInfo: fetchDiscussionData(completion:),
                                                  mode: .page
                                   )
                                   
@@ -77,8 +67,8 @@ struct PostView: View {
                                           }
 
                                       }
-                                                                            
-                                      if selectedSortingOption == "Search"{
+                                      
+                                      if selectedSortingOption == "Search" || (discussionData.isEmpty && selectedSortingOption == "Search") {
                                           Section{
                                               HStack {
                                                   Spacer()
@@ -101,10 +91,13 @@ struct PostView: View {
                                               }
                                           }
                                       }
-                                      
 
                                       Section{
                                           ForEach(filteredDiscussionData, id: \.id) { item in
+                                              let isHidden = isDiscussionHidden(discussion: item)
+                                              let subscription = item.attributes.subscription ?? ""
+                                              let isSubscription = (subscription == "follow")
+                                              
                                               if item.attributes.lastPostedAt != nil{
                                                   HStack {
                                                       VStack {
@@ -141,8 +134,6 @@ struct PostView: View {
                                                                               .lineLimit(2)
                                                                           Spacer()
                                                                       }
-
-
                                                                   }
                                                                   Spacer()
                                                               }
@@ -185,7 +176,7 @@ struct PostView: View {
                                                               PostAttributes(isSticky: item.attributes.isSticky, isFrontPage: item.attributes.frontpage, isLocked: item.attributes.isLocked, hasBestAnswer: checkIfHasBestAnswer(dataIn: item.attributes.hasBestAnswer), hasPoll: item.attributes.hasPoll)
 
                                                               
-                                                              FavoriteButton()
+                                                              FavoriteButton(isSubscription: isSubscription, discussionId: item.id)
                                                               
                                                           }
                                                           .padding(.top, 10)
@@ -194,6 +185,7 @@ struct PostView: View {
                                                           Divider()
                                                       }
                                                   }
+                                                  .opacity(isHidden ? 0.3 : 1)
                                                   .listRowSeparator(.hidden)
                                               }
                                           }
@@ -221,12 +213,27 @@ struct PostView: View {
                                   }
                                   .navigationTitle(selectedSortingOption)
                                   .navigationBarTitleDisplayMode(.inline)
-                                  .navigationDestination(for: Datum.self){item in
-                                      PostDetailView(postTitle: item.attributes.title, postID: item.id, commentCount: item.attributes.commentCount).environmentObject(appsettings)
-                                  }
                                   .toolbar {
                                       ToolbarItemGroup(placement: .topBarTrailing) {
                                           Menu {
+                                              Section(NSLocalizedString("tabbar_operations", comment: "")){
+                                                  Button {
+                                                      if selectedSortingOption != NSLocalizedString("subsription_sort", comment: ""){
+                                                          discussionData = []
+                                                      }
+                                                      //选择收藏帖子的逻辑
+                                                      if isHeaderSlideViewEnabled{
+                                                          proxy.scrollTo("Top", anchor: .top)
+                                                      }else{
+                                                          proxy.scrollTo("TopWithoutSlide", anchor: .top)
+                                                      }
+                                                      selectedSortingOption = NSLocalizedString("subsription_sort", comment: "")
+                                                  } label: {
+                                                      Label(NSLocalizedString("subsription_sort", comment: ""), systemImage: "star.fill")
+                                                          .foregroundStyle(Color.yellow)
+                                                  }
+                                              }
+                                              
                                               Section(NSLocalizedString("sorted_by_text", comment: "")){
                                                   Button {
                                                       if selectedSortingOption != NSLocalizedString("default_sort", comment: ""){
@@ -255,7 +262,7 @@ struct PostView: View {
                                                       }
                                                       selectedSortingOption = NSLocalizedString("latest_sort_discussion", comment: "")
                                                   } label: {
-                                                      Label(NSLocalizedString("latest_sort_discussion", comment: ""), systemImage: "clock.badge")
+                                                      Label(NSLocalizedString("latest_sort_discussion", comment: ""), systemImage: "bubble.middle.bottom")
                                                   }
                                                   
                                                   Button {
@@ -270,7 +277,7 @@ struct PostView: View {
                                                       }
                                                       selectedSortingOption = NSLocalizedString("latest_sort_comment", comment: "")
                                                   } label: {
-                                                      Label(NSLocalizedString("latest_sort_comment", comment: ""), systemImage: "message.badge")
+                                                      Label(NSLocalizedString("latest_sort_comment", comment: ""), systemImage: "clock.badge")
                                                   }
                                                   
                                                   Button {
@@ -333,14 +340,17 @@ struct PostView: View {
                                       }
                                   }
                               }
+                              .navigationDestination(for: Datum.self){item in
+                                  PostDetailView(postTitle: item.attributes.title, postID: item.id, commentCount: item.attributes.commentCount).environmentObject(appsettings)
+                              }
                               
                               Button {
                                   showingPostingArea.toggle()
                               } label: {
-                                  Image(systemName: "plus.bubble.fill")
+                                  Image(systemName: "plus")
                                       .font(.title.weight(.semibold))
                                       .padding()
-                                      .background(Color(hex: "565dd9").gradient)
+                                      .background(Color("FlarumTheme").gradient)
                                       .foregroundColor(.white)
                                       .clipShape(Circle())
                                       .shadow(color: shadowColor, radius: 4, x: 0, y: 4)
@@ -354,7 +364,7 @@ struct PostView: View {
           .alert(isPresented: $isCheckInSucceeded) {
               Alert(
                   title: Text(NSLocalizedString("check_in_succeeded_title", comment: "")),
-                  message: Text(NSLocalizedString("continuous_days", comment: "") + ": \(appsettings.totalContinuousCheckIn + 1)"),
+                  message: Text(NSLocalizedString("continuous_days", comment: "") + ": \(appsettings.totalContinuousCheckIn)"),
                   dismissButton: .default(Text("OK")) {
                   }
               )
@@ -362,25 +372,26 @@ struct PostView: View {
           .persistentSystemOverlays(.hidden)
           .refreshable{
               if !showingPostingArea{
-                  await fetchDiscussion()
-                  print("fetching when refreshing")
+                  fetchDiscussionData { success in
+                      if success{
+                          print("fetching when refreshing")
+                      }
+                  }
               }
           }
           .onChange(of: appsettings.refreshPostView) { _ in
               currentPage = 1
-              Task {
-                  await fetchDiscussion()
-                  print("fetching when appsettings.refreshPostView changed")
+              fetchDiscussionData { success in
+                  if success{
+                      print("fetching when appsettings.refreshPostView changed")
+                  }
               }
           }
-//          .task {
-//              await fetchDiscussion()
-//              print("fetching in .task")
-//          }
           .onAppear {
-              Task{
-                  await fetchDiscussion()
-                  print("fetching when appear")
+              fetchDiscussionData { success in
+                  if success{
+                      print("fetching when appear")
+                  }
               }
               // Check the URL status and set isHeaderSlideViewEnabled accordingly
               checkURLStatus(urlString: "\(appsettings.FlarumUrl)/api/header-slideshow/list") { success in
@@ -391,9 +402,10 @@ struct PostView: View {
           }
           .onChange(of: selectedSortingOption){ newValue in
               currentPage = 1
-              Task {
-                  await fetchDiscussion()
-                  print("fetching when selectedSortingOption changed")
+              fetchDiscussionData { success in
+                  if success{
+                      print("fetching when selectedSortingOption changed")
+                  }
               }
           }
           .onSubmit(of: .search) {
@@ -401,13 +413,28 @@ struct PostView: View {
               discussionIncluded = []
              
               selectedSortingOption = "Search"
-              Task{
-                  await fetchDiscussion()
-                  print("fetching when search submitted")
+              fetchDiscussionData { success in
+                  if success{
+                      print("fetching when search submitted")
+                  }
               }
           }
         }
         
+    }
+    
+    private func isDiscussionHidden(discussion : Datum) -> Bool{
+        var isHidden = false
+        if let hidden = discussion.attributes.isHidden{
+            switch hidden{
+            case .bool(let bool):
+                isHidden = bool
+            case .integer(_):
+                isHidden = false
+            }
+            return isHidden
+        }
+        return false
     }
     
     private func findUser(with id: String) -> Included? {
@@ -419,7 +446,7 @@ struct PostView: View {
         return nil
     }
     
-    private func fetchDiscussion() async {
+    private func fetchDiscussionData(completion: @escaping (Bool) -> Void){
         var url: URL? = nil // 声明url变量并初始化为nil
         
         if selectedSortingOption == NSLocalizedString("default_sort", comment: "") {
@@ -430,7 +457,7 @@ struct PostView: View {
             url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?page[number]=\(currentPage)&sort=-lastPostedAt")
         }else if selectedSortingOption == "Search"{
             if let encodedString = searchTerm.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed){
-                url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?include=user%2ClastPostedUser%2CmostRelevantPost%2CmostRelevantPost.user%2Ctags%2Ctags.parent%2CclarkwinkelmannWhoReaders.user.groups%2CfirstPost%2Cposts%2Cposts.user&filter%5Bq%5D=\(encodedString)&sort&page%5Bnumber%5D=1")
+                url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?include=user%2ClastPostedUser%2CmostRelevantPost%2CmostRelevantPost.user%2Ctags%2Ctags.parent%2CfirstPost&filter%5Bq%5D=\(encodedString)&sort&page%5Bnumber%5D=1")
             }
         }else if selectedSortingOption == NSLocalizedString("hot_discussions", comment: ""){
             url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?page[number]=\(currentPage)&sort=-commentCount")
@@ -438,6 +465,8 @@ struct PostView: View {
             url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?page[number]=\(currentPage)&sort=createdAt")
         }else if selectedSortingOption == NSLocalizedString("frontPage_discussions", comment: ""){
             url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?page[number]=\(currentPage)&frontpage%5D=true&sort=-frontdate")
+        }else if selectedSortingOption == NSLocalizedString("subsription_sort", comment: ""){
+            url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?include=user%2ClastPostedUser%2Ctags%2Ctags.parent%2CclarkwinkelmannWhoReaders.user.groups&filter%5Bsubscription%5D=following&sort&page%5Bnumber%5D=\(currentPage)")
         }
         
         print("fetching from url: \(String(describing: url))")
@@ -445,63 +474,7 @@ struct PostView: View {
         // 检查url是否为nil
         guard let url = url else {
             print("Invalid URL")
-            return
-        }
-
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            
-            if let decodedResponse = try? JSONDecoder().decode(Discussion.self, from: data) {
-                discussionData = decodedResponse.data
-                discussionIncluded = decodedResponse.included
-                discussionLinksFirst = decodedResponse.links.first
-                
-                if decodedResponse.links.next == nil || decodedResponse.links.next == "" {
-                    self.hasNextPage = false
-                } else {
-                    self.hasNextPage = true
-                }
-                
-                if decodedResponse.links.prev != nil && currentPage != 1 {
-                    self.hasPrevPage = true
-                } else {
-                    self.hasPrevPage = false
-                }
-                
-                print("successfully decode discussions data")
-            }
-
-        } catch {
-            print("Invalid Discussions Overview And Title Data!", error)
-        }
-    }
-    
-    private func fetchDiscussionData(completion: @escaping (Bool) -> Void) {
-        var url: URL? = nil // 声明url变量并初始化为nil
-        
-        if selectedSortingOption == NSLocalizedString("default_sort", comment: "") {
-            url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?page[number]=\(currentPage)")
-        } else if selectedSortingOption == NSLocalizedString("latest_sort_discussion", comment: "") {
-            url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?page[number]=\(currentPage)&sort=-createdAt")
-        }else if selectedSortingOption == NSLocalizedString("latest_sort_comment", comment: "") {
-            url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?page[number]=\(currentPage)&sort=-lastPostedAt")
-        }else if selectedSortingOption == "Search"{
-            if let encodedString = searchTerm.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed){
-                url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?include=user%2ClastPostedUser%2CmostRelevantPost%2CmostRelevantPost.user%2Ctags%2Ctags.parent%2CclarkwinkelmannWhoReaders.user.groups%2CfirstPost%2Cposts%2Cposts.user&filter%5Bq%5D=\(encodedString)&sort&page%5Bnumber%5D=1")
-            }
-        }else if selectedSortingOption == NSLocalizedString("hot_discussions", comment: ""){
-            url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?page[number]=\(currentPage)&sort=-commentCount")
-        }else if selectedSortingOption == NSLocalizedString("old_discussions", comment: ""){
-            url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?page[number]=\(currentPage)&sort=createdAt")
-        }else if selectedSortingOption == NSLocalizedString("frontPage_discussions", comment: ""){
-            url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?page[number]=\(currentPage)&frontpage%5D=true&sort=-frontdate")
-        }
-        
-        print("fetching from url: \(String(describing: url))")
-        
-        // 检查url是否为nil
-        guard let url = url else {
-            print("Invalid URL")
+            completion(false)
             return
         }
         
@@ -515,7 +488,7 @@ struct PostView: View {
         if appsettings.token != "" {
             request.setValue("Token \(appsettings.token)", forHTTPHeaderField: "Authorization")
         } else {
-            print("Invalid token or not logged in yet!")
+            print("Invalid Token Or Not Logged in Yet!")
         }
         
         URLSession.shared.dataTask(with: request) { data, response, error in
@@ -535,6 +508,7 @@ struct PostView: View {
             // 在请求成功时处理数据
             if let data = data {
                 if let decodedResponse = try? JSONDecoder().decode(Discussion.self, from: data) {
+                    print("Successfully decoding use Discussion.self")
                     discussionData = decodedResponse.data
                     discussionIncluded = decodedResponse.included
                     discussionLinksFirst = decodedResponse.links.first
@@ -553,15 +527,15 @@ struct PostView: View {
                     
                     print("successfully decode discussions data")
                 } else {
-                    print("Decoding to Discussion.self Failed!")
+                    print("Invalid Discussions Overview And Title Data!")
                 }
             }
             
             // 请求成功后调用回调
             completion(true)
+            
         }.resume()
     }
-
     
     func checkURLStatus(urlString: String, completion: @escaping (Bool) -> Void) {
         guard let url = URL(string: urlString) else {
@@ -595,11 +569,13 @@ struct PostView: View {
             default:
                 hasBestAnswer = false
             }
-        }        
+        }
         return hasBestAnswer
     }
 }
 
-//#Preview {
-//    PostView()
-//}
+enum TabBarButtonLink{
+    case moneyRankingListLink
+    case userGroupListLink
+    case statisticsPage
+}

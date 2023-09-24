@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0712DDA12A3DEA3B00A8AC0E /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0712DDA02A3DEA3B00A8AC0E /* ProfileView.swift */; };
 		0716E62A2AA445B700DAF3B7 /* CommentDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0716E6292AA445B700DAF3B7 /* CommentDisplayView.swift */; };
+		071C68702AC0615900A862AC /* Awesome in Frameworks */ = {isa = PBXBuildFile; productRef = 071C686F2AC0615900A862AC /* Awesome */; };
 		07232C062AA84414004709D2 /* PostDetailViewContentLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07232C052AA84414004709D2 /* PostDetailViewContentLoader.swift */; };
 		07232C082AA8738A004709D2 /* TagDetailViewContentLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07232C072AA8738A004709D2 /* TagDetailViewContentLoader.swift */; };
 		07232C0B2AA9E373004709D2 /* MoneyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07232C0A2AA9E373004709D2 /* MoneyData.swift */; };
@@ -63,6 +64,11 @@
 		07EF7CAC2A4AA004008E41D4 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EF7CAB2A4AA004008E41D4 /* Helper.swift */; };
 		07EF7CB22A4AE343008E41D4 /* LikesAndMentionedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EF7CB12A4AE343008E41D4 /* LikesAndMentionedButton.swift */; };
 		07EF7CB42A4B225C008E41D4 /* TagElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EF7CB32A4B225C008E41D4 /* TagElement.swift */; };
+		07F2E4032AC05DB10081343C /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F2E3FF2AC05DB10081343C /* ImageCache.swift */; };
+		07F2E4042AC05DB10081343C /* CachedImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F2E4002AC05DB10081343C /* CachedImageManager.swift */; };
+		07F2E4052AC05DB10081343C /* ImageRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F2E4012AC05DB10081343C /* ImageRetriever.swift */; };
+		07F2E4062AC05DB10081343C /* CachedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F2E4022AC05DB10081343C /* CachedImage.swift */; };
+		07F2E4082AC05E6A0081343C /* BadgeDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F2E4072AC05E6A0081343C /* BadgeDetail.swift */; };
 		42ED96A8F2F8C2C4783C8159 /* UserCommentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42ED924319C2DF3E476F3CD1 /* UserCommentData.swift */; };
 		42ED9C4F27CBEA016712891E /* DiscussionDataWithId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42ED9B9C42BCB58DB6FFFFE5 /* DiscussionDataWithId.swift */; };
 /* End PBXBuildFile section */
@@ -126,6 +132,11 @@
 		07EF7CAB2A4AA004008E41D4 /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		07EF7CB12A4AE343008E41D4 /* LikesAndMentionedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesAndMentionedButton.swift; sourceTree = "<group>"; };
 		07EF7CB32A4B225C008E41D4 /* TagElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagElement.swift; sourceTree = "<group>"; };
+		07F2E3FF2AC05DB10081343C /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
+		07F2E4002AC05DB10081343C /* CachedImageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedImageManager.swift; sourceTree = "<group>"; };
+		07F2E4012AC05DB10081343C /* ImageRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageRetriever.swift; sourceTree = "<group>"; };
+		07F2E4022AC05DB10081343C /* CachedImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedImage.swift; sourceTree = "<group>"; };
+		07F2E4072AC05E6A0081343C /* BadgeDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BadgeDetail.swift; sourceTree = "<group>"; };
 		42ED924319C2DF3E476F3CD1 /* UserCommentData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCommentData.swift; sourceTree = "<group>"; };
 		42ED9B9C42BCB58DB6FFFFE5 /* DiscussionDataWithId.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscussionDataWithId.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -135,6 +146,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				071C68702AC0615900A862AC /* Awesome in Frameworks */,
 				072DA5282AAF87C8000B2F1F /* Shimmer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -288,6 +300,7 @@
 				0712DDA02A3DEA3B00A8AC0E /* ProfileView.swift */,
 				0779EE1A2A5461A600EE3D93 /* LinksProfileView.swift */,
 				07DF6F3B2A557AEF0073CDE8 /* ChangeProfileDetail.swift */,
+				07F2E4072AC05E6A0081343C /* BadgeDetail.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -317,6 +330,7 @@
 		07EF7CB72A4B2946008E41D4 /* Sub */ = {
 			isa = PBXGroup;
 			children = (
+				07F2E3FE2AC05DB10081343C /* Cached */,
 				07232C092AA8739E004709D2 /* ContentLoader */,
 				07EF7CB12A4AE343008E41D4 /* LikesAndMentionedButton.swift */,
 				0783CE302A419008009A2F7D /* InfoDisplayWithTitleView.swift */,
@@ -334,6 +348,17 @@
 				072DA5242AAF1350000B2F1F /* LevelProgressView.swift */,
 			);
 			path = Sub;
+			sourceTree = "<group>";
+		};
+		07F2E3FE2AC05DB10081343C /* Cached */ = {
+			isa = PBXGroup;
+			children = (
+				07F2E3FF2AC05DB10081343C /* ImageCache.swift */,
+				07F2E4002AC05DB10081343C /* CachedImageManager.swift */,
+				07F2E4012AC05DB10081343C /* ImageRetriever.swift */,
+				07F2E4022AC05DB10081343C /* CachedImage.swift */,
+			);
+			path = Cached;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -354,6 +379,7 @@
 			name = FlarumiOSApp;
 			packageProductDependencies = (
 				072DA5272AAF87C8000B2F1F /* Shimmer */,
+				071C686F2AC0615900A862AC /* Awesome */,
 			);
 			productName = LiangJianForum;
 			productReference = 07A867FF2A3D879E00311F65 /* FlarumiOSApp.app */;
@@ -386,6 +412,7 @@
 			mainGroup = 07A867F62A3D879E00311F65;
 			packageReferences = (
 				072DA5262AAF87C8000B2F1F /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
+				071C686E2AC0615900A862AC /* XCRemoteSwiftPackageReference "Awesome" */,
 			);
 			productRefGroup = 07A868002A3D879E00311F65 /* Products */;
 			projectDirPath = "";
@@ -417,6 +444,7 @@
 			files = (
 				0779EE1B2A5461A600EE3D93 /* LinksProfileView.swift in Sources */,
 				07CBD46D2A4EC1F8007854DA /* PostDetailView.swift in Sources */,
+				07F2E4042AC05DB10081343C /* CachedImageManager.swift in Sources */,
 				0774753A2A643FC700581DCE /* CommentsView.swift in Sources */,
 				07CBD46B2A4EC076007854DA /* PostData.swift in Sources */,
 				079C84652AA816BD00A1D358 /* ShimmerEffectBox.swift in Sources */,
@@ -427,12 +455,14 @@
 				07A868052A3D879E00311F65 /* LoginPageView.swift in Sources */,
 				0712DDA12A3DEA3B00A8AC0E /* ProfileView.swift in Sources */,
 				075948DF2A56C9E60010AB55 /* TagsData.swift in Sources */,
+				07F2E4032AC05DB10081343C /* ImageCache.swift in Sources */,
 				07B63C3A2A4976CC00594DA8 /* DiscussionData.swift in Sources */,
 				07232C0D2AA9E395004709D2 /* MoneyConditionRecord.swift in Sources */,
 				079C846B2AA820B700A1D358 /* CommentsViewContentLoader.swift in Sources */,
 				079C84672AA8187100A1D358 /* PostViewContentLoader.swift in Sources */,
 				073C19372A4D550B001A2411 /* AvatarAsyncImage.swift in Sources */,
 				073C19332A4C89F8001A2411 /* SecureFieldWithIcon.swift in Sources */,
+				07F2E4062AC05DB10081343C /* CachedImage.swift in Sources */,
 				07E1FB252A3DDC1500F9049B /* newPostView.swift in Sources */,
 				07A868032A3D879E00311F65 /* FlarumiOSApp.swift in Sources */,
 				0783CE312A419008009A2F7D /* InfoDisplayWithTitleView.swift in Sources */,
@@ -447,6 +477,7 @@
 				07C57DD22A606A4300DCADB6 /* TagButton.swift in Sources */,
 				07EF7C9E2A49B998008E41D4 /* TagField.swift in Sources */,
 				072DA5232AAD5033000B2F1F /* CheckinButton.swift in Sources */,
+				07F2E4052AC05DB10081343C /* ImageRetriever.swift in Sources */,
 				07232C082AA8738A004709D2 /* TagDetailViewContentLoader.swift in Sources */,
 				07EF7CA42A49BE16008E41D4 /* TagDetail.swift in Sources */,
 				074EF28F2A50500600D486A3 /* NoticeView.swift in Sources */,
@@ -463,6 +494,7 @@
 				0779EE1D2A556B4A00EE3D93 /* FavoriteButton.swift in Sources */,
 				07CBD46F2A4FD799007854DA /* PostDataWithTag.swift in Sources */,
 				07DF6F3C2A557AEF0073CDE8 /* ChangeProfileDetail.swift in Sources */,
+				07F2E4082AC05E6A0081343C /* BadgeDetail.swift in Sources */,
 				07CBD4672A4E8421007854DA /* PostDetailModel.swift in Sources */,
 				07232C0B2AA9E373004709D2 /* MoneyData.swift in Sources */,
 				42ED96A8F2F8C2C4783C8159 /* UserCommentData.swift in Sources */,
@@ -715,6 +747,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		071C686E2AC0615900A862AC /* XCRemoteSwiftPackageReference "Awesome" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/LiveUI/Awesome";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		072DA5262AAF87C8000B2F1F /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/markiv/SwiftUI-Shimmer";
@@ -726,6 +766,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		071C686F2AC0615900A862AC /* Awesome */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 071C686E2AC0615900A862AC /* XCRemoteSwiftPackageReference "Awesome" */;
+			productName = Awesome;
+		};
 		072DA5272AAF87C8000B2F1F /* Shimmer */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 072DA5262AAF87C8000B2F1F /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */;

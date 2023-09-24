@@ -61,78 +61,14 @@ struct TagDetail: View {
             if discussionData.isEmpty {
                 TagDetailViewContentLoader(selectedTag: selectedTag)
             } else {
-                if hasPrevPage || hasNextPage {
-                    HStack{
-                        Button(action: {
-                            if currentPageOffset >= 20 {
-                                currentPageOffset -= 20
-                            }
-                            isLoading = true
-                            Task {
-                                await fetchTagsDetailPosts()
-                                isLoading = false
-                            }
-                        }) {
-                            HStack{
-                                Image(systemName: "chevron.left")
-                                    .foregroundColor(hasPrevPage ? .blue : .secondary)
-                                    .font(.system(size: 20))
-                                    .padding(.top, 1)
-                                Text("Prev")
-                                    .foregroundStyle(hasPrevPage ? .blue : .secondary)
-                                    .font(.system(size: 14))
-                            }
-                        }
-                        .padding(.leading)
-                        .disabled(!hasPrevPage)
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            isLoading = true
-                            currentPageOffset = 0
-                            isLoading = false
-                            Task {
-                                await fetchTagsDetailPosts()
-                                isLoading = false
-                            }
-                        }) {
-                            HStack{
-                                Text("First Page")
-                                    .foregroundStyle(hasPrevPage ? .blue : .secondary)
-                                    .font(.system(size: 14))
-                            }
-                        }
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            currentPageOffset += 20
-                            isLoading = true
-                            Task {
-                                await fetchTagsDetailPosts()
-                                isLoading = false
-                            }
-                        }) {
-                            HStack{
-                                Text("Next")
-                                    .foregroundStyle(hasNextPage ? .blue : .secondary)
-                                    .font(.system(size: 14))
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(hasNextPage ? .blue : .secondary)
-                                    .font(.system(size: 20))
-                                    .padding(.top, 1)
-                            }
-                        }
-                        .padding(.trailing)
-                        .disabled(!hasNextPage)
-                    }.padding(.top)
-                }
+                PaginationView(hasPrevPage: hasPrevPage, hasNextPage: hasNextPage, currentPage: $currentPageOffset, isLoading: $isLoading, fetchDiscussion: nil, fetchUserInfo: fetchDiscussionData(completion:), mode: .offset)
 
                 ScrollViewReader { proxy in
                     List {
                         Section{
                             ForEach(filteredDiscussionData, id: \.id) { item in
+                                let subscription = item.attributes.subscription ?? ""
+                                let isSubscription = (subscription == "follow")
                                 if item.attributes.lastPostedAt != nil{
                                     HStack {
                                         VStack {
@@ -212,7 +148,7 @@ struct TagDetail: View {
                                                 
                                                 PostAttributes(isSticky: item.attributes.isSticky, isFrontPage: item.attributes.frontpage, isLocked: item.attributes.isLocked, hasBestAnswer: checkIfHasBestAnswer(dataIn: item.attributes.hasBestAnswer), hasPoll: item.attributes.hasPoll)
                                                 
-                                                FavoriteButton()
+                                                FavoriteButton(isSubscription: isSubscription, discussionId: item.id)
                                                 
                                             }
                                             .padding(.top, 10)
@@ -266,15 +202,20 @@ struct TagDetail: View {
         }
         .refreshable {
             isLoading = true
-            await fetchTagsDetailPosts()
-            isLoading = false
-        }
-        .task {
-            await fetchTagsDetailPosts()
+            fetchDiscussionData { success in
+                if success{
+                    
+                }
+                isLoading = false
+            }
         }
         .onAppear {
-            Task {
-                await fetchTagsDetailPosts()
+            isLoading = true
+            fetchDiscussionData { success in
+                if success{
+                    
+                }
+                isLoading = false
             }
         }
 
@@ -307,41 +248,79 @@ struct TagDetail: View {
         return appsettings.vipUsernames.contains(username)
     }
     
-    private func fetchTagsDetailPosts() async {
+    private func fetchDiscussionData(completion: @escaping (Bool) -> Void){
+        var url: URL? = nil // 声明url变量并初始化为nil
         
-        guard let url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?include=user%2ClastPostedUser%2Ctags%2Ctags.parent%2CfirstPost&filter%5Btag%5D=\(selectedTag.attributes.slug)&sort=&page%5Boffset%5D=\(currentPageOffset)") else{
-                print("Invalid URL")
+       
+        url = URL(string: "\(appsettings.FlarumUrl)/api/discussions?include=user%2ClastPostedUser%2Ctags%2Ctags.parent%2CfirstPost&filter%5Btag%5D=\(selectedTag.attributes.slug)&sort=&page%5Boffset%5D=\(currentPageOffset)")
+        
+        
+        print("fetching from url: \(String(describing: url))")
+        
+        // 检查url是否为nil
+        guard let url = url else {
+            print("Invalid URL")
+            completion(false)
             return
         }
         
-        do{
-            let (data, _) = try await URLSession.shared.data(from: url)
-            
-            if let decodedResponse = try? JSONDecoder().decode(Discussion.self, from: data){
-                discussionData = decodedResponse.data
-                discussionIncluded = decodedResponse.included
-                discussionLinksFirst = decodedResponse.links.first
-                
-                if decodedResponse.links.next != nil{
-                    self.hasNextPage = true
-                }
-                
-                if decodedResponse.links.prev != nil && currentPageOffset != 1{
-                    self.hasPrevPage = true
-                }else{
-                    self.hasPrevPage = false
-                }
-                
-                print("successfully decode tags detail data")
-                print("current tags api url: \(discussionLinksFirst)")
-                print("current page offset: \(currentPageOffset)")
-                print("has next page: \(hasNextPage)")
-                print("has prev page: \(hasPrevPage)")
-            }
-
-        } catch {
-            print("Invalid tags detail data!" ,error)
+        // 创建URLRequest
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET" // 使用GET方法
+        
+        // 设置请求头
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        if appsettings.token != "" {
+            request.setValue("Token \(appsettings.token)", forHTTPHeaderField: "Authorization")
+        } else {
+            print("Invalid Token Or Not Logged in Yet!")
         }
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error: \(error)")
+                completion(false)
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200...299).contains(httpResponse.statusCode) else {
+                print("Invalid response")
+                completion(false)
+                return
+            }
+            
+            // 在请求成功时处理数据
+            if let data = data {
+                if let decodedResponse = try? JSONDecoder().decode(Discussion.self, from: data) {
+                    print("Successfully decoding use Discussion.self")
+                    discussionData = decodedResponse.data ?? []
+                    discussionIncluded = decodedResponse.included
+                    discussionLinksFirst = decodedResponse.links.first
+                    
+                    if decodedResponse.links.next == nil || decodedResponse.links.next == "" {
+                        self.hasNextPage = false
+                    } else {
+                        self.hasNextPage = true
+                    }
+                    
+                    if decodedResponse.links.prev != nil && currentPageOffset != 0 {
+                        self.hasPrevPage = true
+                    } else {
+                        self.hasPrevPage = false
+                    }
+                    
+                    print("successfully decode discussions data")
+                } else {
+                    print("Invalid Discussions Overview And Title Data!")
+                }
+            }
+            
+            // 请求成功后调用回调
+            completion(true)
+            
+        }.resume()
     }
 }
 
