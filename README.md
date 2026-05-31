@@ -1,4 +1,4 @@
-# Flarum iOS App - An App Demo Developed with SwiftUI and Flarum REST API
+# Flarum iOS App - An App Developed with SwiftUI and Flarum REST API
 
 ![Platform](https://img.shields.io/badge/platform-iOS%2016%2B-blue) ![Language](https://img.shields.io/badge/language-Swift%205.5-orange) ![License](https://img.shields.io/badge/license-MIT-green)
 
